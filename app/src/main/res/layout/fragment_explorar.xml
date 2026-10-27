@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Tarjeta de bienvenida del usuario -->
+        <!-- 1. Tarjeta de bienvenida del usuario -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_usuario"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="18dp">
 
                 <TextView
                     android:id="@+id/tv_saludo_usuario"
@@ -43,7 +43,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:text="@string/subtitulo_home"
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="@color/chef_primary"
@@ -53,10 +53,227 @@
                     android:id="@+id/tv_email_usuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="4dp"
                     android:textAppearance="?attr/textAppearanceCaption"
                     android:textColor="@color/chef_text_secondary"
                     tools:text="usuario@ejemplo.com" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2. Estado Sin Conexión (Modo Offline) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_offline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/chef_surface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeColor="@color/chef_outline"
+            app:strokeWidth="1dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:contentDescription="@string/modo_offline_titulo"
+                    android:src="@drawable/ic_wifi_off"
+                    app:tint="@color/chef_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/modo_offline_titulo"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textColor="@color/chef_text_primary"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="@string/modo_offline_mensaje"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="@color/chef_text_secondary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_reintentar_conexion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/btn_reintentar"
+                    android:textColor="@color/chef_surface"
+                    app:backgroundTint="@color/chef_primary"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_refresh"
+                    app:iconTint="@color/chef_surface" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 3. Indicador de carga de recetas -->
+        <LinearLayout
+            android:id="@+id/layout_cargando_receta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ProgressBar
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:indeterminateTint="@color/chef_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/cargando_receta"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/chef_text_secondary" />
+
+        </LinearLayout>
+
+        <!-- 4. Tarjeta Destacada: Receta del Día (TheMealDB via Retrofit) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_receta_dia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/chef_surface"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:strokeColor="@color/chef_outline"
+            app:strokeWidth="1dp"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Cabecera de la tarjeta con título y botón de refrescar -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingTop="14dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/titulo_receta_dia"
+                            android:textAppearance="?attr/textAppearanceSubtitle1"
+                            android:textColor="@color/chef_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/subtitulo_receta_dia"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_refrescar_receta"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/btn_cambiar_receta"
+                        android:textColor="@color/chef_primary"
+                        app:icon="@drawable/ic_refresh"
+                        app:iconTint="@color/chef_primary" />
+
+                </RelativeLayout>
+
+                <!-- Imagen del plato (Cargada con Glide) -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp">
+
+                    <ImageView
+                        android:id="@+id/iv_receta_dia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/titulo_receta_dia"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/backgrounds/scenic" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#1A000000" />
+
+                </FrameLayout>
+
+                <!-- Información del plato -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tv_nombre_receta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:textColor="@color/chef_text_primary"
+                        android:textStyle="bold"
+                        tools:text="Spaghetti Bolognese" />
+
+                    <TextView
+                        android:id="@+id/tv_categoria_origen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/chef_primary_dark"
+                        android:textStyle="bold"
+                        tools:text="Italian · Pasta" />
+
+                    <TextView
+                        android:id="@+id/tv_instrucciones_resumen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/chef_text_secondary"
+                        tools:text="Bring a large pot of water to a boil. Add salt and pasta. Meanwhile in a pan saute onions and minced garlic..." />
+
+                </LinearLayout>
 
             </LinearLayout>
 

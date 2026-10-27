@@ -1,4 +1,3 @@
-
 MEMORIA DE LA PRÁCTICA: CHEFPOCKET (AUTENTICACIÓN, SERVICIOS WEB Y BASE DE DATOS EN LA NUBE)
 
 Alumno: Enrique Arancón López
@@ -79,3 +78,44 @@ como Instagram:
 - Para el estilo visual, definí una paleta gastronómica en colors.xml con tonos 
   terracota (#E65100), ámbar (#FFB300) y superficies cálidas, además de un selector de 
   estados (selector_nav_bottom.xml) para resaltar la pestaña activa.
+
+
+5. ACCESO A SERVICIOS WEB REST (RETROFIT + GSON + GLIDE) Y GESTIÓN OFFLINE
+Para cumplir con el requisito de consumo de APIs externas (Tema 4):
+
+- Comprobación previa de conectividad (Tema 4, Diapositiva 3):
+  Creé la clase NetworkUtils en el paquete utilidades. Antes de realizar cualquier 
+  petición a la red, compruebo si el dispositivo tiene acceso activo a Internet mediante 
+  ConnectivityManager (con soporte tanto para NetworkCapabilities en Android moderno 
+  como para NetworkInfo). Si no hay red, la aplicación no se queda bloqueada ni lanza 
+  errores silenciosos: conmuta la interfaz para mostrar una tarjeta visual de aviso 
+  (card_offline con icono ic_wifi_off) y un botón de "Reintentar", además de notificar 
+  mediante un Snackbar. Al recuperar la señal o pulsar en reintentar, se reanuda la 
+  carga automáticamente.
+
+- Modelos de datos DTO y servicio Retrofit:
+  Para interactuar con la API TheMealDB (https://www.themealdb.com/api/json/v1/1/):
+  * Diseñé los modelos MealDto y MealResponse en datos.api.modelos anotando los campos 
+    con @SerializedName para su deserialización automática mediante Gson. Creé un 
+    método auxiliar getIngredientesConMedidas() que agrupa los 20 campos dinámicos 
+    de ingredientes y cantidades que devuelve la API.
+  * Definí la interfaz TheMealDbApiService con las operaciones HTTP correspondientes 
+    (@GET("random.php") para la receta aleatoria del día y @GET("search.php") para 
+    el buscador).
+  * Implementé la clase RetrofitClient siguiendo el patrón Singleton, instanciando un 
+    único cliente Retrofit configurado con el convertidor GsonConverterFactory.
+
+- Carga asíncrona e imágenes con Glide en ExplorarFragment:
+  En la pestaña principal muestro la tarjeta destacada de la recomendación diaria. 
+  La llamada asíncrona se ejecuta mediante enqueue() con callbacks onResponse() y 
+  onFailure(). Para la visualización de la fotografía del plato utilizo la librería 
+  Glide, configurando placeholders y redondeo adaptativo para que la interfaz se sienta 
+  fluida y elegante. Añadí además un botón "Otra receta" para que el usuario pueda pedir 
+  otra propuesta gourmet al vuelo.
+
+- Trazas de depuración en Logcat:
+  Para poder auditar el correcto funcionamiento de cada componente y verificar el flujo 
+  durante el desarrollo, añadí trazas de log (Log.i, Log.d y Log.w) bajo una etiqueta 
+  unificada ("ChefPocket"). Esto permite filtrar en el Logcat de Android Studio de un 
+  vistazo el estado de la red, la inicialización del cliente Retrofit, la receta 
+  recibida y la carga de imágenes.

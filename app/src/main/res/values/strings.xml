@@ -40,6 +40,16 @@
     <!-- Estados y Red -->
     <string name="cargando_datos">Cargando recetas gourmet…</string>
     <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
+    <string name="titulo_receta_dia">Recomendación del día</string>
+    <string name="subtitulo_receta_dia">Descubre una propuesta internacional</string>
+    <string name="btn_cambiar_receta">Otra receta</string>
+    <string name="btn_ver_detalle">Ver preparación</string>
+    <string name="cargando_receta">Consultando TheMealDB…</string>
+    <string name="modo_offline_titulo">Modo sin conexión</string>
+    <string name="modo_offline_mensaje">No hay acceso a Internet. Conéctate a una red Wi-Fi o móvil para descubrir nuevas recetas.</string>
+    <string name="btn_reintentar">Reintentar</string>
+    <string name="receta_origen_categoria">%1$s · %2$s</string>
+    <string name="error_cargar_receta">No se pudo obtener la receta del servidor.</string>
 
     <!-- Sobrescritura completa de textos de FirebaseUI en español -->
     <!-- Botones y Acciones Comunes -->
