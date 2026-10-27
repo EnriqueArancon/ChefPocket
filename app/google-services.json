@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1051099581073",
+    "project_id": "chefpocket",
+    "storage_bucket": "chefpocket.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051099581073:android:44e65d0b9f0a038d274d30",
+        "android_client_info": {
+          "package_name": "es.upm.miw.chefpocket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlNKkh5CsjB3DOi6sPcROKsQjExeyXKg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

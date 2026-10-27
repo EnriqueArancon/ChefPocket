@@ -1,0 +1,21 @@
+*.iml
+.gradle
+/local.properties
+local.properties
+.idea
+.vscode
+.DS_Store
+/build
+app/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Claves y certificados
+*.jks
+*.keystore
+secrets.properties
+
+# Archivos de trabajo / notas de desarrollo
+AGENTS.md
+ENUNCIADO.md
