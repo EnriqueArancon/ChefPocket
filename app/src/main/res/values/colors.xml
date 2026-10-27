@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <!-- Base -->
+    <color name="black">#FF1E2022</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta Culinaria Premium ChefPocket -->
+    <color name="chef_primary">#E65100</color>            <!-- Naranja Terracota Intenso -->
+    <color name="chef_primary_dark">#BF360C</color>       <!-- Rojo Teja / Asado Profundo -->
+    <color name="chef_primary_light">#FF833A</color>      <!-- Naranja Cálido Brillante -->
+    <color name="chef_accent">#FFB300</color>             <!-- Amarillo Azafrán / Miel -->
+    <color name="chef_secondary">#D35400</color>
+
+    <!-- Superficies y Fondos -->
+    <color name="chef_background">#FAF8F5</color>         <!-- Crema muy suave de alta gama -->
+    <color name="chef_surface">#FFFFFF</color>            <!-- Blanco puro para tarjetas -->
+    <color name="chef_outline">#E8E3DD</color>            <!-- Borde tenue y elegante -->
+
+    <!-- Textos legibles -->
+    <color name="chef_text_primary">#1E2022</color>       <!-- Carbón profundo -->
+    <color name="chef_text_secondary">#636B6F</color>     <!-- Gris neutro cálido -->
+    <color name="chef_text_on_primary">#FFFFFF</color>
 </resources>

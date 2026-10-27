@@ -2,26 +2,102 @@
     <!-- Nombre de la aplicación -->
     <string name="app_name">ChefPocket</string>
 
-    <!-- Menú Principal -->
-    <string name="menu_cerrar_sesion">Cerrar sesión</string>
-    <string name="menu_favoritos">Mis Favoritos</string>
-    <string name="menu_estadisticas">Estadísticas</string>
+    <!-- Pantalla de Login / Bienvenida -->
+    <string name="login_eslogan">ChefPocket</string>
+    <string name="login_subtitulo">Tu recetario inteligente de bolsillo</string>
+    <string name="login_descripcion">Explora cientos de recetas internacionales, encuentra inspiración diaria y guarda tus platos favoritos en la nube.</string>
+    <string name="btn_iniciar_sesion">Acceder / Crear cuenta</string>
+    <string name="login_pie">Máster en Ingeniería Web · UPM</string>
 
-    <!-- Autenticación y Bienvenida -->
-    <string name="mensaje_bienvenida">¡Bienvenido/a, %1$s!</string>
+    <!-- Menú Principal y Navegación Inferior -->
+    <string name="menu_explorar">Explorar</string>
+    <string name="menu_favoritos">Favoritos</string>
+    <string name="menu_estadisticas">Estadísticas</string>
+    <string name="menu_perfil">Perfil</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+
+    <!-- Autenticación y Saludos -->
+    <string name="saludo_usuario">¡Hola, %1$s! 👋</string>
+    <string name="subtitulo_home">¿Qué te apetece cocinar hoy?</string>
     <string name="usuario_desconocido">Gourmet</string>
     <string name="usuario_logueado_como">Conectado como:</string>
+    <string name="mensaje_bienvenida">¡Bienvenido/a a ChefPocket, %1$s!</string>
     <string name="login_cancelado">Inicio de sesión cancelado.</string>
     <string name="error_login">Error al iniciar sesión. Inténtalo de nuevo.</string>
     <string name="sesion_cerrada">Sesión cerrada con éxito.</string>
+    <string name="info_cuenta">Información de la Cuenta</string>
+    <string name="info_proveedor">Proveedor: Correo electrónico / Firebase Auth</string>
+    <string name="id_usuario_formato">ID de usuario: %1$s</string>
+    <string name="favoritos_vacio">Aún no tienes recetas favoritas guardadas.</string>
+    <string name="estadisticas_vacio">Consulta recetas para generar tus métricas culinarias.</string>
 
     <!-- Diálogo de Confirmación de Cierre de Sesión -->
     <string name="dialogo_cerrar_sesion_titulo">Cerrar sesión</string>
-    <string name="dialogo_cerrar_sesion_mensaje">¿Estás seguro de que deseas cerrar la sesión actual de ChefPocket?</string>
-    <string name="dialogo_accion_aceptar">Cerrar sesión</string>
+    <string name="dialogo_cerrar_sesion_mensaje">¿Estás seguro de que deseas salir de ChefPocket?</string>
+    <string name="dialogo_accion_aceptar">Salir</string>
     <string name="dialogo_accion_cancelar">Cancelar</string>
 
-    <!-- Estados y Placeholders -->
-    <string name="cargando_datos">Cargando datos de ChefPocket…</string>
+    <!-- Estados y Red -->
+    <string name="cargando_datos">Cargando recetas gourmet…</string>
     <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
+
+    <!-- Sobrescritura completa de textos de FirebaseUI en español -->
+    <!-- Botones y Acciones Comunes -->
+    <string name="fui_sign_in_default">Iniciar sesión</string>
+    <string name="fui_sign_in_with_email">Iniciar sesión con correo</string>
+    <string name="fui_continue">Continuar</string>
+    <string name="fui_next_default">Siguiente</string>
+    <string name="fui_button_text_save">Guardar</string>
+    <string name="fui_button_text_send">Enviar</string>
+
+    <!-- Campos de Entrada (Hints) -->
+    <string name="fui_email_hint">Correo electrónico</string>
+    <string name="fui_name_hint">Nombre y apellidos</string>
+    <string name="fui_password_hint">Contraseña</string>
+    <string name="fui_confirm_password_hint">Confirmar contraseña</string>
+    <string name="fui_new_password_hint">Nueva contraseña</string>
+
+    <!-- Registro de Nuevo Usuario -->
+    <string name="fui_title_register_email">Crear cuenta</string>
+    <string name="fui_progress_dialog_signing_up">Creando tu cuenta…</string>
+    <string name="fui_email_account_creation_error">No se ha podido registrar la cuenta con este correo.</string>
+
+    <!-- Usuario Recurrente (Welcome Back / Inicio de Sesión Existente) -->
+    <string name="fui_welcome_back_email_header">¡Hola de nuevo!</string>
+    <string name="fui_welcome_back_idp_header">Ya tienes una cuenta</string>
+    <string name="fui_welcome_back_email_link_header">Ya tienes una cuenta registrada</string>
+    <string name="fui_welcome_back_password_prompt_body">Ya has utilizado %1$s para iniciar sesión. Introduce la contraseña de esa cuenta para continuar.</string>
+    <string name="fui_welcome_back_idp_prompt">Ya has utilizado %1$s. Inicia sesión con %2$s para continuar.</string>
+    <string name="fui_title_welcome_back_password_prompt">Iniciar sesión</string>
+    <string name="fui_title_welcome_back_idp_prompt">Iniciar sesión</string>
+    <string name="fui_trouble_signing_in">¿Problemas para iniciar sesión?</string>
+
+    <!-- Recuperación de Contraseña -->
+    <string name="fui_title_recover_password_activity">Recuperar contraseña</string>
+    <string name="fui_title_confirm_recover_password">Revisa tu correo</string>
+    <string name="fui_password_recovery_body">Te enviaremos un correo a esta dirección con las instrucciones para restablecer tu contraseña.</string>
+    <string name="fui_confirm_recovery_body">Sigue las instrucciones que hemos enviado a %1$s para restablecer tu contraseña.</string>
+    <string name="fui_progress_dialog_sending">Enviando instrucciones…</string>
+
+    <!-- Diálogos de Progreso -->
+    <string name="fui_progress_dialog_loading">Cargando…</string>
+    <string name="fui_progress_dialog_signing_in">Iniciando sesión…</string>
+    <string name="fui_progress_dialog_checking_accounts">Comprobando cuenta…</string>
+
+    <!-- Validaciones y Errores -->
+    <string name="fui_required_field">No puedes dejar este campo en blanco.</string>
+    <string name="fui_invalid_email_address">La dirección de correo electrónico no es válida.</string>
+    <string name="fui_missing_email_address">Introduce tu correo electrónico para continuar.</string>
+    <string name="fui_missing_first_and_last_name">Introduce tu nombre y apellidos.</string>
+    <string name="fui_passwords_do_not_match">Las contraseñas no coinciden.</string>
+    <string name="fui_error_invalid_password">Contraseña incorrecta. Inténtalo de nuevo.</string>
+    <string name="fui_error_email_does_not_exist">No existe ninguna cuenta asociada a este correo electrónico.</string>
+    <string name="fui_error_password_too_short">La contraseña debe tener al menos %1$d caracteres.</string>
+    <string name="fui_error_unknown">Se ha producido un error inesperado. Inténtalo más tarde.</string>
+    <string name="fui_no_internet">Error de red. Comprueba tu conexión a Internet.</string>
+
+    <plurals name="fui_error_weak_password">
+        <item quantity="one">La contraseña debe tener al menos %1$d carácter y combinar letras y números.</item>
+        <item quantity="other">La contraseña debe tener al menos %1$d caracteres y combinar letras y números.</item>
+    </plurals>
 </resources>

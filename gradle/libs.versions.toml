@@ -9,7 +9,7 @@ activityKtx = "1.13.0"
 constraintlayout = "2.2.2"
 googleGmsServices = "4.4.2"
 firebaseBom = "33.5.1"
-firebaseUi = "8.0.2"
+firebaseUi = "9.1.1"
 retrofit = "2.11.0"
 glide = "4.16.0"
 

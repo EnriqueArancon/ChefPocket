@@ -1,0 +1,81 @@
+
+MEMORIA DE LA PRÁCTICA: CHEFPOCKET (AUTENTICACIÓN, SERVICIOS WEB Y BASE DE DATOS EN LA NUBE)
+
+Alumno: Enrique Arancón López
+Máster en Ingeniería Web (MIW) - UPM
+Asignatura: Front-end para Móviles (FEM)
+
+
+A continuación explico paso a paso las funcionalidades que he ido desarrollando 
+en la práctica, cómo he organizado el código y las decisiones que he tomado:
+
+
+1. ARQUITECTURA GENERAL Y ORGANIZACIÓN DEL CÓDIGO
+Para no sobrecargar MainActivity y mantener una arquitectura limpia y desacoplada, 
+he separado las responsabilidades en paquetes dentro de es.upm.miw.chefpocket:
+
+- ui.actividades: Contiene LoginActivity (pantalla de bienvenida y punto de entrada 
+  de la app) y MainActivity (pantalla principal una vez autenticado).
+- ui.fragmentos: Contiene los fragmentos independientes para cada pestaña de la 
+  aplicación (ExplorarFragment, FavoritosFragment, EstadisticasFragment y PerfilFragment), 
+  además del diálogo modal de confirmación (CerrarSesionDialogFragment).
+- res/menu: Donde he configurado el menú de navegación inferior menu_navegacion_inferior.xml.
+- res/values/strings.xml: Siguiendo las buenas prácticas y las pautas de las 
+  diapositivas, he centralizado absolutamente todas las cadenas de texto aquí, sin 
+  dejar cadenas forzadas (hardcodeadas) en el código Java ni en los layouts XML.
+
+
+2. AUTENTICACIÓN CON FIREBASEUI Y GESTIÓN DE SESIÓN
+Para la autenticación de usuarios he utilizado la librería oficial de FirebaseUI (v9.1.1):
+
+- Pantalla de bienvenida (LoginActivity):
+  Diseñé un layout (activity_login.xml) con una estética moderna y una tarjeta de 
+  bienvenida donde el usuario puede iniciar el proceso de identificación o registro 
+  pulsando en "Acceder / Crear cuenta". Si el usuario ya tenía una sesión activa previa, 
+  compruebo FirebaseAuth.getInstance().getCurrentUser() en el arranque para saltar 
+  directamente a MainActivity sin transiciones innecesarias.
+
+- Configuración y flujo de autenticación:
+  Lancé el intent de inicio de sesión de FirebaseUI configurando el proveedor de 
+  Email/Contraseña. Durante las pruebas en el emulador me encontré con dos detalles técnicos:
+  * El tema por defecto no contrastaba bien en componentes Material, así que creé el estilo 
+    Theme.ChefPocket.Login heredando de FirebaseUI.DefaultMaterialTheme, logrando que los 
+    campos de texto y botones se vean con el delineado perfecto.
+  * En versiones modernas de Android (Android 14 y 15), el Credential Manager bloqueaba 
+    el flujo en el emulador, por lo que añadí la instrucción .setCredentialManagerEnabled(false) 
+    al constructor de AuthUI.
+
+- Cierre de sesión y diálogo de confirmación:
+  En la pestaña de Perfil (PerfilFragment) añadí un botón para cerrar sesión. Siguiendo 
+  el patrón que vimos en clase (Tema 2), creé la clase CerrarSesionDialogFragment 
+  heredando de DialogFragment y usando MaterialAlertDialogBuilder. Mediante la interfaz 
+  de callback CerrarSesionListener aviso a la actividad para que llame a 
+  AuthUI.getInstance().signOut(), notifique al usuario con un Snackbar y lo devuelva a 
+  LoginActivity, asegurando que la sesión queda cerrada de forma limpia.
+
+
+3. INTERNACIONALIZACIÓN COMPLETA (STRINGS.XML)
+Al probar en el emulador me percaté de que, al estar el sistema operativo del teléfono 
+en inglés (en-US), FirebaseUI mostraba textos en inglés en la pantalla de bienvenida y en 
+el formulario de usuarios ya registrados ("Welcome back!", "Trouble signing in?").
+
+Para resolverlo y asegurar que la entrega se evalúe 100% en castellano independientemente 
+del idioma del móvil del profesor:
+- Sobrescribí en res/values/strings.xml toda la batería de recursos de FirebaseUI (fui_*).
+- Traduje tanto las pantallas de creación de cuenta como las de usuario recurrente, 
+  recuperación de contraseña olvidada y mensajes de error de validación (por ejemplo, 
+  contraseña incorrecta o correo mal formado).
+
+
+4. NAVEGACIÓN INFERIOR Y DISEÑO VISUAL
+Para conseguir una interfaz moderna y atractiva, similar a las aplicaciones actuales 
+como Instagram:
+
+- Implementé un BottomNavigationView en la parte inferior de MainActivity, enlazado 
+  a un contenedor de fragmentos (fragment_container).
+- Creé 4 pestañas desacopladas con iconos vectoriales propios: Explorar (receta del 
+  día y buscador), Favoritos (recetas guardadas en la nube), Estadísticas (métricas 
+  culinarias) y Perfil (datos del usuario logueado e ID de Firebase).
+- Para el estilo visual, definí una paleta gastronómica en colors.xml con tonos 
+  terracota (#E65100), ámbar (#FFB300) y superficies cálidas, además de un selector de 
+  estados (selector_nav_bottom.xml) para resaltar la pestaña activa.
