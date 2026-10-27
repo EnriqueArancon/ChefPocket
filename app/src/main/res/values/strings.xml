@@ -1,3 +1,27 @@
 <resources>
+    <!-- Nombre de la aplicación -->
     <string name="app_name">ChefPocket</string>
+
+    <!-- Menú Principal -->
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+    <string name="menu_favoritos">Mis Favoritos</string>
+    <string name="menu_estadisticas">Estadísticas</string>
+
+    <!-- Autenticación y Bienvenida -->
+    <string name="mensaje_bienvenida">¡Bienvenido/a, %1$s!</string>
+    <string name="usuario_desconocido">Gourmet</string>
+    <string name="usuario_logueado_como">Conectado como:</string>
+    <string name="login_cancelado">Inicio de sesión cancelado.</string>
+    <string name="error_login">Error al iniciar sesión. Inténtalo de nuevo.</string>
+    <string name="sesion_cerrada">Sesión cerrada con éxito.</string>
+
+    <!-- Diálogo de Confirmación de Cierre de Sesión -->
+    <string name="dialogo_cerrar_sesion_titulo">Cerrar sesión</string>
+    <string name="dialogo_cerrar_sesion_mensaje">¿Estás seguro de que deseas cerrar la sesión actual de ChefPocket?</string>
+    <string name="dialogo_accion_aceptar">Cerrar sesión</string>
+    <string name="dialogo_accion_cancelar">Cancelar</string>
+
+    <!-- Estados y Placeholders -->
+    <string name="cargando_datos">Cargando datos de ChefPocket…</string>
+    <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
 </resources>
