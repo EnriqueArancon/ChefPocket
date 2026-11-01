@@ -21,12 +21,16 @@ he separado las responsabilidades en paquetes dentro de es.upm.miw.chefpocket:
 - ui.viewmodel: Alberga ExplorarViewModel, encargado de mantener el estado observable 
   (LiveData) de la pantalla principal y evitar llamadas redundantes de red ante cambios 
   de configuración (rotación del dispositivo o cambio entre pestañas).
+- ui.adaptadores: Contiene MealAdapter, el adaptador personalizado para el RecyclerView 
+  que muestra las tarjetas de las recetas con su imagen redondeada con Glide y textos adaptados.
 - utilidades: Clases de soporte desacopladas, como NetworkUtils para comprobar la 
-  conectividad de red mediante ConnectivityManager.
+  conectividad de red mediante ConnectivityManager y TraductorUtils para la localización 
+  inteligente de categorías y orígenes gastronómicos.
 - res/menu: Donde he configurado el menú de navegación inferior menu_navegacion_inferior.xml.
-- res/values/strings.xml: Siguiendo las buenas prácticas y las pautas de las 
-  diapositivas, he centralizado absolutamente todas las cadenas de texto aquí, sin 
-  dejar cadenas forzadas (hardcodeadas) en el código Java ni en los layouts XML.
+- res/values/strings.xml y res/values-en/strings.xml: Siguiendo las buenas prácticas y las pautas 
+  de internacionalización de Android, he configurado soporte bilingüe completo (español e inglés). 
+  Si el móvil está en inglés, la app se adapta íntegramente a inglés; si está en español u otro idioma, 
+  se muestra en castellano, sin ninguna cadena forzada (hardcodeada) en Java ni en XML.
 
 
 2. AUTENTICACIÓN CON FIREBASEUI Y GESTIÓN DE SESIÓN
@@ -134,3 +138,37 @@ Para cumplir con el requisito de consumo de APIs externas (Tema 4):
   unificada ("ChefPocket"). Esto permite filtrar en el Logcat de Android Studio de un 
   vistazo el estado de la red, la inicialización del cliente Retrofit, la receta 
   recibida y la carga de imágenes.
+
+
+6. CATÁLOGO DE RECETAS, FILTROS POR CATEGORÍA (CHIPS), BUSCADOR Y TRADUCTOR ADAPTATIVO
+Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
+
+- Buscador interactivo en tiempo real:
+  Añadí en fragment_explorar.xml una caja de búsqueda con TextInputEditText y estilo outlined, 
+  con icono de lupa y botón para limpiar texto al vuelo. En ExplorarFragment vinculé un 
+  OnEditorActionListener para capturar la pulsación de la tecla "Enter/Buscar" en el teclado 
+  virtual del móvil, cerrando el teclado y disparando la búsqueda en TheMealDB mediante el 
+  ViewModel.
+
+- Barra de filtros rápidos por categoría con Chips:
+  Incorporé un ChipGroup horizontal dentro de un HorizontalScrollView con selección única 
+  (app:singleSelection="true"). Definí chips temáticos para las categorías más populares: 
+  "Todas", "Pastas", "Pollo", "Pescados", "Postres", "Vegetariano", "Desayunos" y "Ternera". 
+  Al pulsar sobre cualquiera de ellos, el ViewModel consulta la API filtrando por dicha categoría 
+  o mostrando el catálogo global si se marca "Todas".
+
+- Adaptador RecyclerView (MealAdapter):
+  Diseñé item_receta.xml con MaterialCardView, esquinas redondeadas y una imagen cuadrada 
+  (ShapeableImageView) cargada de forma asíncrona mediante Glide con placeholder y transición 
+  cruzada. El adaptador MealAdapter actualiza la lista eficientemente mediante notifyDataSetChanged(), 
+  y muestra un mensaje amigable ("tv_sin_resultados") si la búsqueda no encuentra ningún plato.
+
+- Soporte de idioma bilingüe e inteligencia de traducción (TraductorUtils):
+  Dado que la API TheMealDB proporciona la mayoría de datos en inglés, creé la clase 
+  TraductorUtils para detectar el idioma del dispositivo (Locale.getDefault()). Si el usuario 
+  tiene el móvil configurado en español, las categorías culinarias (e.g. "Dessert" -> "Postres", 
+  "Beef" -> "Ternera", "Seafood" -> "Pescados y Mariscos") y los orígenes gastronómicos 
+  (e.g. "Italian" -> "Cocina Italiana", "Japanese" -> "Cocina Japonesa") se traducen de forma 
+  transparente. Además, en el modelo MealDto añadí soporte para el campo opcional 
+  strInstructionsES que TheMealDB ofrece en ciertas recetas internacionales, priorizando la 
+  versión en español cuando está disponible.

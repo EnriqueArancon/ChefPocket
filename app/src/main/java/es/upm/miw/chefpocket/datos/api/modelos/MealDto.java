@@ -29,6 +29,9 @@ public class MealDto implements Serializable {
     @SerializedName("strInstructions")
     private String strInstructions;
 
+    @SerializedName("strInstructionsES")
+    private String strInstructionsES;
+
     @SerializedName("strMealThumb")
     private String strMealThumb;
 
@@ -124,6 +127,18 @@ public class MealDto implements Serializable {
 
     public void setStrInstructions(String strInstructions) {
         this.strInstructions = strInstructions;
+    }
+
+    public String getStrInstructionsES() {
+        return strInstructionsES;
+    }
+
+    public void setStrInstructionsES(String strInstructionsES) {
+        this.strInstructionsES = strInstructionsES;
+    }
+
+    public boolean tieneTraduccionEspanol() {
+        return strInstructionsES != null && !strInstructionsES.trim().isEmpty();
     }
 
     public String getStrMealThumb() {

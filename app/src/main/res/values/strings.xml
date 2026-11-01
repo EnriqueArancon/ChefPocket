@@ -51,6 +51,28 @@
     <string name="receta_origen_categoria">%1$s · %2$s</string>
     <string name="error_cargar_receta">No se pudo obtener la receta del servidor.</string>
 
+    <!-- Filtros y Búsqueda -->
+    <string name="hint_buscar_receta">Buscar por plato o ingrediente…</string>
+    <string name="categoria_todas">Todas</string>
+    <string name="categoria_pollo">Pollo</string>
+    <string name="categoria_pastas">Pastas</string>
+    <string name="categoria_pescados">Pescados</string>
+    <string name="categoria_postres">Postres</string>
+    <string name="categoria_vegetariano">Vegetariano</string>
+    <string name="categoria_desayunos">Desayunos</string>
+    <string name="categoria_ternera">Ternera</string>
+    <string name="titulo_catalogo_recetas">Catálogo de recetas</string>
+    <string name="sin_resultados_busqueda">No se encontraron recetas para tu búsqueda.</string>
+
+    <!-- Detalle de Receta e Idioma -->
+    <string name="titulo_ingredientes">Ingredientes necesarios</string>
+    <string name="titulo_preparacion">Preparación paso a paso</string>
+    <string name="btn_video_tutorial">Ver vídeo tutorial</string>
+    <string name="aviso_idioma_original">Instrucciones en idioma original (inglés). TheMealDB no dispone de traducción al español para esta receta.</string>
+    <string name="video_sin_conexion">Se necesita conexión a Internet para reproducir el vídeo tutorial.</string>
+    <string name="favorito_anadido">Receta añadida a favoritos</string>
+    <string name="favorito_eliminado">Receta eliminada de favoritos</string>
+
     <!-- Sobrescritura completa de textos de FirebaseUI en español -->
     <!-- Botones y Acciones Comunes -->
     <string name="fui_sign_in_default">Iniciar sesión</string>
