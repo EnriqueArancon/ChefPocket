@@ -28,7 +28,7 @@
 
         <!-- Pantalla Principal de Recetas -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.actividades.MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 

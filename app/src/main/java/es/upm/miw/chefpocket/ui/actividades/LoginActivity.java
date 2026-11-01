@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Collections;
 import java.util.List;
 
-import es.upm.miw.chefpocket.MainActivity;
 import es.upm.miw.chefpocket.R;
 
 public class LoginActivity extends AppCompatActivity {

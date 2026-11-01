@@ -1,4 +1,4 @@
-package es.upm.miw.chefpocket;
+package es.upm.miw.chefpocket.ui.actividades;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import es.upm.miw.chefpocket.ui.actividades.LoginActivity;
+import es.upm.miw.chefpocket.R;
 import es.upm.miw.chefpocket.ui.dialogos.CerrarSesionDialogFragment;
 import es.upm.miw.chefpocket.ui.fragmentos.EstadisticasFragment;
 import es.upm.miw.chefpocket.ui.fragmentos.ExplorarFragment;
@@ -89,3 +89,4 @@ public class MainActivity extends AppCompatActivity implements CerrarSesionDialo
                 });
     }
 }
+
