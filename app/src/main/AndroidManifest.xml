@@ -32,6 +32,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Pantalla de Detalle de Receta -->
+        <activity
+            android:name=".ui.actividades.RecipeDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.actividades.MainActivity" />
+
     </application>
 
 </manifest>

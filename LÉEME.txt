@@ -14,7 +14,9 @@ Para no sobrecargar MainActivity y mantener una arquitectura limpia y desacoplad
 he separado las responsabilidades en paquetes dentro de es.upm.miw.chefpocket:
 
 - ui.actividades: Contiene LoginActivity (pantalla de bienvenida y punto de entrada 
-  de la app) y MainActivity (pantalla principal una vez autenticado).
+  de la app), MainActivity (pantalla principal una vez autenticado) y RecipeDetailActivity 
+  (pantalla de detalle completo de cada receta con cabecera colapsable, ingredientes, 
+  instrucciones, aviso de idioma y tutorial en vídeo).
 - ui.fragmentos: Contiene los fragmentos independientes para cada pestaña de la 
   aplicación (ExplorarFragment, FavoritosFragment, EstadisticasFragment y PerfilFragment), 
   además del diálogo modal de confirmación (CerrarSesionDialogFragment).
@@ -87,6 +89,13 @@ como Instagram:
 - Para el estilo visual, definí una paleta gastronómica en colors.xml con tonos 
   terracota (#E65100), ámbar (#FFB300) y superficies cálidas, además de un selector de 
   estados (selector_nav_bottom.xml) para resaltar la pestaña activa.
+- Para garantizar una experiencia de usuario fluida e instantánea, gestioné la navegación en 
+  MainActivity mediante transacciones de FragmentManager empleando show() y hide() en lugar 
+  de destruir y recrear fragmentos (replace()). Esto, sumado al alcance de ExplorarViewModel 
+  ligado a la Activity anfitriona (requireActivity()), conserva íntegro el estado en memoria: 
+  la propuesta gastronómica destacada no cambia aleatoriamente al conmutar de pestaña, ni se 
+  pierde la posición de scroll ni los filtros aplicados en el catálogo. Únicamente se solicita 
+  una nueva propuesta si el usuario pulsa explícitamente el botón "Probar otra".
 
 
 5. ACCESO A SERVICIOS WEB REST (RETROFIT + GSON + GLIDE) Y GESTIÓN OFFLINE
@@ -163,12 +172,70 @@ Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
   cruzada. El adaptador MealAdapter actualiza la lista eficientemente mediante notifyDataSetChanged(), 
   y muestra un mensaje amigable ("tv_sin_resultados") si la búsqueda no encuentra ningún plato.
 
-- Soporte de idioma bilingüe e inteligencia de traducción (TraductorUtils):
+- Soporte de idioma bilingüe y traductor en memoria de alta eficiencia O(1) (TraductorUtils):
   Dado que la API TheMealDB proporciona la mayoría de datos en inglés, creé la clase 
-  TraductorUtils para detectar el idioma del dispositivo (Locale.getDefault()). Si el usuario 
-  tiene el móvil configurado en español, las categorías culinarias (e.g. "Dessert" -> "Postres", 
-  "Beef" -> "Ternera", "Seafood" -> "Pescados y Mariscos") y los orígenes gastronómicos 
-  (e.g. "Italian" -> "Cocina Italiana", "Japanese" -> "Cocina Japonesa") se traducen de forma 
-  transparente. Además, en el modelo MealDto añadí soporte para el campo opcional 
-  strInstructionsES que TheMealDB ofrece en ciertas recetas internacionales, priorizando la 
-  versión en español cuando está disponible.
+  TraductorUtils para detectar el idioma del dispositivo (Locale.getDefault()). Para no penalizar 
+  el rendimiento de la aplicación ni depender de APIs externas de traducción por red (que 
+  introducirían latencia, consumo excesivo de batería y fallos en modo offline), implementé 
+  diccionarios estáticos mediante tablas hash (HashMap).
+  
+  Esto me permitió lograr búsquedas instantáneas en tiempo constante O(1) sin sobrecarga de memoria:
+  * Traduzco al castellano categorías gastronómicas y países de origen.
+  * Traduzco más de 120 ingredientes culinarios comunes (harina, azúcar, leche, huevos, mantequilla, calamares, verduras, especias, etc.) 
+    y adapto exhaustivamente unidades de medida anglosajonas y descriptores culinarios 
+    (ej. "cups" -> "tazas", "tbsp" -> "cucharadas", "tsp" -> "cucharaditas", "to taste" -> "al gusto", 
+    "minced" -> "picado", "peeled and crushed" -> "pelado y machacado", "for frying" -> "para freír", 
+    "to serve" -> "para servir", "medium" -> "mediano", unidades contables "1" -> "1 ud." / "2 uds.", etc., 
+    respetando rigurosamente la concordancia gramatical de género y número en español).
+  * Añadí traducciones íntegras en español para las recetas más populares y consultadas de la API 
+    (Flan, Tortilla Española, Pancakes, Summer Pudding, etc.), reservando la tarjeta de aviso 
+    únicamente para platos que carecen de versión en español en la comunidad de TheMealDB. Si el 
+    móvil del usuario está en inglés, la clase cortocircuita inmediatamente para conservar los textos 
+    originales sin coste de procesamiento.
+
+
+7. PANTALLA DE DETALLE DE RECETA (RECIPEDETAILACTIVITY), INGREDIENTES Y VÍDEO TUTORIAL
+Para que el usuario pueda consultar paso a paso toda la información necesaria para cocinar:
+
+- Navegación explícita mediante Intent:
+  Al pulsar sobre la propuesta destacada o sobre cualquier receta del catálogo en ExplorarFragment, 
+  se inicia un Intent explícito hacia RecipeDetailActivity enviando el objeto MealDto 
+  (que implementa Serializable) bajo la clave EXTRA_RECETA. En AndroidManifest.xml declaré la 
+  actividad configurando android:parentActivityName=".ui.actividades.MainActivity" para garantizar 
+  la navegación hacia arriba de forma estándar.
+
+- Cabecera interactiva con CollapsingToolbarLayout y Glide:
+  Diseñé la cabecera en activity_recipe_detail.xml usando CoordinatorLayout y CollapsingToolbarLayout 
+  con efecto parallax. La fotografía del plato se carga con Glide y se funde suavemente al hacer 
+  scroll, manteniendo el título de la receta fijado en la barra superior junto al botón de retroceso.
+
+- Desglose de ingredientes con medidas:
+  En MealDto implementé la clase auxiliar IngredienteItem y el método getIngredientesDesglosados(). 
+  En RecipeDetailActivity inflo dinámicamente filas personalizadas (item_ingrediente.xml) con 
+  puntos decorativos en tono terracota, mostrando el nombre del ingrediente a la izquierda y la 
+  medida precisa requerida a la derecha.
+
+- Instrucciones de preparación paso a paso con numeración visual:
+  Para evitar presentar un bloque denso e incómodo de texto corrido, diseñé un algoritmo en 
+  TraductorUtils (desglosarPasosInstrucciones) que segmenta las instrucciones en pasos individuales 
+  limpios eliminando prefijos redundantes. En la interfaz inflo dinámicamente para cada paso una vista 
+  dedicada (item_paso_instruccion.xml) con un distintivo numérico circular en color terracota y su 
+  correspondiente texto explicativo, logrando una experiencia de lectura secuencial sumamente clara y moderna.
+
+- Consulta complementaria (lookup.php) si faltan datos:
+  Si el usuario accede a una receta filtrada por categoría (cuyo endpoint original en TheMealDB solo 
+  devuelve el identificador, el título y la foto), RecipeDetailActivity lo detecta automáticamente, 
+  muestra un indicador de carga y realiza una petición asíncrona a lookup.php?i={idMeal} con 
+  Retrofit para recuperar los ingredientes y las instrucciones completas antes de pintar la vista.
+
+- Enlace directo a vídeo tutorial en YouTube:
+  Si la receta dispone de URL de vídeo en el campo strYoutube, muestro un botón estilizado 
+  (btn_ver_video_detalle) con el icono de YouTube. Antes de lanzar el Intent implícito de tipo 
+  ACTION_VIEW hacia la aplicación de YouTube o el navegador, compruebo la conectividad con 
+  NetworkUtils.hayConexion(this). Si el dispositivo no tiene conexión, evito errores silenciosos 
+  y muestro un aviso no bloqueante mediante Snackbar.
+
+- Botón flotante de favoritos (FAB):
+  Añadí un FloatingActionButton superpuesto entre la fotografía y el contenido para permitir 
+  marcar o desmarcar la receta como favorita, mostrando avisos contextuales con Snackbar y 
+  preparando la integración con la base de datos en la nube.

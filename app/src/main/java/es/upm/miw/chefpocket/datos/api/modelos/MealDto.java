@@ -166,6 +166,56 @@ public class MealDto implements Serializable {
     }
 
     /**
+     * Elemento estructurado que desglosa un ingrediente y su medida correspondiente.
+     */
+    public static class IngredienteItem implements Serializable {
+        private final String ingrediente;
+        private final String medida;
+
+        public IngredienteItem(String ingrediente, String medida) {
+            this.ingrediente = ingrediente;
+            this.medida = medida;
+        }
+
+        public String getIngrediente() {
+            return ingrediente;
+        }
+
+        public String getMedida() {
+            return medida;
+        }
+    }
+
+    /**
+     * Devuelve la lista desglosada de ingredientes y sus medidas para la vista de detalle.
+     */
+    public List<IngredienteItem> getIngredientesDesglosados() {
+        List<IngredienteItem> resultado = new ArrayList<>();
+        String[] ingredientes = new String[]{
+                strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5,
+                strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10,
+                strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15,
+                strIngredient16, strIngredient17, strIngredient18, strIngredient19, strIngredient20
+        };
+        String[] medidas = new String[]{
+                strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5,
+                strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10,
+                strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15,
+                strMeasure16, strMeasure17, strMeasure18, strMeasure19, strMeasure20
+        };
+
+        for (int i = 0; i < ingredientes.length; i++) {
+            String ing = ingredientes[i];
+            String med = (i < medidas.length && medidas[i] != null) ? medidas[i].trim() : "";
+
+            if (ing != null && !ing.trim().isEmpty()) {
+                resultado.add(new IngredienteItem(ing.trim(), med));
+            }
+        }
+        return resultado;
+    }
+
+    /**
      * Extrae de forma limpia todos los ingredientes no vacíos junto con sus medidas correspondientes.
      *
      * @return Lista de strings formateados como "Medida Ingrediente" (ej: "200g Flour")

@@ -1,6 +1,7 @@
 package es.upm.miw.chefpocket.ui.fragmentos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import es.upm.miw.chefpocket.R;
 import es.upm.miw.chefpocket.datos.api.modelos.MealDto;
+import es.upm.miw.chefpocket.ui.actividades.RecipeDetailActivity;
 import es.upm.miw.chefpocket.ui.adaptadores.MealAdapter;
 import es.upm.miw.chefpocket.ui.viewmodel.ExplorarViewModel;
 import es.upm.miw.chefpocket.utilidades.TraductorUtils;
@@ -120,7 +122,9 @@ public class ExplorarFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(this).get(ExplorarViewModel.class);
+        // Vinculamos el ViewModel a la Activity anfitriona para que su estado (receta sugerida y catálogo)
+        // sobreviva a la navegación entre pestañas del BottomNavigationView y a rotaciones.
+        viewModel = new ViewModelProvider(requireActivity()).get(ExplorarViewModel.class);
 
         // Configuración de RecyclerView
         adapter = new MealAdapter(this::abrirDetalleReceta);
@@ -297,9 +301,11 @@ public class ExplorarFragment extends Fragment {
     }
 
     private void abrirDetalleReceta(MealDto meal) {
-        Log.i(LOG_TAG, "ExplorarFragment: Clic en receta -> " + meal.getStrMeal() + " (ID: " + meal.getIdMeal() + ")");
-        Toast.makeText(requireContext(), meal.getStrMeal(), Toast.LENGTH_SHORT).show();
-        // En el siguiente paso conectaremos con RecipeDetailActivity.class
+        if (meal == null) return;
+        Log.i(LOG_TAG, "ExplorarFragment: Abriendo detalle de receta -> " + meal.getStrMeal() + " (ID: " + meal.getIdMeal() + ")");
+        Intent intent = new Intent(requireContext(), RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailActivity.EXTRA_RECETA, meal);
+        startActivity(intent);
     }
 
     private void ocultarTeclado() {

@@ -65,11 +65,16 @@
     <string name="sin_resultados_busqueda">No recipes found for your query.</string>
 
     <!-- Recipe Detail -->
+    <string name="titulo_actividad_detalle">Recipe Details</string>
     <string name="titulo_ingredientes">Ingredients</string>
     <string name="titulo_preparacion">Step-by-Step Instructions</string>
-    <string name="btn_video_tutorial">Watch video tutorial</string>
+    <string name="btn_video_tutorial">Watch video tutorial on YouTube</string>
+    <string name="aviso_idioma_titulo">Language notice</string>
     <string name="aviso_idioma_original">Original English instructions (TheMealDB does not have a Spanish translation for this dish).</string>
     <string name="video_sin_conexion">An Internet connection is required to play the video tutorial.</string>
+    <string name="cargando_detalle_receta">Loading recipe details…</string>
+    <string name="compartir_receta_texto">Check out this recipe for %1$s on ChefPocket!\n%2$s</string>
+    <string name="fab_anadir_favorito">Add to favorites</string>
     <string name="favorito_anadido">Recipe saved to favorites</string>
     <string name="favorito_eliminado">Recipe removed from favorites</string>
 </resources>

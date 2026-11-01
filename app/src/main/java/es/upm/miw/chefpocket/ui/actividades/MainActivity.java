@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -21,6 +22,17 @@ import es.upm.miw.chefpocket.ui.fragmentos.FavoritosFragment;
 import es.upm.miw.chefpocket.ui.fragmentos.PerfilFragment;
 
 public class MainActivity extends AppCompatActivity implements CerrarSesionDialogFragment.CerrarSesionListener {
+
+    private static final String TAG_EXPLORAR = "fragment_explorar";
+    private static final String TAG_FAVORITOS = "fragment_favoritos";
+    private static final String TAG_ESTADISTICAS = "fragment_estadisticas";
+    private static final String TAG_PERFIL = "fragment_perfil";
+
+    private Fragment fragmentExplorar;
+    private Fragment fragmentFavoritos;
+    private Fragment fragmentEstadisticas;
+    private Fragment fragmentPerfil;
+    private Fragment fragmentActivo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,37 +51,64 @@ public class MainActivity extends AppCompatActivity implements CerrarSesionDialo
         setSupportActionBar(toolbar);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnItemSelectedListener(item -> {
-            Fragment fragmentSeleccionado = null;
-            int itemId = item.getItemId();
+        FragmentManager fm = getSupportFragmentManager();
 
-            if (itemId == R.id.nav_explorar) {
-                fragmentSeleccionado = new ExplorarFragment();
-            } else if (itemId == R.id.nav_favoritos) {
-                fragmentSeleccionado = new FavoritosFragment();
-            } else if (itemId == R.id.nav_estadisticas) {
-                fragmentSeleccionado = new EstadisticasFragment();
-            } else if (itemId == R.id.nav_perfil) {
-                fragmentSeleccionado = new PerfilFragment();
+        if (savedInstanceState == null) {
+            fragmentExplorar = new ExplorarFragment();
+            fragmentFavoritos = new FavoritosFragment();
+            fragmentEstadisticas = new EstadisticasFragment();
+            fragmentPerfil = new PerfilFragment();
+
+            fragmentActivo = fragmentExplorar;
+
+            fm.beginTransaction()
+                    .add(R.id.contenedor_fragmentos, fragmentPerfil, TAG_PERFIL).hide(fragmentPerfil)
+                    .add(R.id.contenedor_fragmentos, fragmentEstadisticas, TAG_ESTADISTICAS).hide(fragmentEstadisticas)
+                    .add(R.id.contenedor_fragmentos, fragmentFavoritos, TAG_FAVORITOS).hide(fragmentFavoritos)
+                    .add(R.id.contenedor_fragmentos, fragmentExplorar, TAG_EXPLORAR)
+                    .commit();
+        } else {
+            fragmentExplorar = fm.findFragmentByTag(TAG_EXPLORAR);
+            fragmentFavoritos = fm.findFragmentByTag(TAG_FAVORITOS);
+            fragmentEstadisticas = fm.findFragmentByTag(TAG_ESTADISTICAS);
+            fragmentPerfil = fm.findFragmentByTag(TAG_PERFIL);
+
+            if (fragmentExplorar == null) fragmentExplorar = new ExplorarFragment();
+            if (fragmentFavoritos == null) fragmentFavoritos = new FavoritosFragment();
+            if (fragmentEstadisticas == null) fragmentEstadisticas = new EstadisticasFragment();
+            if (fragmentPerfil == null) fragmentPerfil = new PerfilFragment();
+
+            fragmentActivo = obtenerFragmentoPorId(bottomNav.getSelectedItemId());
+            if (fragmentActivo == null) {
+                fragmentActivo = fragmentExplorar;
             }
+        }
 
-            if (fragmentSeleccionado != null) {
-                cargarFragmento(fragmentSeleccionado);
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment fragmentDestino = obtenerFragmentoPorId(item.getItemId());
+            if (fragmentDestino != null && fragmentDestino != fragmentActivo) {
+                fm.beginTransaction()
+                        .hide(fragmentActivo)
+                        .show(fragmentDestino)
+                        .commit();
+                fragmentActivo = fragmentDestino;
                 return true;
             }
-            return false;
+            return fragmentDestino != null;
         });
-
-        // Cargar por defecto la primera pestaña (Explorar)
-        if (savedInstanceState == null) {
-            cargarFragmento(new ExplorarFragment());
-        }
     }
 
-    private void cargarFragmento(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contenedor_fragmentos, fragment)
-                .commit();
+    private Fragment obtenerFragmentoPorId(int itemId) {
+        if (itemId == R.id.nav_explorar) {
+            return fragmentExplorar;
+        } else if (itemId == R.id.nav_favoritos) {
+            return fragmentFavoritos;
+        } else if (itemId == R.id.nav_estadisticas) {
+            return fragmentEstadisticas;
+        } else if (itemId == R.id.nav_perfil) {
+            return fragmentPerfil;
+        }
+        return null;
     }
 
     private void redirigirALogin() {

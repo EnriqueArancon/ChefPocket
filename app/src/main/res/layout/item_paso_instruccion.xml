@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:orientation="horizontal">
+
+    <!-- Indicador numérico circular del paso -->
+    <TextView
+        android:id="@+id/tv_numero_paso"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_step_circle"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceCaption"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="1" />
+
+    <!-- Texto de la instrucción -->
+    <TextView
+        android:id="@+id/tv_texto_paso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1"
+        android:lineSpacingExtra="3dp"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="@color/chef_text_primary"
+        tools:text="Precalienta el horno a 180°C y engrasa el molde de tarta con mantequilla." />
+
+</LinearLayout>
+

@@ -65,11 +65,16 @@
     <string name="sin_resultados_busqueda">No se encontraron recetas para tu búsqueda.</string>
 
     <!-- Detalle de Receta e Idioma -->
+    <string name="titulo_actividad_detalle">Detalle de la receta</string>
     <string name="titulo_ingredientes">Ingredientes necesarios</string>
     <string name="titulo_preparacion">Preparación paso a paso</string>
-    <string name="btn_video_tutorial">Ver vídeo tutorial</string>
+    <string name="btn_video_tutorial">Ver vídeo tutorial en YouTube</string>
+    <string name="aviso_idioma_titulo">Aviso de idioma</string>
     <string name="aviso_idioma_original">Instrucciones en idioma original (inglés). TheMealDB no dispone de traducción al español para esta receta.</string>
     <string name="video_sin_conexion">Se necesita conexión a Internet para reproducir el vídeo tutorial.</string>
+    <string name="cargando_detalle_receta">Cargando detalles de la receta…</string>
+    <string name="compartir_receta_texto">¡Mira esta deliciosa receta de %1$s en ChefPocket!\n%2$s</string>
+    <string name="fab_anadir_favorito">Añadir a favoritos</string>
     <string name="favorito_anadido">Receta añadida a favoritos</string>
     <string name="favorito_eliminado">Receta eliminada de favoritos</string>
 
