@@ -28,8 +28,27 @@
     <string name="info_cuenta">Account Information</string>
     <string name="info_proveedor">Provider: Email / Firebase Auth</string>
     <string name="id_usuario_formato">User ID: %1$s</string>
-    <string name="favoritos_vacio">You don\'t have any favorite recipes saved yet.</string>
-    <string name="estadisticas_vacio">Browse recipes to generate your culinary stats.</string>
+    <string name="titulo_seccion_favoritos">My Favorite Recipes</string>
+    <string name="subtitulo_seccion_favoritos">Collection synced to the cloud via Firebase</string>
+    <string name="favoritos_vacio_titulo">Your recipe collection is empty</string>
+    <string name="favoritos_vacio">You don\'t have any favorite recipes saved yet. Tap the heart on any dish to save it here.</string>
+    <string name="estadisticas_vacio">You don\'t have enough favorite recipes yet to calculate your culinary stats. Save your favorite dishes to discover them!</string>
+    <string name="titulo_seccion_estadisticas">Culinary Statistics</string>
+    <string name="subtitulo_seccion_estadisticas">Real-time metrics from your Firebase recipe collection</string>
+    <string name="stat_total_recetas">Recipes in Favorites</string>
+    <string name="stat_total_recetas_sub">Dishes synchronized in your Firebase account</string>
+    <string name="stat_platos_cocinados">Dishes Cooked</string>
+    <string name="stat_platos_cocinados_sub">Permanent culinary experience</string>
+    <string name="btn_marcar_cocinado_inactivo">I COOKED THIS DISH!</string>
+    <string name="btn_marcar_cocinado_activo">✔ DISH COOKED SUCCESSFULLY!</string>
+    <string name="snack_plato_cocinado_anadido">Congratulations, Chef! You gained culinary experience.</string>
+    <string name="snack_plato_cocinado_eliminado">Dish removed from your cooking log.</string>
+    <string name="stat_categoria_predilecta">Favorite Category</string>
+    <string name="stat_origen_predilecto">Preferred Cuisine</string>
+    <string name="stat_rango_culinario">Chef Rank</string>
+    <string name="rango_novato">Novice Cook 🍳</string>
+    <string name="rango_aficionado">Amateur Chef 👨‍🍳</string>
+    <string name="rango_master">Master Chef Pocket ⭐</string>
 
     <!-- Sign-out Dialog -->
     <string name="dialogo_cerrar_sesion_titulo">Sign out</string>
@@ -75,6 +94,7 @@
     <string name="cargando_detalle_receta">Loading recipe details…</string>
     <string name="compartir_receta_texto">Check out this recipe for %1$s on ChefPocket!\n%2$s</string>
     <string name="fab_anadir_favorito">Add to favorites</string>
+    <string name="fab_eliminar_favorito">Remove from favorites</string>
     <string name="favorito_anadido">Recipe saved to favorites</string>
     <string name="favorito_eliminado">Recipe removed from favorites</string>
 </resources>

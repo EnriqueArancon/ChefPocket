@@ -1,5 +1,6 @@
 package es.upm.miw.chefpocket.datos.api.modelos;
 
+import com.google.firebase.database.Exclude;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -137,6 +138,7 @@ public class MealDto implements Serializable {
         this.strInstructionsES = strInstructionsES;
     }
 
+    @Exclude
     public boolean tieneTraduccionEspanol() {
         return strInstructionsES != null && !strInstructionsES.trim().isEmpty();
     }
@@ -189,6 +191,7 @@ public class MealDto implements Serializable {
     /**
      * Devuelve la lista desglosada de ingredientes y sus medidas para la vista de detalle.
      */
+    @Exclude
     public List<IngredienteItem> getIngredientesDesglosados() {
         List<IngredienteItem> resultado = new ArrayList<>();
         String[] ingredientes = new String[]{
@@ -220,6 +223,7 @@ public class MealDto implements Serializable {
      *
      * @return Lista de strings formateados como "Medida Ingrediente" (ej: "200g Flour")
      */
+    @Exclude
     public List<String> getIngredientesConMedidas() {
         List<String> resultado = new ArrayList<>();
         String[] ingredientes = new String[]{

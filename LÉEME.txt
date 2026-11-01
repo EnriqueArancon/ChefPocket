@@ -237,5 +237,76 @@ Para que el usuario pueda consultar paso a paso toda la información necesaria p
 
 - Botón flotante de favoritos (FAB):
   Añadí un FloatingActionButton superpuesto entre la fotografía y el contenido para permitir 
-  marcar o desmarcar la receta como favorita, mostrando avisos contextuales con Snackbar y 
-  preparando la integración con la base de datos en la nube.
+  marcar o desmarcar la receta como favorita conmutando en tiempo real en Firebase. Al abrir la 
+  pantalla, consulta de forma reactiva si el plato ya está guardado para alternar el icono entre 
+  contorno (ic_favorite_border) o relleno (ic_favorite_filled), mostrando avisos contextuales no 
+  bloqueantes mediante Snackbar.
+
+
+8. PERSISTENCIA EN LA NUBE CON FIREBASE REALTIME DATABASE Y MODO OFFLINE EN DISCO
+Para satisfacer los requisitos de almacenamiento en la nube y sincronización reactiva (Tema 3):
+
+- Persistencia en disco local (Modo Offline de Firebase):
+  Creé la clase ChefPocketApp extendiendo de Application y la registré en AndroidManifest.xml. 
+  En su método onCreate() invoqué FirebaseDatabase.getInstance().setPersistenceEnabled(true). 
+  Esto garantiza que Firebase mantenga una base de datos SQLite interna en el dispositivo, 
+  permitiendo al usuario consultar sus recetas favoritas y sus estadísticas incluso en modo avión 
+  o sin conexión a Internet, sincronizando automáticamente las modificaciones pendientes en cuanto 
+  se recupera la red.
+
+- Estructura de datos particionada por usuario (Multiusuario y doble colección):
+  Para garantizar la privacidad, el aislamiento de datos entre cuentas de Firebase Auth y 
+  una distinción lógica entre deseos y logros culinarios, estructuré dos nodos JSON en la nube:
+  * usuarios / {userId} / favoritos / {idMeal} -> Colección de recetas guardadas para cocinar más tarde (wishlist).
+  * usuarios / {userId} / cocinadas / {idMeal} -> Historial permanente de recetas preparadas con éxito.
+  Esta separación aporta una gran ventaja de UX: si el usuario hace limpieza en su recetario 
+  de favoritos y elimina recetas, su nivel y experiencia como cocinero no se pierden ni disminuyen.
+
+- Serialización de modelos y exclusión de métodos auxiliares:
+  En el modelo MealDto anoté con @Exclude (del paquete com.google.firebase.database.Exclude) los 
+  métodos auxiliares getIngredientesDesglosados(), getIngredientesConMedidas() y tieneTraduccionEspanol(). 
+  De esta forma evité que Firebase intentara persistir propiedades calculadas que carecen de campos 
+  correspondientes, previniendo excepciones durante la deserialización automática.
+
+- Capa de acceso a datos (FirebaseDbHelper):
+  Siguiendo el patrón Singleton, implementé FirebaseDbHelper en el paquete datos.firebase. 
+  Centraliza todas las operaciones contra la base de datos en la nube:
+  * comprobarEsFavorito(): consulta puntual mediante addListenerForSingleValueEvent().
+  * guardarFavorito() y eliminarFavorito(): llamadas asíncronas con setValue() y removeValue().
+  * conmutarFavorito(): método de alto nivel que comprueba el estado actual y lo alterna de forma atómica.
+  * suscribirAFavoritos() y suscribirAPlatosCocinados(): establecen ValueEventListener persistentes 
+    que notifican cualquier cambio en tiempo real hacia los fragmentos.
+  * desuscribirDeFavoritos() y desuscribirDeCocinadas(): eliminan los escuchadores en el ciclo 
+    de vida (onStop) para prevenir fugas de memoria.
+  * marcarPlatoComoCocinado() y comprobarPlatoCocinado(): gestionan el registro de platos preparados con éxito.
+
+- Pantalla de detalle con acción de cocinado (RecipeDetailActivity):
+  En la pantalla de detalle incorporé, justo después del botón de vídeo tutorial para 
+  respetar el orden natural del flujo culinario (consultar pasos -> ver vídeo explicativo -> 
+  preparar el plato), el botón de logro gastronómico "¡HE COCINADO ESTE PLATO!" (btn_marcar_cocinado). 
+  Al pulsarlo, la receta se registra en el nodo /cocinadas de Firebase, el botón se transforma 
+  a un estado de confirmación ("✔ ¡PLATO COCINADO CON ÉXITO!") y se notifica al usuario con un 
+  Snackbar festivo ("¡Enhorabuena, Chef! Has sumado experiencia culinaria").
+
+- Pestaña de Favoritos (FavoritosFragment):
+  Muestra la colección de recetas guardadas por el usuario. Implementé un RecyclerView conectado a 
+  MealAdapter que se alimenta del escuchador en tiempo real de Firebase. Si el usuario no tiene 
+  favoritos, conmuta a una vista ilustrativa de estado vacío (layout_favoritos_vacio). Si añade o 
+  elimina recetas desde cualquier punto de la aplicación, la lista y el contador del subtítulo se 
+  actualizan de forma instantánea.
+
+- Panel de Estadísticas Culinarias (EstadisticasFragment) y Hero Card de Rango de Chef:
+  Diseñé un panel de control gastronómico reactivo situando como protagonista absoluto en lo más 
+  alto de la pantalla la Tarjeta Hero del Rango de Chef (MaterialCardView con borde resaltado y 
+  elevación), garantizando que el usuario aprecie su progreso culinario de forma inmediata:
+  * Rango de Chef permanente: calculado según el número de platos cocinados con éxito:
+    - "Pinche de Cocina 🧑‍🍳" (0 platos preparados).
+    - "Cocinero Novato 🍳" (1 a 2 platos preparados).
+    - "Chef Aficionado 👨‍🍳" (3 a 5 platos preparados).
+    - "Master Chef Pocket ⭐" (6 o más platos preparados).
+  * Mensaje dinámico de progreso: indica cuántos platos faltan exactamente para el siguiente ascenso.
+  * Tarjetas métricas de actividad: desglose simultáneo de "Platos Cocinados" y "Recetas en Favoritos".
+  * Preferencias gastronómicas: detección reactiva de la categoría culinaria predilecta (analizando 
+    las frecuencias de las recetas cocinadas y guardadas) y la cocina del mundo favorita (país de origen).
+  Todas las métricas se recalculan en tiempo real sin recargar la pantalla gracias a los 
+  ValueEventListener sincronizados con Firebase.

@@ -1,35 +1,389 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/chef_background"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:fillViewport="true">
 
-    <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:contentDescription="@string/menu_estadisticas"
-        android:src="@drawable/ic_nav_stats"
-        app:tint="@color/chef_accent" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/menu_estadisticas"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/chef_text_primary"
-        android:textStyle="bold" />
+        android:paddingBottom="36dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/estadisticas_vacio"
-        android:textAppearance="?attr/textAppearanceBody2"
-        android:textColor="@color/chef_text_secondary" />
+        <!-- Cabecera de la sección -->
+        <LinearLayout
+            android:id="@+id/ll_cabecera_stats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="12dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/titulo_seccion_estadisticas"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/chef_text_primary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/subtitulo_seccion_estadisticas"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/chef_text_secondary" />
+        </LinearLayout>
+
+        <!-- Indicador de carga -->
+        <ProgressBar
+            android:id="@+id/progress_stats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:indeterminateTint="@color/chef_primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_cabecera_stats" />
+
+        <!-- Contenedor principal de métricas -->
+        <LinearLayout
+            android:id="@+id/layout_stats_contenido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/ll_cabecera_stats">
+
+            <!-- TARJETA PROTAGONISTA SUPERIOR: RANGO DE COCINERO (HERO CARD) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/chef_surface"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/chef_primary"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Insignia del Chef -->
+                        <ImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:backgroundTint="@color/chef_primary"
+                            android:contentDescription="@string/stat_rango_culinario"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_nav_profile"
+                            app:tint="@color/white" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/stat_rango_culinario"
+                                android:textAppearance="?attr/textAppearanceCaption"
+                                android:textColor="@color/chef_primary"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_stat_rango_chef"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/rango_novato"
+                                android:textAppearance="?attr/textAppearanceHeadline5"
+                                android:textColor="@color/chef_text_primary"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Mensaje de progreso hacia el siguiente nivel -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="14dp"
+                        android:background="@color/chef_divider" />
+
+                    <TextView
+                        android:id="@+id/tv_stat_rango_sub"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="¡Prepara tus platos favoritos para subir de rango!"
+                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textColor="@color/chef_text_secondary" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- FILA DE ACTIVIDAD: Platos Cocinados y Recetas en Favoritos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <!-- Tarjeta: Platos Cocinados -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/chef_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/chef_divider"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:backgroundTint="@color/chef_primary_dark"
+                            android:contentDescription="@string/stat_platos_cocinados"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_cocinados_numero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="0"
+                            android:textAppearance="?attr/textAppearanceHeadline4"
+                            android:textColor="@color/chef_primary_dark"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_platos_cocinados"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/chef_text_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_platos_cocinados_sub"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Tarjeta: Recetas en Favoritos -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/chef_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/chef_divider"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:backgroundTint="@color/chef_primary_light"
+                            android:contentDescription="@string/stat_total_recetas"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_favorite_filled"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_favoritos_numero"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="0"
+                            android:textAppearance="?attr/textAppearanceHeadline4"
+                            android:textColor="@color/chef_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_total_recetas"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/chef_text_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Guardadas en recetario"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Tarjeta: Categoría y Especialidad Predilecta -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/chef_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/chef_divider"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_step_circle"
+                        android:backgroundTint="@color/chef_surface_variant"
+                        android:contentDescription="@string/stat_categoria_predilecta"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_nav_home"
+                        app:tint="@color/chef_accent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_categoria_predilecta"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_categoria_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/chef_text_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_categoria_top_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tu especialidad más cocinada o guardada"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Tarjeta: Cocina Internacional Favorita -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/chef_surface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/chef_divider"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_step_circle"
+                        android:backgroundTint="@color/chef_surface_variant"
+                        android:contentDescription="@string/stat_origen_predilecto"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/chef_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_origen_predilecto"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_origen_top"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/chef_text_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_stat_origen_top_sub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gastronomía más explorada"
+                            android:textAppearance="?attr/textAppearanceCaption"
+                            android:textColor="@color/chef_text_secondary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

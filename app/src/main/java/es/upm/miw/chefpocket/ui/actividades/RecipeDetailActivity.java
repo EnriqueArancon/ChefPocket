@@ -30,6 +30,7 @@ import es.upm.miw.chefpocket.R;
 import es.upm.miw.chefpocket.datos.api.RetrofitClient;
 import es.upm.miw.chefpocket.datos.api.modelos.MealDto;
 import es.upm.miw.chefpocket.datos.api.modelos.MealResponse;
+import es.upm.miw.chefpocket.datos.firebase.FirebaseDbHelper;
 import es.upm.miw.chefpocket.utilidades.NetworkUtils;
 import es.upm.miw.chefpocket.utilidades.TraductorUtils;
 import retrofit2.Call;
@@ -56,11 +57,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private LinearLayout llIngredientesLista;
     private LinearLayout llPasosLista;
     private MaterialButton btnVerVideo;
+    private MaterialButton btnMarcarCocinada;
     private FloatingActionButton fabFavorito;
     private View layoutCargando;
 
     private MealDto recetaActual;
     private boolean esFavorito = false;
+    private boolean esCocinada = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +103,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         llIngredientesLista = findViewById(R.id.ll_ingredientes_lista);
         llPasosLista = findViewById(R.id.ll_pasos_lista);
         btnVerVideo = findViewById(R.id.btn_ver_video_detalle);
+        btnMarcarCocinada = findViewById(R.id.btn_marcar_cocinado);
         fabFavorito = findViewById(R.id.fab_favorito_detalle);
         layoutCargando = findViewById(R.id.layout_cargando_detalle);
     }
@@ -228,22 +232,90 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void configurarListeners() {
+        comprobarEstadoFavorito();
+        comprobarEstadoCocinada();
+
         fabFavorito.setOnClickListener(v -> {
-            esFavorito = !esFavorito;
-            actualizarIconoFavorito();
-            int msgRes = esFavorito ? R.string.favorito_anadido : R.string.favorito_eliminado;
-            Snackbar.make(findViewById(android.R.id.content), msgRes, Snackbar.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "RecipeDetailActivity: Favorito alternado -> " + (esFavorito ? "Añadido" : "Eliminado"));
+            if (recetaActual == null) return;
+
+            fabFavorito.setEnabled(false);
+            FirebaseDbHelper.getInstance().conmutarFavorito(recetaActual, new FirebaseDbHelper.ConmutarCallback() {
+                @Override
+                public void onCompletado(boolean ahoraEsFavorito) {
+                    esFavorito = ahoraEsFavorito;
+                    actualizarIconoFavorito();
+                    fabFavorito.setEnabled(true);
+                    int msgRes = esFavorito ? R.string.favorito_anadido : R.string.favorito_eliminado;
+                    Snackbar.make(findViewById(android.R.id.content), msgRes, Snackbar.LENGTH_SHORT).show();
+                    Log.i(LOG_TAG, "RecipeDetailActivity: Estado de favorito actualizado en Firebase -> " + (esFavorito ? "Añadido" : "Eliminado"));
+                }
+
+                @Override
+                public void onError(String mensaje) {
+                    fabFavorito.setEnabled(true);
+                    Log.e(LOG_TAG, "RecipeDetailActivity: Error al conmutar favorito: " + mensaje);
+                    Snackbar.make(findViewById(android.R.id.content), mensaje != null ? mensaje : "Error con Firebase", Snackbar.LENGTH_SHORT).show();
+                }
+            });
         });
+
+        btnMarcarCocinada.setOnClickListener(v -> {
+            if (recetaActual == null) return;
+
+            btnMarcarCocinada.setEnabled(false);
+            FirebaseDbHelper.getInstance().conmutarCocinada(recetaActual, new FirebaseDbHelper.ConmutarCallback() {
+                @Override
+                public void onCompletado(boolean ahoraEsCocinada) {
+                    esCocinada = ahoraEsCocinada;
+                    actualizarBotonCocinada();
+                    btnMarcarCocinada.setEnabled(true);
+                    int msgRes = esCocinada ? R.string.snack_plato_cocinado_anadido : R.string.snack_plato_cocinado_eliminado;
+                    Snackbar.make(findViewById(android.R.id.content), msgRes, Snackbar.LENGTH_SHORT).show();
+                    Log.i(LOG_TAG, "RecipeDetailActivity: Plato cocinado actualizado -> " + esCocinada);
+                }
+
+                @Override
+                public void onError(String mensaje) {
+                    btnMarcarCocinada.setEnabled(true);
+                    Snackbar.make(findViewById(android.R.id.content), mensaje != null ? mensaje : "Error con Firebase", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
+    private void comprobarEstadoFavorito() {
+        if (recetaActual == null || recetaActual.getIdMeal() == null) return;
+        FirebaseDbHelper.getInstance().comprobarEsFavorito(recetaActual.getIdMeal(), esFav -> {
+            esFavorito = esFav;
+            actualizarIconoFavorito();
+        });
+    }
+
+    private void comprobarEstadoCocinada() {
+        if (recetaActual == null || recetaActual.getIdMeal() == null) return;
+        FirebaseDbHelper.getInstance().comprobarEsCocinada(recetaActual.getIdMeal(), yaCocinada -> {
+            esCocinada = yaCocinada;
+            actualizarBotonCocinada();
+        });
+    }
+
+    private void actualizarBotonCocinada() {
+        if (esCocinada) {
+            btnMarcarCocinada.setText(R.string.btn_marcar_cocinado_activo);
+            btnMarcarCocinada.setBackgroundColor(getResources().getColor(R.color.chef_primary_dark, getTheme()));
+        } else {
+            btnMarcarCocinada.setText(R.string.btn_marcar_cocinado_inactivo);
+            btnMarcarCocinada.setBackgroundColor(getResources().getColor(R.color.chef_primary, getTheme()));
+        }
     }
 
     private void actualizarIconoFavorito() {
         if (esFavorito) {
-            fabFavorito.setImageResource(R.drawable.ic_nav_favorites);
-            fabFavorito.setColorFilter(getResources().getColor(R.color.white, getTheme()));
+            fabFavorito.setImageResource(R.drawable.ic_favorite_filled);
+            fabFavorito.setContentDescription(getString(R.string.fab_eliminar_favorito));
         } else {
-            fabFavorito.setImageResource(R.drawable.ic_nav_favorites);
-            fabFavorito.setColorFilter(getResources().getColor(R.color.white, getTheme()));
+            fabFavorito.setImageResource(R.drawable.ic_favorite_border);
+            fabFavorito.setContentDescription(getString(R.string.fab_anadir_favorito));
         }
     }
 

@@ -263,6 +263,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_marginBottom="12dp"
                 android:text="@string/btn_video_tutorial"
                 android:textColor="@color/chef_red_youtube"
                 app:cornerRadius="12dp"
@@ -271,6 +272,21 @@
                 app:iconPadding="10dp"
                 app:iconTint="@null"
                 app:strokeColor="@color/chef_red_youtube" />
+
+            <!-- Botón de Logro Culinario: ¡He cocinado este plato! -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_marcar_cocinado"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/btn_marcar_cocinado_inactivo"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/chef_primary"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_check_circle"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:iconTint="@color/white" />
 
         </LinearLayout>
 

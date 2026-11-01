@@ -15,6 +15,8 @@
     <color name="chef_background">#FAF8F5</color>         <!-- Crema muy suave de alta gama -->
     <color name="chef_surface">#FFFFFF</color>            <!-- Blanco puro para tarjetas -->
     <color name="chef_outline">#E8E3DD</color>            <!-- Borde tenue y elegante -->
+    <color name="chef_divider">#E8E3DD</color>            <!-- Líneas de separación sutiles -->
+    <color name="chef_surface_variant">#FFF3E0</color>    <!-- Fondo ámbar pastel suave -->
     <color name="chef_amber_light">#FFF9E6</color>        <!-- Fondo cálido para avisos -->
     <color name="chef_amber_border">#FFE082</color>       <!-- Borde aviso -->
     <color name="chef_red_youtube">#E53935</color>        <!-- Rojo YouTube / Favorito -->

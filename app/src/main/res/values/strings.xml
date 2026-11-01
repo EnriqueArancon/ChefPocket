@@ -28,8 +28,27 @@
     <string name="info_cuenta">Información de la Cuenta</string>
     <string name="info_proveedor">Proveedor: Correo electrónico / Firebase Auth</string>
     <string name="id_usuario_formato">ID de usuario: %1$s</string>
-    <string name="favoritos_vacio">Aún no tienes recetas favoritas guardadas.</string>
-    <string name="estadisticas_vacio">Consulta recetas para generar tus métricas culinarias.</string>
+    <string name="titulo_seccion_favoritos">Mis Recetas Favoritas</string>
+    <string name="subtitulo_seccion_favoritos">Colección sincronizada en la nube con Firebase</string>
+    <string name="favoritos_vacio_titulo">Tu recetario está vacío</string>
+    <string name="favoritos_vacio">Aún no tienes recetas favoritas guardadas. Marca el corazón en cualquier receta para guardarla aquí.</string>
+    <string name="estadisticas_vacio">Aún no tienes suficientes recetas en favoritos para calcular tus estadísticas culinarias. ¡Guarda tus platos preferidos para descubrirlas!</string>
+    <string name="titulo_seccion_estadisticas">Estadísticas Culinarias</string>
+    <string name="subtitulo_seccion_estadisticas">Métricas en tiempo real de tu recetario en Firebase</string>
+    <string name="stat_total_recetas">Recetas en Favoritos</string>
+    <string name="stat_total_recetas_sub">Platos sincronizados en tu cuenta de Firebase</string>
+    <string name="stat_platos_cocinados">Platos Cocinados</string>
+    <string name="stat_platos_cocinados_sub">Experiencia culinaria permanente</string>
+    <string name="btn_marcar_cocinado_inactivo">¡HE COCINADO ESTE PLATO!</string>
+    <string name="btn_marcar_cocinado_activo">✔ ¡PLATO COCINADO CON ÉXITO!</string>
+    <string name="snack_plato_cocinado_anadido">¡Enhorabuena, Chef! Has sumado experiencia culinaria.</string>
+    <string name="snack_plato_cocinado_eliminado">Plato retirado de tu historial de cocina.</string>
+    <string name="stat_categoria_predilecta">Categoría Predilecta</string>
+    <string name="stat_origen_predilecto">Cocina Preferida</string>
+    <string name="stat_rango_culinario">Rango de Chef</string>
+    <string name="rango_novato">Cocinero Novato 🍳</string>
+    <string name="rango_aficionado">Chef Aficionado 👨‍🍳</string>
+    <string name="rango_master">Master Chef Pocket ⭐</string>
 
     <!-- Diálogo de Confirmación de Cierre de Sesión -->
     <string name="dialogo_cerrar_sesion_titulo">Cerrar sesión</string>
@@ -75,6 +94,7 @@
     <string name="cargando_detalle_receta">Cargando detalles de la receta…</string>
     <string name="compartir_receta_texto">¡Mira esta deliciosa receta de %1$s en ChefPocket!\n%2$s</string>
     <string name="fab_anadir_favorito">Añadir a favoritos</string>
+    <string name="fab_eliminar_favorito">Eliminar de favoritos</string>
     <string name="favorito_anadido">Receta añadida a favoritos</string>
     <string name="favorito_eliminado">Receta eliminada de favoritos</string>
 
