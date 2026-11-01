@@ -18,6 +18,11 @@ he separado las responsabilidades en paquetes dentro de es.upm.miw.chefpocket:
 - ui.fragmentos: Contiene los fragmentos independientes para cada pestaña de la 
   aplicación (ExplorarFragment, FavoritosFragment, EstadisticasFragment y PerfilFragment), 
   además del diálogo modal de confirmación (CerrarSesionDialogFragment).
+- ui.viewmodel: Alberga ExplorarViewModel, encargado de mantener el estado observable 
+  (LiveData) de la pantalla principal y evitar llamadas redundantes de red ante cambios 
+  de configuración (rotación del dispositivo o cambio entre pestañas).
+- utilidades: Clases de soporte desacopladas, como NetworkUtils para comprobar la 
+  conectividad de red mediante ConnectivityManager.
 - res/menu: Donde he configurado el menú de navegación inferior menu_navegacion_inferior.xml.
 - res/values/strings.xml: Siguiendo las buenas prácticas y las pautas de las 
   diapositivas, he centralizado absolutamente todas las cadenas de texto aquí, sin 
@@ -106,12 +111,22 @@ Para cumplir con el requisito de consumo de APIs externas (Tema 4):
     único cliente Retrofit configurado con el convertidor GsonConverterFactory.
 
 - Carga asíncrona e imágenes con Glide en ExplorarFragment:
-  En la pestaña principal muestro la tarjeta destacada de la recomendación diaria. 
+  En la pestaña principal muestro la tarjeta destacada "¿No sabes qué cocinar?". 
   La llamada asíncrona se ejecuta mediante enqueue() con callbacks onResponse() y 
   onFailure(). Para la visualización de la fotografía del plato utilizo la librería 
   Glide, configurando placeholders y redondeo adaptativo para que la interfaz se sienta 
-  fluida y elegante. Añadí además un botón "Otra receta" para que el usuario pueda pedir 
-  otra propuesta gourmet al vuelo.
+  fluida y elegante. Añadí además el botón "Probar otra" para que el usuario pueda forzar 
+  una nueva propuesta gourmet al vuelo.
+
+- Gestión de estado y persistencia en memoria con ViewModel y LiveData (Tema 4, Diapositiva 19):
+  Siguiendo el esquema de arquitectura de la diapositiva 19 (App UI / ViewModel -> 
+  Retrofit Service), implementé la clase ExplorarViewModel en el paquete ui.viewmodel. 
+  Al rotar el dispositivo o alternar entre las pestañas del menú inferior, la actividad y 
+  el fragmento se destruyen y recrean, lo que inicialmente provocaba peticiones repetidas 
+  a TheMealDB y parpadeos en pantalla. Al delegar la receta en un MutableLiveData dentro 
+  del ViewModel, la propuesta se conserva intacta en memoria. Solo cuando el usuario pulsa 
+  de forma explícita en "Probar otra" o cuando no existía una sugerencia previa, el 
+  ViewModel solicita una nueva propuesta aleatoria al servicio Retrofit.
 
 - Trazas de depuración en Logcat:
   Para poder auditar el correcto funcionamiento de cada componente y verificar el flujo 

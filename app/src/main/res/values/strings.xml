@@ -40,9 +40,9 @@
     <!-- Estados y Red -->
     <string name="cargando_datos">Cargando recetas gourmet…</string>
     <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
-    <string name="titulo_receta_dia">Recomendación del día</string>
-    <string name="subtitulo_receta_dia">Descubre una propuesta internacional</string>
-    <string name="btn_cambiar_receta">Otra receta</string>
+    <string name="titulo_receta_dia">¿No sabes qué cocinar?</string>
+    <string name="subtitulo_receta_dia">Inspiración del Chef</string>
+    <string name="btn_cambiar_receta">Probar otra</string>
     <string name="btn_ver_detalle">Ver preparación</string>
     <string name="cargando_receta">Consultando TheMealDB…</string>
     <string name="modo_offline_titulo">Modo sin conexión</string>

@@ -1,4 +1,4 @@
-﻿plugins {
+plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
 }
@@ -49,6 +49,10 @@ dependencies {
     // Glide
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
+
+    // Lifecycle (ViewModel y LiveData - Tema 4)
+    implementation(libs.lifecycle.viewmodel)
+    implementation(libs.lifecycle.livedata)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)

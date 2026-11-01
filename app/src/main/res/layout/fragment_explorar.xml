@@ -49,15 +49,6 @@
                     android:textColor="@color/chef_primary"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_email_usuario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textAppearance="?attr/textAppearanceCaption"
-                    android:textColor="@color/chef_text_secondary"
-                    tools:text="usuario@ejemplo.com" />
-
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
