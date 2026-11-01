@@ -268,14 +268,29 @@ public class ExplorarFragment extends Fragment {
         layoutCargandoReceta.setVisibility(View.GONE);
         cardRecetaDia.setVisibility(View.VISIBLE);
 
-        tvNombreReceta.setText(meal.getStrMeal());
+        tvNombreReceta.setText(TraductorUtils.traducirTitulo(meal.getStrMeal()));
+        if (TraductorUtils.esEspanol() && meal.getStrMeal() != null) {
+            TraductorUtils.traducirTextoAsync(meal.getStrMeal(), (trad, fueExitosa) -> {
+                if (isAdded() && trad != null) {
+                    tvNombreReceta.setText(trad);
+                }
+            });
+        }
 
         String categoria = TraductorUtils.traducirCategoria(meal.getStrCategory());
         String origen = TraductorUtils.traducirOrigen(meal.getStrArea());
         tvCategoriaOrigen.setText(getString(R.string.receta_origen_categoria, origen, categoria));
 
-        String instrucciones = TraductorUtils.obtenerInstrucciones(meal);
-        tvInstruccionesResumen.setText(instrucciones);
+        if (!TraductorUtils.esEspanol() || TraductorUtils.tieneTraduccionCompleta(meal)) {
+            tvInstruccionesResumen.setText(TraductorUtils.obtenerInstrucciones(meal));
+        } else if (meal.getStrInstructions() != null) {
+            tvInstruccionesResumen.setText(R.string.traduciendo_instrucciones);
+            TraductorUtils.traducirInstruccionesAsync(meal.getStrInstructions(), (trad, fueExitosa) -> {
+                if (isAdded() && trad != null) {
+                    tvInstruccionesResumen.setText(trad);
+                }
+            });
+        }
 
         if (meal.getStrMealThumb() != null && !meal.getStrMealThumb().isEmpty()) {
             Glide.with(this)

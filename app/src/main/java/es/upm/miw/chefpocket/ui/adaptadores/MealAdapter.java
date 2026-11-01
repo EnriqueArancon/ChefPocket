@@ -76,7 +76,8 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         }
 
         public void bind(MealDto meal, OnMealClickListener listener) {
-            tvTitulo.setText(meal.getStrMeal());
+            // Título de la receta (utiliza traducción síncrona en memoria O(1) para garantizar 60 FPS sin parpadeos al hacer scroll)
+            tvTitulo.setText(TraductorUtils.traducirTitulo(meal.getStrMeal()));
 
             String categoria = TraductorUtils.traducirCategoria(meal.getStrCategory());
             String origen = TraductorUtils.traducirOrigen(meal.getStrArea());

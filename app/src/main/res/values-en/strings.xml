@@ -89,7 +89,8 @@
     <string name="titulo_preparacion">Step-by-Step Instructions</string>
     <string name="btn_video_tutorial">Watch video tutorial on YouTube</string>
     <string name="aviso_idioma_titulo">Language notice</string>
-    <string name="aviso_idioma_original">Original English instructions (TheMealDB does not have a Spanish translation for this dish).</string>
+    <string name="aviso_idioma_original">Instructions displayed in original language (English). Connect to the Internet to enable automatic translation.</string>
+    <string name="traduciendo_instrucciones">Loading recipe instructions…</string>
     <string name="video_sin_conexion">An Internet connection is required to play the video tutorial.</string>
     <string name="cargando_detalle_receta">Loading recipe details…</string>
     <string name="compartir_receta_texto">Check out this recipe for %1$s on ChefPocket!\n%2$s</string>

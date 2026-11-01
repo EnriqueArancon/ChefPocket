@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -121,8 +122,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void popularVistas(MealDto meal) {
         this.recetaActual = meal;
 
-        // Título en la barra colapsable
-        collapsingToolbar.setTitle(meal.getStrMeal());
+        // Título en la barra colapsable (con soporte de traducción automática)
+        collapsingToolbar.setTitle(TraductorUtils.traducirTitulo(meal.getStrMeal()));
+        if (TraductorUtils.esEspanol() && meal.getStrMeal() != null) {
+            TraductorUtils.traducirTextoAsync(meal.getStrMeal(), (tituloTrad, fueExitosa) -> {
+                if (!isFinishing() && !isDestroyed() && tituloTrad != null) {
+                    collapsingToolbar.setTitle(tituloTrad);
+                }
+            });
+        }
 
         // Fotografía del plato con Glide
         Glide.with(this)
@@ -145,18 +153,42 @@ public class RecipeDetailActivity extends AppCompatActivity {
             tvOrigen.setVisibility(View.GONE);
         }
 
-        // Aviso explicativo si las instrucciones están en inglés original
-        if (TraductorUtils.requiereAvisoIdioma(meal)) {
-            cardAvisoIdioma.setVisibility(View.VISIBLE);
-        } else {
-            cardAvisoIdioma.setVisibility(View.GONE);
-        }
+        // El aviso de idioma permanece oculto por defecto; solo se mostrará si no hay conexión o falla la traducción
+        cardAvisoIdioma.setVisibility(View.GONE);
 
         // Desglose de ingredientes con medidas
         popularIngredientes(meal.getIngredientesDesglosados());
 
+        // Si faltan ingredientes por traducir, resolverlos por lotes en segundo plano
+        if (TraductorUtils.esEspanol() && meal.getIngredientesDesglosados() != null) {
+            TraductorUtils.traducirIngredientesFaltantesAsync(meal.getIngredientesDesglosados(), () -> {
+                if (!isFinishing() && !isDestroyed()) {
+                    popularIngredientes(meal.getIngredientesDesglosados());
+                }
+            });
+        }
+
         // Instrucciones de preparación paso a paso formateadas
-        popularInstrucciones(TraductorUtils.obtenerInstrucciones(meal));
+        // Si el usuario tiene el dispositivo en inglés o ya disponemos de traducción completa en memoria/catálogo,
+        // poblamos de inmediato las instrucciones sin parpadeos.
+        if (!TraductorUtils.esEspanol() || TraductorUtils.tieneTraduccionCompleta(meal)) {
+            cardAvisoIdioma.setVisibility(View.GONE);
+            popularInstrucciones(TraductorUtils.obtenerInstrucciones(meal));
+        } else if (meal.getStrInstructions() != null) {
+            // Mostramos un mensaje suave mientras se traduce en segundo plano, evitando el parpadeo de inglés a español
+            mostrarPlaceholderTraduccion();
+            TraductorUtils.traducirInstruccionesAsync(meal.getStrInstructions(), (textoTraducido, fueExitosa) -> {
+                if (!isFinishing() && !isDestroyed()) {
+                    if (fueExitosa && textoTraducido != null && !textoTraducido.trim().isEmpty()) {
+                        cardAvisoIdioma.setVisibility(View.GONE);
+                        popularInstrucciones(textoTraducido);
+                    } else {
+                        cardAvisoIdioma.setVisibility(View.VISIBLE);
+                        popularInstrucciones(meal.getStrInstructions());
+                    }
+                }
+            });
+        }
 
         // Botón de vídeo tutorial en YouTube
         String urlYoutube = meal.getStrYoutube();
@@ -185,6 +217,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             llIngredientesLista.addView(viewItem);
         }
+    }
+
+    private void mostrarPlaceholderTraduccion() {
+        llPasosLista.removeAllViews();
+        TextView tv = new TextView(this);
+        tv.setText(R.string.traduciendo_instrucciones);
+        tv.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_Material3_BodyMedium);
+        tv.setTextColor(ContextCompat.getColor(this, R.color.chef_text_secondary));
+        tv.setPadding(8, 24, 8, 24);
+        llPasosLista.addView(tv);
     }
 
     private void popularInstrucciones(String textoInstrucciones) {

@@ -172,26 +172,34 @@ Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
   cruzada. El adaptador MealAdapter actualiza la lista eficientemente mediante notifyDataSetChanged(), 
   y muestra un mensaje amigable ("tv_sin_resultados") si la búsqueda no encuentra ningún plato.
 
-- Soporte de idioma bilingüe y traductor en memoria de alta eficiencia O(1) (TraductorUtils):
-  Dado que la API TheMealDB proporciona la mayoría de datos en inglés, creé la clase 
-  TraductorUtils para detectar el idioma del dispositivo (Locale.getDefault()). Para no penalizar 
-  el rendimiento de la aplicación ni depender de APIs externas de traducción por red (que 
-  introducirían latencia, consumo excesivo de batería y fallos en modo offline), implementé 
-  diccionarios estáticos mediante tablas hash (HashMap).
+- Soporte de idioma bilingüe, diccionarios O(1) y traductor asíncrono en segundo plano (TraductorUtils):
+  Dado que la API TheMealDB proporciona los datos en inglés, diseñé la clase TraductorUtils 
+  para gestionar de forma inteligente la internacionalización de la app según el idioma del móvil:
   
-  Esto me permitió lograr búsquedas instantáneas en tiempo constante O(1) sin sobrecarga de memoria:
-  * Traduzco al castellano categorías gastronómicas y países de origen.
-  * Traduzco más de 120 ingredientes culinarios comunes (harina, azúcar, leche, huevos, mantequilla, calamares, verduras, especias, etc.) 
-    y adapto exhaustivamente unidades de medida anglosajonas y descriptores culinarios 
-    (ej. "cups" -> "tazas", "tbsp" -> "cucharadas", "tsp" -> "cucharaditas", "to taste" -> "al gusto", 
-    "minced" -> "picado", "peeled and crushed" -> "pelado y machacado", "for frying" -> "para freír", 
-    "to serve" -> "para servir", "medium" -> "mediano", unidades contables "1" -> "1 ud." / "2 uds.", etc., 
-    respetando rigurosamente la concordancia gramatical de género y número en español).
-  * Añadí traducciones íntegras en español para las recetas más populares y consultadas de la API 
-    (Flan, Tortilla Española, Pancakes, Summer Pudding, etc.), reservando la tarjeta de aviso 
-    únicamente para platos que carecen de versión en español en la comunidad de TheMealDB. Si el 
-    móvil del usuario está en inglés, la clase cortocircuita inmediatamente para conservar los textos 
-    originales sin coste de procesamiento.
+  * Diccionarios en memoria O(1) y traducción dinámica: Traducen al instante categorías, países 
+    de origen, más de 120 ingredientes comunes y unidades de medida culinarias ("cups" -> "tazas", 
+    "tbsp" -> "cucharadas", "to taste" -> "al gusto", etc.), garantizando que los filtros por Chips, 
+    las tarjetas del catálogo y la lista de ingredientes aparezcan en perfecto castellano en 0 ms. 
+    Para ingredientes específicos no incluidos en el diccionario estático o títulos complejos, 
+    incorporé traducción asíncrona por lotes en segundo plano.
+  * Pipeline de traducción asíncrona con caché en memoria (traducirInstruccionesAsync): Para las 
+    instrucciones completas de preparación, conecté en segundo plano mediante un hilo del sistema 
+    (ExecutorService) una arquitectura con tolerancia a fallos que consulta en primer término Google 
+    Translate (client=gtx) y dispone de fallback secundario a MyMemory (segmentado por oraciones para 
+    evitar límites de caracteres), sin claves ni bloqueos en la interfaz de usuario. Los resultados 
+    se almacenan en una caché en memoria (ConcurrentHashMap), permitiendo que accesos posteriores a la 
+    misma receta respondan de inmediato en 0 ms.
+  * Aviso contextual inteligente según estado de traducción (card_aviso_idioma): Para ofrecer una 
+    interfaz limpia y libre de ruidos visuales, configuré la tarjeta de aviso de idioma oculta por defecto 
+    (View.GONE). Cuando la traducción al español se completa satisfactoriamente (o la receta ya dispone de 
+    traducción nativa/destacada), la tarjeta permanece oculta y el usuario disfruta de la receta como si 
+    hubiese sido redactada originalmente en castellano. Únicamente si el dispositivo se encuentra offline 
+    o el servicio de traducción experimenta una incidencia de red, la tarjeta se muestra de forma dinámica 
+    informando con claridad: "Instrucciones mostradas en su idioma original (inglés). Conéctate a Internet 
+    para obtener la traducción automática al español." y presentando las instrucciones originales de TheMealDB.
+  * Cortocircuito para idioma inglés: Si el dispositivo del usuario está configurado en inglés 
+    (Locale.getDefault()), la comprobación esEspanol() cortocircuita de inmediato devolviendo los 
+    textos originales de la API sin sobrecarga de procesamiento ni llamadas de red innecesarias.
 
 
 7. PANTALLA DE DETALLE DE RECETA (RECIPEDETAILACTIVITY), INGREDIENTES Y VÍDEO TUTORIAL

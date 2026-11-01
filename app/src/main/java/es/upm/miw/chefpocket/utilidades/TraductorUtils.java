@@ -1,10 +1,27 @@
 package es.upm.miw.chefpocket.utilidades;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import es.upm.miw.chefpocket.datos.api.modelos.MealDto;
 
@@ -211,6 +228,75 @@ public final class TraductorUtils {
         INGREDIENTES_ES.put("cilantro", "Cilantro");
         INGREDIENTES_ES.put("kidney beans", "Alubias rojas");
         INGREDIENTES_ES.put("garam masala", "Garam Masala");
+        INGREDIENTES_ES.put("sticky rice flour", "Harina de arroz glutinoso");
+        INGREDIENTES_ES.put("rice flour", "Harina de arroz");
+        INGREDIENTES_ES.put("pandan leaves", "Hojas de pandán");
+        INGREDIENTES_ES.put("pandan leaf", "Hoja de pandán");
+        INGREDIENTES_ES.put("beetroot", "Remolacha");
+        INGREDIENTES_ES.put("pumpkin", "Calabaza");
+        INGREDIENTES_ES.put("taro", "Taro");
+        INGREDIENTES_ES.put("longan", "Longan");
+        INGREDIENTES_ES.put("coconut", "Coco rallado");
+        INGREDIENTES_ES.put("coconut cream", "Crema de coco");
+        INGREDIENTES_ES.put("white cabbage", "Repollo blanco");
+        INGREDIENTES_ES.put("red cabbage", "Lombarda / Col morada");
+        INGREDIENTES_ES.put("cabbage", "Repollo / Col");
+        INGREDIENTES_ES.put("hispi cabbage", "Col puntiaguda");
+        INGREDIENTES_ES.put("sweetheart cabbage", "Col dulce");
+        INGREDIENTES_ES.put("sauerkraut", "Chucrut");
+        INGREDIENTES_ES.put("lard", "Manteca de cerdo");
+        INGREDIENTES_ES.put("german sausages", "Salchichas alemanas");
+        INGREDIENTES_ES.put("sausages", "Salchichas");
+        INGREDIENTES_ES.put("sausage", "Salchicha");
+        INGREDIENTES_ES.put("bay leaf", "Hoja de laurel");
+        INGREDIENTES_ES.put("bay leaves", "Hojas de laurel");
+        INGREDIENTES_ES.put("cloves", "Clavos de olor");
+        INGREDIENTES_ES.put("clove", "Clavo de olor");
+        INGREDIENTES_ES.put("peppercorns", "Granos de pimienta");
+        INGREDIENTES_ES.put("juniper berries", "Bayas de enebro");
+        INGREDIENTES_ES.put("allspice berries", "Pimienta de Jamaica");
+        INGREDIENTES_ES.put("allspice", "Pimienta de Jamaica");
+        INGREDIENTES_ES.put("prunes", "Ciruelas pasas");
+        INGREDIENTES_ES.put("red wine", "Vino tinto");
+        INGREDIENTES_ES.put("white wine", "Vino blanco");
+        INGREDIENTES_ES.put("cannellini beans", "Alubias blancas (Cannellini)");
+        INGREDIENTES_ES.put("beans", "Alubias / Judías");
+        INGREDIENTES_ES.put("chorizo", "Chorizo");
+        INGREDIENTES_ES.put("tarragon leaves", "Hojas de estragón");
+        INGREDIENTES_ES.put("tarragon", "Estragón");
+        INGREDIENTES_ES.put("chives", "Cebollino");
+        INGREDIENTES_ES.put("gruyere", "Queso Gruyère");
+        INGREDIENTES_ES.put("gruyère", "Queso Gruyère");
+        INGREDIENTES_ES.put("sunflower oil", "Aceite de girasol");
+        INGREDIENTES_ES.put("sweet potato", "Batata / Boniato");
+        INGREDIENTES_ES.put("aubergine", "Berenjena");
+        INGREDIENTES_ES.put("eggplant", "Berenjena");
+        INGREDIENTES_ES.put("zucchini", "Calabacín");
+        INGREDIENTES_ES.put("courgette", "Calabacín");
+        INGREDIENTES_ES.put("corn flour", "Harina de maíz");
+        INGREDIENTES_ES.put("thyme", "Tomillo");
+        INGREDIENTES_ES.put("rosemary", "Romero");
+        INGREDIENTES_ES.put("salmon", "Salmón");
+        INGREDIENTES_ES.put("tuna", "Atún");
+        INGREDIENTES_ES.put("cod", "Bacalao");
+        INGREDIENTES_ES.put("prawns", "Gambas / Langostinos");
+        INGREDIENTES_ES.put("shrimp", "Camarones / Gambas");
+        INGREDIENTES_ES.put("mussels", "Mejillones");
+        INGREDIENTES_ES.put("lamb", "Carne de cordero");
+        INGREDIENTES_ES.put("minced lamb", "Carne picada de cordero");
+        INGREDIENTES_ES.put("lentils", "Lentejas");
+        INGREDIENTES_ES.put("chickpeas", "Garbanzos");
+        INGREDIENTES_ES.put("green beans", "Judías verdes");
+        INGREDIENTES_ES.put("lettuce", "Lechuga");
+        INGREDIENTES_ES.put("ground mahleb", "Mahleb molido");
+        INGREDIENTES_ES.put("mahleb", "Mahleb");
+        INGREDIENTES_ES.put("black treacle", "Melaza negra");
+        INGREDIENTES_ES.put("treacle", "Melaza");
+        INGREDIENTES_ES.put("butter beans", "Alubias blancas / Frijoles de mantequilla");
+        INGREDIENTES_ES.put("sev dzandig", "Semillas negras de nigella");
+        INGREDIENTES_ES.put("nigella seeds", "Semillas de nigella");
+        INGREDIENTES_ES.put("sesame soy sauce", "Salsa de soja y sésamo");
+        INGREDIENTES_ES.put("english mustard", "Mostaza inglesa");
 
         // Recetas destacadas con traducción al español integrada
         RECETAS_DESTACADAS_ES.put("flan",
@@ -321,7 +407,13 @@ public final class TraductorUtils {
         }
         String clave = ingrediente.trim().toLowerCase();
         String traduccion = INGREDIENTES_ES.get(clave);
-        return traduccion != null ? traduccion : ingrediente.trim();
+        if (traduccion != null) {
+            return traduccion;
+        }
+        if (CACHE_TRADUCCIONES.containsKey(clave)) {
+            return CACHE_TRADUCCIONES.get(clave);
+        }
+        return ingrediente.trim();
     }
 
     /**
@@ -421,6 +513,12 @@ public final class TraductorUtils {
         m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*heads?\\b", "$1 cabeza");
         m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*drops?\\b", "$1 gota");
         m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*cubes?\\b", "$1 pastilla");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:fl(?:uid)?\\s*oz|fluid\\s+ounces?)\\b", "$1 oz líq.");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:ounces?|oz)\\b", "$1 onza");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:pounds?|lbs?)\\b", "$1 libra");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:pints?|pt)\\b", "$1 pinta");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:quarts?|qt)\\b", "$1 cuarto de galón");
+        m = m.replaceAll("(?i)\\b(1|1/2|1/4)\\s*(?:gallons?|gal)\\b", "$1 galón");
 
         // Plurales o unidades sin número delante
         m = m.replaceAll("(?i)\\b(?:tbsps?|tbls?p?s?|tablespoons?)\\b", "cucharadas");
@@ -447,6 +545,16 @@ public final class TraductorUtils {
         m = m.replaceAll("(?i)\\bdrops?\\b", "gotas");
         m = m.replaceAll("(?i)\\bcubes?\\b", "pastillas");
         m = m.replaceAll("(?i)\\b(?:drizzle|splash|dash)(?:es)?\\b", "chorrito");
+        m = m.replaceAll("(?i)\\b(?:fl(?:uid)?\\s*oz|fluid\\s+ounces?)\\b", "oz líq.");
+        m = m.replaceAll("(?i)\\b(?:ounces?|oz)\\b", "onzas");
+        m = m.replaceAll("(?i)\\b(?:pounds?|lbs?)\\b", "libras");
+        m = m.replaceAll("(?i)\\b(?:pints?|pt)\\b", "pintas");
+        m = m.replaceAll("(?i)\\b(?:quarts?|qt)\\b", "cuartos de galón");
+        m = m.replaceAll("(?i)\\b(?:gallons?|gal)\\b", "galones");
+        m = m.replaceAll("(?i)\\bgrams?\\b", "g");
+        m = m.replaceAll("(?i)\\bkilograms?\\b", "kg");
+        m = m.replaceAll("(?i)\\bmillilit(?:ers?|res?)\\b", "ml");
+        m = m.replaceAll("(?i)\\blit(?:ers?|res?)\\b", "l");
 
         // Ajustes gramaticales adicionales de concordancia
         m = m.replaceAll("(?i)\\b(\\d+\\s+dientes)\\s+picado\\b", "$1 picados");
@@ -470,7 +578,20 @@ public final class TraductorUtils {
     }
 
     /**
-     * Obtiene el texto de instrucciones priorizando el idioma del usuario y recetas traducidas.
+     * Interfaz de callback para recepción asíncrona de traducciones en el hilo principal de UI.
+     */
+    public interface TraduccionCallback {
+        void onTraduccion(String textoTraducido, boolean fueExitosa);
+    }
+
+    private static final Map<String, String> CACHE_TRADUCCIONES = new ConcurrentHashMap<>();
+    private static final ExecutorService EXECUTOR_TRADUCTOR = Executors.newCachedThreadPool();
+    private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
+
+    /**
+     * Obtiene el texto de instrucciones disponible de forma inmediata (síncrona).
+     * Devuelve la versión en español si viene en la API, la traducción destacada o
+     * el resultado previo en caché; en su defecto devuelve el texto original en inglés.
      */
     public static String obtenerInstrucciones(MealDto meal) {
         if (meal == null) return "";
@@ -484,8 +605,247 @@ public final class TraductorUtils {
                     return destacada;
                 }
             }
+            if (meal.getStrInstructions() != null && CACHE_TRADUCCIONES.containsKey(meal.getStrInstructions())) {
+                return CACHE_TRADUCCIONES.get(meal.getStrInstructions());
+            }
         }
         return meal.getStrInstructions();
+    }
+
+    /**
+     * Determina si una receta ya dispone de traducción completa al español
+     * (sea oficial en TheMealDB, incluida en el catálogo destacado o presente en caché).
+     */
+    public static boolean tieneTraduccionCompleta(MealDto meal) {
+        if (meal == null) return false;
+        if (meal.tieneTraduccionEspanol()) return true;
+        if (meal.getStrMeal() != null && RECETAS_DESTACADAS_ES.containsKey(meal.getStrMeal().trim().toLowerCase())) {
+            return true;
+        }
+        if (meal.getStrInstructions() != null && CACHE_TRADUCCIONES.containsKey(meal.getStrInstructions())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Traduce de forma asíncrona en segundo plano el texto de instrucciones al español
+     * utilizando servicios online de traducción (Google Translate y fallback a MyMemory), sin claves ni bloqueos.
+     * Incorpora caché en memoria para que accesos repetidos a la misma receta respondan en 0 ms.
+     * Si el dispositivo está en inglés, cortocircuita y devuelve el texto original al momento.
+     * En caso de ausencia de conexión o fallo de red, efectúa un fallback transparente al texto original.
+     */
+    public static void traducirInstruccionesAsync(String textoIngles, TraduccionCallback callback) {
+        if (textoIngles == null || textoIngles.trim().isEmpty() || !esEspanol()) {
+            callback.onTraduccion(textoIngles, true);
+            return;
+        }
+
+        // Si ya está en la caché en memoria, responder al instante en el hilo principal
+        if (CACHE_TRADUCCIONES.containsKey(textoIngles)) {
+            callback.onTraduccion(CACHE_TRADUCCIONES.get(textoIngles), true);
+            return;
+        }
+
+        EXECUTOR_TRADUCTOR.execute(() -> {
+            String resultado = traducirConGoogle(textoIngles);
+            if (resultado == null || resultado.isEmpty()) {
+                resultado = traducirConMyMemory(textoIngles);
+            }
+
+            if (resultado != null && !resultado.trim().isEmpty()) {
+                CACHE_TRADUCCIONES.put(textoIngles, resultado);
+                final String finalResultado = resultado;
+                MAIN_HANDLER.post(() -> callback.onTraduccion(finalResultado, true));
+            } else {
+                Log.w("TraductorUtils", "Traducción online no disponible. Mostrando instrucciones originales en inglés.");
+                MAIN_HANDLER.post(() -> callback.onTraduccion(textoIngles, false));
+            }
+        });
+    }
+
+    private static String traducirConGoogle(String textoIngles) {
+        try {
+            URL url = new URL("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=es&dt=t");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(4000);
+            conn.setReadTimeout(4000);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile)");
+
+            String postBody = "q=" + URLEncoder.encode(textoIngles, "UTF-8");
+            byte[] bytes = postBody.getBytes(StandardCharsets.UTF_8);
+            conn.setFixedLengthStreamingMode(bytes.length);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(bytes);
+                os.flush();
+            }
+
+            if (conn.getResponseCode() == 200) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                StringBuilder jsonResponse = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonResponse.append(line);
+                }
+                reader.close();
+
+                JSONArray root = new JSONArray(jsonResponse.toString());
+                JSONArray sentences = root.getJSONArray(0);
+                StringBuilder textoFinal = new StringBuilder();
+                for (int i = 0; i < sentences.length(); i++) {
+                    JSONArray sentence = sentences.getJSONArray(i);
+                    if (sentence.length() > 0 && !sentence.isNull(0)) {
+                        textoFinal.append(sentence.getString(0));
+                    }
+                }
+
+                String res = textoFinal.toString().trim();
+                if (!res.isEmpty()) {
+                    return res;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private static String traducirConMyMemory(String textoIngles) {
+        if (textoIngles == null || textoIngles.trim().isEmpty()) return null;
+        try {
+            // MyMemory admite un máximo de 500 caracteres por petición.
+            // Para textos breves (títulos, nombres de ingredientes), traducir directamente.
+            if (textoIngles.length() <= 400) {
+                return traducirSegmentoMyMemory(textoIngles);
+            }
+
+            // Para textos largos (instrucciones completas), dividimos por párrafos o frases
+            String[] fragmentos = textoIngles.split("(?<=\\r?\\n)|(?<=\\.)\\s+");
+            StringBuilder traduccionTotal = new StringBuilder();
+            StringBuilder buffer = new StringBuilder();
+
+            for (String frag : fragmentos) {
+                if (buffer.length() + frag.length() > 380) {
+                    if (buffer.length() > 0) {
+                        String trad = traducirSegmentoMyMemory(buffer.toString());
+                        traduccionTotal.append(trad != null ? trad : buffer.toString()).append(" ");
+                        buffer.setLength(0);
+                    }
+                }
+                buffer.append(frag);
+            }
+
+            if (buffer.length() > 0) {
+                String trad = traducirSegmentoMyMemory(buffer.toString());
+                traduccionTotal.append(trad != null ? trad : buffer.toString());
+            }
+
+            String resultado = traduccionTotal.toString().trim();
+            return !resultado.isEmpty() ? resultado : null;
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    private static String traducirSegmentoMyMemory(String segmento) {
+        if (segmento == null || segmento.trim().isEmpty()) return "";
+        try {
+            String encoded = URLEncoder.encode(segmento.trim(), "UTF-8");
+            URL url = new URL("https://api.mymemory.translated.net/get?q=" + encoded + "&langpair=en|es");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(4000);
+            conn.setReadTimeout(4000);
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Android; Mobile)");
+
+            if (conn.getResponseCode() == 200) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                StringBuilder jsonResponse = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonResponse.append(line);
+                }
+                reader.close();
+
+                JSONObject obj = new JSONObject(jsonResponse.toString());
+                if (obj.has("responseData")) {
+                    JSONObject resData = obj.getJSONObject("responseData");
+                    String trad = resData.optString("translatedText", "");
+                    if (!trad.trim().isEmpty() && !trad.contains("QUERY LENGTH LIMIT EXCEEDED")) {
+                        return trad;
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * Traduce un texto genérico (como el título de una receta) de forma asíncrona.
+     */
+    public static void traducirTextoAsync(String textoIngles, TraduccionCallback callback) {
+        traducirInstruccionesAsync(textoIngles, callback);
+    }
+
+    /**
+     * Traduce el título de una receta de forma síncrona si ya está en caché o es conocido,
+     * devolviendo el original en su defecto.
+     */
+    public static String traducirTitulo(String titulo) {
+        if (titulo == null || titulo.trim().isEmpty() || !esEspanol()) {
+            return titulo;
+        }
+        if (CACHE_TRADUCCIONES.containsKey(titulo)) {
+            return CACHE_TRADUCCIONES.get(titulo);
+        }
+        return titulo;
+    }
+
+    /**
+     * Traduce por lotes los ingredientes de una receta que no se encontraban en el diccionario estático.
+     */
+    public static void traducirIngredientesFaltantesAsync(List<MealDto.IngredienteItem> ingredientes, Runnable onActualizado) {
+        if (!esEspanol() || ingredientes == null || ingredientes.isEmpty()) {
+            return;
+        }
+
+        List<String> faltantes = new ArrayList<>();
+        for (MealDto.IngredienteItem item : ingredientes) {
+            String ing = item.getIngrediente();
+            if (ing != null && !ing.trim().isEmpty()) {
+                String clave = ing.trim().toLowerCase();
+                if (!INGREDIENTES_ES.containsKey(clave) && !CACHE_TRADUCCIONES.containsKey(clave)) {
+                    faltantes.add(ing.trim());
+                }
+            }
+        }
+
+        if (faltantes.isEmpty()) {
+            return;
+        }
+
+        // Unir ingredientes separados por salto de línea para traducirlos en un único viaje HTTP
+        String paquete = String.join("\n", faltantes);
+        traducirTextoAsync(paquete, (textoTraducido, fueExitosa) -> {
+            if (textoTraducido != null) {
+                String[] lineas = textoTraducido.split("\\r?\\n");
+                for (int i = 0; i < Math.min(faltantes.size(), lineas.length); i++) {
+                    String orig = faltantes.get(i).toLowerCase();
+                    String trad = lineas[i].trim();
+                    if (!trad.isEmpty()) {
+                        CACHE_TRADUCCIONES.put(orig, trad);
+                        INGREDIENTES_ES.put(orig, trad);
+                    }
+                }
+                if (onActualizado != null) {
+                    onActualizado.run();
+                }
+            }
+        });
     }
 
     /**
@@ -526,7 +886,7 @@ public final class TraductorUtils {
         if (pasos.size() <= 1 && instrucciones.length() > 150) {
             pasos.clear();
             // Dividir por punto seguido de espacio y mayúscula
-            String[] frases = instrucciones.split("(?<=\\.)\\s+(?=[A-Z0-9])");
+            String[] frases = instrucciones.split("(?<=\\.)\\s+(?=[A-Z0-9ÁÉÍÓÚ])");
             for (String frase : frases) {
                 String pasoLimpio = limpiarPaso(frase);
                 if (!pasoLimpio.isEmpty()) {

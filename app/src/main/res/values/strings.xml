@@ -89,7 +89,8 @@
     <string name="titulo_preparacion">Preparación paso a paso</string>
     <string name="btn_video_tutorial">Ver vídeo tutorial en YouTube</string>
     <string name="aviso_idioma_titulo">Aviso de idioma</string>
-    <string name="aviso_idioma_original">Instrucciones en idioma original (inglés). TheMealDB no dispone de traducción al español para esta receta.</string>
+    <string name="aviso_idioma_original">Instrucciones mostradas en su idioma original (inglés). Conéctate a Internet para obtener la traducción automática al español.</string>
+    <string name="traduciendo_instrucciones">Traduciendo pasos de preparación al español…</string>
     <string name="video_sin_conexion">Se necesita conexión a Internet para reproducir el vídeo tutorial.</string>
     <string name="cargando_detalle_receta">Cargando detalles de la receta…</string>
     <string name="compartir_receta_texto">¡Mira esta deliciosa receta de %1$s en ChefPocket!\n%2$s</string>
