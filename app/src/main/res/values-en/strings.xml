@@ -95,6 +95,7 @@
     <!-- Recipe Detail -->
     <string name="titulo_actividad_detalle">Recipe Details</string>
     <string name="titulo_ingredientes">Ingredients</string>
+    <string name="ingredientes_en_instrucciones">Ingredients detailed in the preparation steps</string>
     <string name="titulo_preparacion">Step-by-Step Instructions</string>
     <string name="btn_video_tutorial">Watch video tutorial on YouTube</string>
     <string name="aviso_idioma_titulo">Language notice</string>

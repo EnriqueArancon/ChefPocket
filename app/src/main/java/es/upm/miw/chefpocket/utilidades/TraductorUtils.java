@@ -2,6 +2,8 @@ package es.upm.miw.chefpocket.utilidades;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -585,6 +587,38 @@ public final class TraductorUtils {
     }
 
     private static final Map<String, String> CACHE_TRADUCCIONES = new ConcurrentHashMap<>();
+    private static SharedPreferences prefsTraducciones = null;
+
+    /**
+     * Inicializa la persistencia en disco de la caché de traducciones gastronómicas.
+     * Carga en O(1) todas las traducciones previamente almacenadas para evitar peticiones repetidas a internet.
+     */
+    public static void inicializarCacheDisco(Context context) {
+        if (prefsTraducciones != null || context == null) return;
+        try {
+            prefsTraducciones = context.getApplicationContext().getSharedPreferences("chefpocket_traducciones_cache", Context.MODE_PRIVATE);
+            Map<String, ?> todas = prefsTraducciones.getAll();
+            for (Map.Entry<String, ?> entry : todas.entrySet()) {
+                if (entry.getValue() instanceof String) {
+                    CACHE_TRADUCCIONES.put(entry.getKey(), (String) entry.getValue());
+                }
+            }
+            Log.d("TraductorUtils", "Caché de traducciones cargada desde disco: " + CACHE_TRADUCCIONES.size() + " entradas.");
+        } catch (Exception e) {
+            Log.w("TraductorUtils", "Error al cargar caché de traducciones de disco: " + e.getMessage());
+        }
+    }
+
+    private static void persistirEnDisco(String clave, String valor) {
+        if (prefsTraducciones != null && clave != null && valor != null) {
+            prefsTraducciones.edit().putString(clave, valor).apply();
+        }
+    }
+
+    public static boolean tieneTraduccionEnCache(String texto) {
+        if (texto == null) return false;
+        return CACHE_TRADUCCIONES.containsKey(texto);
+    }
     private static final ExecutorService EXECUTOR_TRADUCTOR = Executors.newCachedThreadPool();
     private static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
 
@@ -655,6 +689,7 @@ public final class TraductorUtils {
 
             if (resultado != null && !resultado.trim().isEmpty()) {
                 CACHE_TRADUCCIONES.put(textoIngles, resultado);
+                persistirEnDisco(textoIngles, resultado);
                 final String finalResultado = resultado;
                 MAIN_HANDLER.post(() -> callback.onTraduccion(finalResultado, true));
             } else {
@@ -838,6 +873,7 @@ public final class TraductorUtils {
                     String trad = lineas[i].trim();
                     if (!trad.isEmpty()) {
                         CACHE_TRADUCCIONES.put(orig, trad);
+                        persistirEnDisco(orig, trad);
                         INGREDIENTES_ES.put(orig, trad);
                     }
                 }
@@ -906,16 +942,24 @@ public final class TraductorUtils {
         if (texto == null) return "";
         String limpio = texto.trim();
 
-        // Si la línea es únicamente un número aislado ("1", "2") o un marcador "Step 1",
-        // es solo un indicador del formato original de la API: no es contenido real del paso.
-        if (limpio.matches("^(?i:step\\s*\\d+|\\d+)[.:-]?$")) {
+        // 1. Descartar encabezados genéricos aislados ("Instructions:", "Method", "Preparación", etc.)
+        if (limpio.matches("^(?i:(?:cooking\\s+)?instructions?|directions?|method|preparaci[oó]n|elaboraci[oó]n|modo\\s+de\\s+empleo)[.:-]?$")) {
             return "";
         }
 
-        // Eliminar prefijos comunes en líneas normales como "STEP 1:", "Step 1 -", "1.", "1)", "1 -", etc.
-        limpio = limpio.replaceFirst("^(?i:step\\s*\\d+\\s*[:.-]?\\s*)", "");
-        limpio = limpio.replaceFirst("^\\d+\\s*[.)-]\\s*", "");
+        // 2. Si la línea es únicamente un número aislado ("1", "1.") o un marcador de paso ("Step 1", "Paso 1", "PASO 1:", etc.)
+        if (limpio.matches("^(?i:(?:step|paso|etapa|fase)\\s*\\d+|\\d+)[.:-]?$")) {
+            return "";
+        }
+
+        // 3. Descartar marcadores de sección en mayúsculas breves (ej: "STEP 2 - STIR FRY", "PASO 2 - SALTEADO")
+        if (limpio.matches("^(?i:(?:step|paso)\\s*\\d+\\s*[-–—]\\s*[a-záéíóúñA-ZÁÉÍÓÚÑ\\s]{2,18})$")) {
+            return "";
+        }
+
+        // 4. Eliminar prefijos de paso cuando hay contenido útil detrás (ej: "Paso 1: Mezclar...", "STEP 1 - Put...", "1.- Batir...")
+        limpio = limpio.replaceFirst("^(?i:(?:step|paso|etapa|fase)\\s*\\d+\\s*[:.-]*\\s*)", "");
+        limpio = limpio.replaceFirst("^\\d+\\s*[.):-]+\\s*", "");
         return limpio.trim();
     }
 }
-

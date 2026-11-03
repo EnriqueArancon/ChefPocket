@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -81,6 +83,7 @@ public class ExplorarFragment extends Fragment {
 
     // Receta sugerida activa
     private MealDto recetaSugeridaActual;
+    private boolean debeAnimarVolteoSugerencia = false;
 
     @Nullable
     @Override
@@ -139,9 +142,12 @@ public class ExplorarFragment extends Fragment {
         configurarBuscador();
         configurarFiltrosCategorias();
 
-        // Listeners de sugerencia
+        // Listeners de sugerencia con volteo suave al completarse la carga
         btnRefrescarReceta.setOnClickListener(v -> {
-            Log.i(LOG_TAG, "ExplorarFragment: Solicitando nueva sugerencia...");
+            Log.i(LOG_TAG, "ExplorarFragment: Solicitando nueva sugerencia con volteo suave...");
+            debeAnimarVolteoSugerencia = true;
+            btnRefrescarReceta.setEnabled(false);
+            btnRefrescarReceta.animate().alpha(0.65f).scaleX(0.92f).scaleY(0.92f).setDuration(160).start();
             viewModel.cargarRecetaSugerida(requireContext(), true);
         });
 
@@ -157,7 +163,8 @@ public class ExplorarFragment extends Fragment {
             }
         });
 
-        // Carga inicial: no duplica llamadas si el ViewModel ya dispone de datos
+        // Carga inicial ultrarrápida (0 ms) mediante caché en disco
+        viewModel.cargarCacheInicial(requireContext());
         viewModel.cargarRecetaSugerida(requireContext(), false);
         if (viewModel.getRecetasCatalogo().getValue() == null || viewModel.getRecetasCatalogo().getValue().isEmpty()) {
             viewModel.cargarCatalogoPorCategoria(requireContext(), "Todas");
@@ -169,15 +176,26 @@ public class ExplorarFragment extends Fragment {
         viewModel.getRecetaSugerida().observe(getViewLifecycleOwner(), meal -> {
             if (meal != null) {
                 recetaSugeridaActual = meal;
-                mostrarSugerencia(meal);
+                if (debeAnimarVolteoSugerencia && cardRecetaDia.getVisibility() == View.VISIBLE) {
+                    debeAnimarVolteoSugerencia = false;
+                    ejecutarVolteoSugerencia(meal);
+                } else {
+                    mostrarSugerencia(meal);
+                }
             }
         });
 
         // Observador de carga de sugerencia
         viewModel.getCargandoSugerencia().observe(getViewLifecycleOwner(), cargando -> {
-            layoutCargandoReceta.setVisibility(Boolean.TRUE.equals(cargando) ? View.VISIBLE : View.GONE);
-            if (Boolean.TRUE.equals(cargando)) {
-                cardRecetaDia.setVisibility(View.GONE);
+            boolean estaCargando = Boolean.TRUE.equals(cargando);
+            // Solo mostramos el skeleton si es la carga inicial en frío (sin plato previo)
+            if (recetaSugeridaActual == null) {
+                layoutCargandoReceta.setVisibility(estaCargando ? View.VISIBLE : View.GONE);
+                cardRecetaDia.setVisibility(estaCargando ? View.GONE : View.VISIBLE);
+            }
+            if (!estaCargando && !debeAnimarVolteoSugerencia) {
+                btnRefrescarReceta.setEnabled(true);
+                btnRefrescarReceta.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(160).start();
             }
         });
 
@@ -273,6 +291,40 @@ public class ExplorarFragment extends Fragment {
             Log.i(LOG_TAG, "ExplorarFragment: Categoría seleccionada -> " + categoriaEnglish);
             viewModel.cargarCatalogoPorCategoria(requireContext(), categoriaEnglish);
         });
+    }
+
+    private void ejecutarVolteoSugerencia(MealDto meal) {
+        float density = getResources().getDisplayMetrics().density;
+        cardRecetaDia.setCameraDistance(16000 * density);
+        cardRecetaDia.setCardElevation(0f);
+        cardRecetaDia.setMaxCardElevation(0f);
+
+        // Fase 1: Girar limpiamente hasta 90° sobre su eje vertical sin sombras proyectadas
+        cardRecetaDia.animate()
+                .rotationY(90f)
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(260)
+                .setInterpolator(new AccelerateInterpolator(1.2f))
+                .withEndAction(() -> {
+                    // En el punto ciego (90°), actualizamos todos los textos y fotografía
+                    mostrarSugerencia(meal);
+                    cardRecetaDia.setRotationY(-90f);
+
+                    // Fase 2: Girar desde -90° a 0° revelando el nuevo plato con desaceleración natural
+                    cardRecetaDia.animate()
+                            .rotationY(0f)
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(300)
+                            .setInterpolator(new DecelerateInterpolator(1.3f))
+                            .withEndAction(() -> {
+                                btnRefrescarReceta.setEnabled(true);
+                                btnRefrescarReceta.animate().alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setDuration(150).start();
+                            })
+                            .start();
+                })
+                .start();
     }
 
     private void mostrarSugerencia(MealDto meal) {

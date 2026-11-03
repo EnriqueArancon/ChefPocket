@@ -147,7 +147,8 @@
             android:visibility="gone"
             app:cardBackgroundColor="@color/chef_surface"
             app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:strokeColor="@color/chef_outline"
             app:strokeWidth="1dp"
             tools:visibility="visible">
@@ -220,10 +221,7 @@
                         android:scaleType="centerCrop"
                         tools:src="@tools:sample/backgrounds/scenic" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#1A000000" />
+
 
                 </FrameLayout>
 

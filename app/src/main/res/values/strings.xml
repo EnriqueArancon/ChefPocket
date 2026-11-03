@@ -95,6 +95,7 @@
     <!-- Detalle de Receta e Idioma -->
     <string name="titulo_actividad_detalle">Detalle de la receta</string>
     <string name="titulo_ingredientes">Ingredientes necesarios</string>
+    <string name="ingredientes_en_instrucciones">Ingredientes detallados en los pasos de preparación</string>
     <string name="titulo_preparacion">Preparación paso a paso</string>
     <string name="btn_video_tutorial">Ver vídeo tutorial en YouTube</string>
     <string name="aviso_idioma_titulo">Aviso de idioma</string>

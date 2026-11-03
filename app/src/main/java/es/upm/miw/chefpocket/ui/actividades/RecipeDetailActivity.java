@@ -26,6 +26,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import es.upm.miw.chefpocket.R;
 import es.upm.miw.chefpocket.datos.api.RetrofitClient;
@@ -62,6 +64,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private FloatingActionButton fabFavorito;
     private View layoutCargando;
 
+    private static final Map<String, MealDto> CACHE_DETALLES_RECETAS = new ConcurrentHashMap<>();
+
     private MealDto recetaActual;
     private boolean esFavorito = false;
     private boolean esCocinada = false;
@@ -84,12 +88,20 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         Log.i(LOG_TAG, "RecipeDetailActivity: Mostrando receta -> " + recetaActual.getStrMeal() + " (ID: " + recetaActual.getIdMeal() + ")");
 
-        // Si la receta viene de un filtro rápido (filter.php), solo incluye ID, nombre y foto.
-        // En ese caso, consultamos lookup.php para obtener ingredientes e instrucciones completas.
-        if (recetaActual.getStrInstructions() == null || recetaActual.getStrInstructions().trim().isEmpty()) {
-            cargarDetallesCompletosDeRed(recetaActual.getIdMeal());
-        } else {
-            popularVistas(recetaActual);
+        // Poblamos de inmediato los datos que ya tengamos para una UI instantánea y fluida
+        popularVistas(recetaActual);
+
+        // Si la receta viene de un filtro rápido (filter.php) o carece de ingredientes/instrucciones:
+        if (recetaActual.getStrInstructions() == null
+                || recetaActual.getStrInstructions().trim().isEmpty()
+                || recetaActual.getIngredientesDesglosados().isEmpty()) {
+            if (CACHE_DETALLES_RECETAS.containsKey(recetaActual.getIdMeal())) {
+                MealDto cached = CACHE_DETALLES_RECETAS.get(recetaActual.getIdMeal());
+                Log.d(LOG_TAG, "RecipeDetailActivity: Sirviendo detalles completos desde caché (0 ms).");
+                popularVistas(cached);
+            } else {
+                cargarDetallesCompletosDeRed(recetaActual.getIdMeal());
+            }
         }
 
         configurarListeners();
@@ -168,15 +180,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
             });
         }
 
-        // Instrucciones de preparación paso a paso formateadas
-        // Si el usuario tiene el dispositivo en inglés o ya disponemos de traducción completa en memoria/catálogo,
-        // poblamos de inmediato las instrucciones sin parpadeos.
+        // Instrucciones de preparación paso a paso formateadas de inmediato
         if (!TraductorUtils.esEspanol() || TraductorUtils.tieneTraduccionCompleta(meal)) {
             cardAvisoIdioma.setVisibility(View.GONE);
             popularInstrucciones(TraductorUtils.obtenerInstrucciones(meal));
-        } else if (meal.getStrInstructions() != null) {
-            // Mostramos un mensaje suave mientras se traduce en segundo plano, evitando el parpadeo de inglés a español
-            mostrarPlaceholderTraduccion();
+        } else if (meal.getStrInstructions() != null && !meal.getStrInstructions().trim().isEmpty()) {
+            // Mostramos de inmediato las instrucciones para que el usuario no espere con pantalla vacía
+            popularInstrucciones(meal.getStrInstructions());
+
+            // Traducimos en segundo plano y actualizamos con fluidez sin bloquear la lectura
             TraductorUtils.traducirInstruccionesAsync(meal.getStrInstructions(), (textoTraducido, fueExitosa) -> {
                 if (!isFinishing() && !isDestroyed()) {
                     if (fueExitosa && textoTraducido != null && !textoTraducido.trim().isEmpty()) {
@@ -184,7 +196,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         popularInstrucciones(textoTraducido);
                     } else {
                         cardAvisoIdioma.setVisibility(View.VISIBLE);
-                        popularInstrucciones(meal.getStrInstructions());
                     }
                 }
             });
@@ -203,6 +214,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void popularIngredientes(List<MealDto.IngredienteItem> ingredientes) {
         llIngredientesLista.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
+
+        if (ingredientes == null || ingredientes.isEmpty()) {
+            TextView tvAviso = new TextView(this);
+            tvAviso.setText(R.string.ingredientes_en_instrucciones);
+            tvAviso.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_Material3_BodyMedium);
+            tvAviso.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.chef_text_secondary));
+            tvAviso.setPadding(8, 16, 8, 16);
+            llIngredientesLista.addView(tvAviso);
+            return;
+        }
 
         for (MealDto.IngredienteItem item : ingredientes) {
             View viewItem = inflater.inflate(R.layout.item_ingrediente, llIngredientesLista, false);
@@ -257,6 +278,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null && response.body().getMeals() != null && !response.body().getMeals().isEmpty()) {
                     MealDto detalleCompleto = response.body().getMeals().get(0);
                     Log.i(LOG_TAG, "RecipeDetailActivity: Detalles completos recibidos para " + detalleCompleto.getStrMeal());
+                    CACHE_DETALLES_RECETAS.put(detalleCompleto.getIdMeal(), detalleCompleto);
                     popularVistas(detalleCompleto);
                 } else {
                     Log.w(LOG_TAG, "RecipeDetailActivity: Respuesta vacía de lookup.");
@@ -286,6 +308,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 public void onCompletado(boolean ahoraEsFavorito) {
                     esFavorito = ahoraEsFavorito;
                     actualizarIconoFavorito();
+                    fabFavorito.animate().scaleX(1.25f).scaleY(1.25f).setDuration(120).withEndAction(() -> fabFavorito.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start()).start();
                     fabFavorito.setEnabled(true);
                     int msgRes = esFavorito ? R.string.favorito_anadido : R.string.favorito_eliminado;
                     Snackbar.make(findViewById(android.R.id.content), msgRes, Snackbar.LENGTH_SHORT).show();
