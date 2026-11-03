@@ -81,6 +81,15 @@
     <string name="categoria_desayunos">Breakfast</string>
     <string name="categoria_ternera">Beef</string>
     <string name="titulo_catalogo_recetas">Recipe Catalog</string>
+    <string name="titulo_seccion_pollo">Chicken Recipes 🍗</string>
+    <string name="titulo_seccion_pastas">Pasta Recipes 🍝</string>
+    <string name="titulo_seccion_pescados">Seafood Dishes 🐟</string>
+    <string name="titulo_seccion_postres">Desserts &amp; Sweets 🍰</string>
+    <string name="titulo_seccion_vegetariano">Vegetarian Dishes 🥗</string>
+    <string name="titulo_seccion_desayunos">Breakfast Dishes 🍳</string>
+    <string name="titulo_seccion_ternera">Beef Dishes 🥩</string>
+    <string name="titulo_seccion_busqueda">Results for: \"%1$s\"</string>
+    <string name="contador_recetas_formato">%1$d recipes</string>
     <string name="sin_resultados_busqueda">No recipes found for your query.</string>
 
     <!-- Recipe Detail -->

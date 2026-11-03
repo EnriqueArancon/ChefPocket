@@ -81,6 +81,15 @@
     <string name="categoria_desayunos">Desayunos</string>
     <string name="categoria_ternera">Ternera</string>
     <string name="titulo_catalogo_recetas">Catálogo de recetas</string>
+    <string name="titulo_seccion_pollo">Recetas de Pollo 🍗</string>
+    <string name="titulo_seccion_pastas">Recetas de Pastas 🍝</string>
+    <string name="titulo_seccion_pescados">Pescados y Mariscos 🐟</string>
+    <string name="titulo_seccion_postres">Postres y Dulces 🍰</string>
+    <string name="titulo_seccion_vegetariano">Platos Vegetarianos 🥗</string>
+    <string name="titulo_seccion_desayunos">Desayunos y Meriendas 🍳</string>
+    <string name="titulo_seccion_ternera">Platos de Ternera 🥩</string>
+    <string name="titulo_seccion_busqueda">Resultados para: \"%1$s\"</string>
+    <string name="contador_recetas_formato">%1$d recetas</string>
     <string name="sin_resultados_busqueda">No se encontraron recetas para tu búsqueda.</string>
 
     <!-- Detalle de Receta e Idioma -->

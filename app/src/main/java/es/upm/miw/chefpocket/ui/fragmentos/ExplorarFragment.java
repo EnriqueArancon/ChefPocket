@@ -71,7 +71,9 @@ public class ExplorarFragment extends Fragment {
     private TextInputEditText etBuscarReceta;
     private ChipGroup chipGroupCategorias;
 
-    // Catálogo RecyclerView
+    // Catálogo RecyclerView y cabecera interactiva
+    private TextView tvTituloSeccionCatalogo;
+    private TextView tvContadorCatalogo;
     private ProgressBar progressCatalogo;
     private TextView tvSinResultados;
     private RecyclerView rvCatalogo;
@@ -111,6 +113,8 @@ public class ExplorarFragment extends Fragment {
         chipGroupCategorias = root.findViewById(R.id.chip_group_categorias);
 
         // Catálogo
+        tvTituloSeccionCatalogo = root.findViewById(R.id.tv_titulo_seccion_catalogo);
+        tvContadorCatalogo = root.findViewById(R.id.tv_contador_catalogo);
         progressCatalogo = root.findViewById(R.id.progress_catalogo);
         tvSinResultados = root.findViewById(R.id.tv_sin_resultados);
         rvCatalogo = root.findViewById(R.id.rv_catalogo_recetas);
@@ -180,6 +184,9 @@ public class ExplorarFragment extends Fragment {
         // Observador del catálogo de recetas
         viewModel.getRecetasCatalogo().observe(getViewLifecycleOwner(), this::mostrarCatalogo);
 
+        // Observador de la categoría activa para actualizar la cabecera dinámica
+        viewModel.getCategoriaActiva().observe(getViewLifecycleOwner(), this::actualizarTituloCatalogo);
+
         // Observador de carga del catálogo
         viewModel.getCargandoCatalogo().observe(getViewLifecycleOwner(), cargando ->
                 progressCatalogo.setVisibility(Boolean.TRUE.equals(cargando) ? View.VISIBLE : View.GONE));
@@ -209,6 +216,9 @@ public class ExplorarFragment extends Fragment {
                 String query = etBuscarReceta.getText() != null ? etBuscarReceta.getText().toString().trim() : "";
                 ocultarTeclado();
                 Log.i(LOG_TAG, "ExplorarFragment: Buscando recetas con término: " + query);
+                if (!query.isEmpty()) {
+                    chipGroupCategorias.clearCheck();
+                }
                 viewModel.buscarRecetas(requireContext(), query);
                 return true;
             }
@@ -223,6 +233,7 @@ public class ExplorarFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
                     // Si se vacía el buscador, recarga la categoría actualmente seleccionada
+                    chipGroupCategorias.check(R.id.chip_cat_todas);
                     viewModel.cargarCatalogoPorCategoria(requireContext(), "Todas");
                 }
             }
@@ -308,10 +319,55 @@ public class ExplorarFragment extends Fragment {
         if (lista == null || lista.isEmpty()) {
             rvCatalogo.setVisibility(View.GONE);
             tvSinResultados.setVisibility(View.VISIBLE);
+            if (tvContadorCatalogo != null) {
+                tvContadorCatalogo.setVisibility(View.GONE);
+            }
         } else {
             tvSinResultados.setVisibility(View.GONE);
             rvCatalogo.setVisibility(View.VISIBLE);
             adapter.setRecetas(lista);
+            if (tvContadorCatalogo != null) {
+                tvContadorCatalogo.setText(getString(R.string.contador_recetas_formato, lista.size()));
+                tvContadorCatalogo.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void actualizarTituloCatalogo(String categoria) {
+        if (tvTituloSeccionCatalogo == null) return;
+
+        if (categoria == null || categoria.equalsIgnoreCase("Todas")) {
+            tvTituloSeccionCatalogo.setText(R.string.titulo_catalogo_recetas);
+        } else if (categoria.startsWith("SEARCH:")) {
+            String query = categoria.substring(7);
+            tvTituloSeccionCatalogo.setText(getString(R.string.titulo_seccion_busqueda, query));
+        } else {
+            switch (categoria) {
+                case "Chicken":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_pollo);
+                    break;
+                case "Pasta":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_pastas);
+                    break;
+                case "Seafood":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_pescados);
+                    break;
+                case "Dessert":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_postres);
+                    break;
+                case "Vegetarian":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_vegetariano);
+                    break;
+                case "Breakfast":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_desayunos);
+                    break;
+                case "Beef":
+                    tvTituloSeccionCatalogo.setText(R.string.titulo_seccion_ternera);
+                    break;
+                default:
+                    tvTituloSeccionCatalogo.setText(TraductorUtils.traducirCategoria(categoria));
+                    break;
+            }
         }
     }
 

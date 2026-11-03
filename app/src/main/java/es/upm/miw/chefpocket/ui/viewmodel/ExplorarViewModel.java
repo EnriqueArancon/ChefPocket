@@ -175,6 +175,8 @@ public class ExplorarViewModel extends ViewModel {
             return;
         }
 
+        String termino = query != null ? query.trim() : "";
+        categoriaActiva.setValue(termino.isEmpty() ? "Todas" : "SEARCH:" + termino);
         cargandoCatalogo.setValue(true);
         modoOffline.setValue(false);
 

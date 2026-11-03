@@ -4,6 +4,9 @@ Alumno: Enrique Arancón López
 Máster en Ingeniería Web (MIW) - UPM
 Asignatura: Front-end para Móviles (FEM)
 
+Enlace al vídeo demostrativo: [INSERTAR_AQUÍ_ENLACE_YOUTUBE_O_DRIVE]
+Repositorio GitHub: https://github.com/EnriqueArancon/ChefPocket.git
+
 
 A continuación explico paso a paso las funcionalidades que he ido desarrollando 
 en la práctica, cómo he organizado el código y las decisiones que he tomado:
@@ -165,6 +168,15 @@ Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
   "Todas", "Pastas", "Pollo", "Pescados", "Postres", "Vegetariano", "Desayunos" y "Ternera". 
   Al pulsar sobre cualquiera de ellos, el ViewModel consulta la API filtrando por dicha categoría 
   o mostrando el catálogo global si se marca "Todas".
+
+- Cabecera dinámica y contador de recetas en tiempo real:
+  Para que la experiencia simule la apertura de una carta temática o menú de restaurante, 
+  la cabecera del catálogo no es un texto fijo, sino un componente reactivo (tv_titulo_seccion_catalogo) 
+  conectado a categoriaActiva del ViewModel. Al pulsar sobre cualquier chip o realizar una búsqueda, 
+  la cabecera se actualiza de inmediato con el nombre temático del menú (ej. "Recetas de Pollo 🍗", 
+  "Recetas de Pastas 🍝", o "Resultados para: 'cake'"), acompañada a su derecha de una insignia 
+  estilizada (tv_contador_catalogo) que indica en tiempo real el número de platos disponibles 
+  (ej. "81 recetas", "12 recetas").
 
 - Adaptador RecyclerView (MealAdapter):
   Diseñé item_receta.xml con MaterialCardView, esquinas redondeadas y una imagen cuadrada 
