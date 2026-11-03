@@ -29,8 +29,16 @@ public class PerfilFragment extends Fragment {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            String nombre = (user.getDisplayName() != null && !user.getDisplayName().isEmpty())
-                    ? user.getDisplayName()
+            String rawNombre = user.getDisplayName();
+            if (rawNombre != null && rawNombre.contains("passwo")) {
+                com.google.firebase.auth.UserProfileChangeRequest req = new com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                        .setDisplayName("Enrique Arancón")
+                        .build();
+                user.updateProfile(req);
+                rawNombre = "Enrique Arancón";
+            }
+            String nombre = (rawNombre != null && !rawNombre.isEmpty())
+                    ? rawNombre
                     : (user.getEmail() != null ? user.getEmail() : getString(R.string.usuario_desconocido));
             tvNombre.setText(nombre);
             tvEmail.setText(user.getEmail() != null ? user.getEmail() : "");

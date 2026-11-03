@@ -36,6 +36,7 @@ public class CerrarSesionDialogFragment extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity());
         builder.setTitle(R.string.dialogo_cerrar_sesion_titulo)
                .setMessage(R.string.dialogo_cerrar_sesion_mensaje)
+               .setIcon(R.drawable.ic_chef_logo)
                .setPositiveButton(R.string.dialogo_accion_aceptar, (dialog, which) -> {
                    if (listener != null) {
                        listener.onConfirmarCierreSesion();

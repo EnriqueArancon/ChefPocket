@@ -2,11 +2,40 @@
     <!-- App Name -->
     <string name="app_name">ChefPocket</string>
 
+        <!-- Unified Auth Form -->
+    <string name="hint_correo">Email address</string>
+    <string name="hint_contrasena">Password</string>
+    <string name="hint_nombre_chef">Chef Name</string>
+    <string name="placeholder_nombre">E.g. Enrique Arancón</string>
+    <string name="placeholder_email">example@domain.com</string>
+    <string name="placeholder_password">Minimum 6 characters</string>
+    <string name="btn_iniciar_sesion_accion">Sign in</string>
+    <string name="btn_crear_cuenta_accion">Create account</string>
+    <string name="tab_iniciar_sesion">Sign in</string>
+    <string name="tab_registrarse">Register</string>
+    <string name="pregunta_no_cuenta">"Don't have an account? Sign up here"</string>
+    <string name="pregunta_si_cuenta">Already have an account? Sign in here</string>
+    <string name="error_campo_vacio">This field is required</string>
+    <string name="error_correo_invalido">Enter a valid email address</string>
+    <string name="error_contrasena_corta">Password must be at least 6 characters</string>
+    <string name="error_credenciales_invalidas">Invalid email or password</string>
+    <string name="error_correo_en_uso">This email is already registered</string>
+    <string name="autenticando">Entering your kitchen…</string>
+    <string name="registrando">Creating your Chef account…</string>
+
     <!-- Welcome / Login Screen -->
     <string name="login_eslogan">ChefPocket</string>
     <string name="login_subtitulo">Your smart pocket cookbook</string>
     <string name="login_descripcion">Explore hundreds of international recipes, find daily inspiration, and save your favorites in the cloud.</string>
     <string name="btn_iniciar_sesion">Sign In / Create Account</string>
+    <string name="btn_empezar_cocinar">Start Cooking</string>
+    <string name="login_feature_1_titulo">Explore World Cuisine</string>
+    <string name="login_feature_1_desc">Hundreds of recipes with high-res photos and detailed steps</string>
+    <string name="login_feature_2_titulo">Your Cloud Cookbook</string>
+    <string name="login_feature_2_desc">Save your favorite dishes synced in real time with Firebase</string>
+    <string name="login_feature_3_titulo">Level Up Your Chef Rank</string>
+    <string name="login_feature_3_desc">Log the dishes you cook and advance to Master Chef</string>
+    <string name="login_seguridad">Secure authentication with Firebase Auth</string>
     <string name="login_pie">Master in Web Engineering · UPM</string>
 
     <!-- Main Menu & Bottom Navigation -->
@@ -27,6 +56,9 @@
     <string name="sesion_cerrada">Signed out successfully.</string>
     <string name="info_cuenta">Account Information</string>
     <string name="info_proveedor">Provider: Email / Firebase Auth</string>
+    <string name="perfil_badge_miembro">ChefPocket Gourmet Member</string>
+    <string name="perfil_seccion_detalles">Account Details</string>
+    <string name="perfil_sincronizacion_activa">Cloud sync: Active</string>
     <string name="id_usuario_formato">User ID: %1$s</string>
     <string name="titulo_seccion_favoritos">My Favorite Recipes</string>
     <string name="subtitulo_seccion_favoritos">Collection synced to the cloud via Firebase</string>
@@ -51,10 +83,10 @@
     <string name="rango_master">Master Chef Pocket ⭐</string>
 
     <!-- Sign-out Dialog -->
-    <string name="dialogo_cerrar_sesion_titulo">Sign out</string>
-    <string name="dialogo_cerrar_sesion_mensaje">Are you sure you want to exit ChefPocket?</string>
-    <string name="dialogo_accion_aceptar">Exit</string>
-    <string name="dialogo_accion_cancelar">Cancel</string>
+    <string name="dialogo_cerrar_sesion_titulo">Ready to hang up your apron?</string>
+    <string name="dialogo_cerrar_sesion_mensaje">You will be signed out on this device. Your favorite recipes and cooking stats will remain safe in the cloud.</string>
+    <string name="dialogo_accion_aceptar">Sign out</string>
+    <string name="dialogo_accion_cancelar">Keep cooking</string>
 
     <!-- Network & Suggestions -->
     <string name="cargando_datos">Loading gourmet recipes…</string>

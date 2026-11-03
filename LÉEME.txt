@@ -1,358 +1,77 @@
-MEMORIA DE LA PRÁCTICA: CHEFPOCKET (AUTENTICACIÓN, SERVICIOS WEB Y BASE DE DATOS EN LA NUBE)
+MEMORIA DE LA PRÁCTICA: CHEFPOCKET
+(Autenticación, Servicios Web REST y Base de Datos en la Nube)
 
 Alumno: Enrique Arancón López
-Máster en Ingeniería Web (MIW) - UPM
+Máster en Ingeniería Web (MIW) - Universidad Politécnica de Madrid (UPM)
 Asignatura: Front-end para Móviles (FEM)
 
 Enlace al vídeo demostrativo: [INSERTAR_AQUÍ_ENLACE_YOUTUBE_O_DRIVE]
 Repositorio GitHub: https://github.com/EnriqueArancon/ChefPocket.git
 
 
-A continuación explico paso a paso las funcionalidades que he ido desarrollando 
-en la práctica, cómo he organizado el código y las decisiones que he tomado:
+1. RESUMEN EJECUTIVO Y ARQUITECTURA GENERAL
+ChefPocket es una aplicación móvil gastronómica nativa en Android desarrollada en Java 17 (minSdk 28, targetSdk 37). Permite a los usuarios descubrir recetas culinarias de todo el mundo consumiendo la API REST de TheMealDB, gestionar su propio recetario sincronizado en tiempo real en la nube y seguir su progreso como cocineros mediante métricas culinarias.
+
+El proyecto sigue una arquitectura desacoplada organizada por paquetes dentro de es.upm.miw.chefpocket:
+- ui.actividades: Ciclo de vida y orquestación de pantallas (LoginActivity, MainActivity y RecipeDetailActivity).
+- ui.fragmentos: Vistas modulares para navegación inferior (ExplorarFragment, FavoritosFragment, EstadisticasFragment, PerfilFragment) y diálogos (CerrarSesionDialogFragment).
+- ui.viewmodel: Gestión de estado observable mediante MVVM (ExplorarViewModel, LiveData, MutableLiveData).
+- ui.adaptadores: Adaptador personalizado para listados de alto rendimiento (MealAdapter con RecyclerView).
+- datos.api: Cliente Retrofit, modelos DTO y servicios de red REST.
+- datos.firebase: Capa de acceso a datos de persistencia en la nube (FirebaseDbHelper).
+- utilidades: Clases de soporte para conectividad (NetworkUtils) y adaptación idiomática (TraductorUtils).
+- Internacionalización completa: Soporte bilingüe estricto mediante res/values/strings.xml y res/values-en/strings.xml, sin cadenas forzadas en código.
 
 
-1. ARQUITECTURA GENERAL Y ORGANIZACIÓN DEL CÓDIGO
-Para no sobrecargar MainActivity y mantener una arquitectura limpia y desacoplada, 
-he separado las responsabilidades en paquetes dentro de es.upm.miw.chefpocket:
-
-- ui.actividades: Contiene LoginActivity (pantalla de bienvenida y punto de entrada 
-  de la app), MainActivity (pantalla principal una vez autenticado) y RecipeDetailActivity 
-  (pantalla de detalle completo de cada receta con cabecera colapsable, ingredientes, 
-  instrucciones, aviso de idioma y tutorial en vídeo).
-- ui.fragmentos: Contiene los fragmentos independientes para cada pestaña de la 
-  aplicación (ExplorarFragment, FavoritosFragment, EstadisticasFragment y PerfilFragment), 
-  además del diálogo modal de confirmación (CerrarSesionDialogFragment).
-- ui.viewmodel: Alberga ExplorarViewModel, encargado de mantener el estado observable 
-  (LiveData) de la pantalla principal y evitar llamadas redundantes de red ante cambios 
-  de configuración (rotación del dispositivo o cambio entre pestañas).
-- ui.adaptadores: Contiene MealAdapter, el adaptador personalizado para el RecyclerView 
-  que muestra las tarjetas de las recetas con su imagen redondeada con Glide y textos adaptados.
-- utilidades: Clases de soporte desacopladas, como NetworkUtils para comprobar la 
-  conectividad de red mediante ConnectivityManager y TraductorUtils para la localización 
-  inteligente de categorías y orígenes gastronómicos.
-- res/menu: Donde he configurado el menú de navegación inferior menu_navegacion_inferior.xml.
-- res/values/strings.xml y res/values-en/strings.xml: Siguiendo las buenas prácticas y las pautas 
-  de internacionalización de Android, he configurado soporte bilingüe completo (español e inglés). 
-  Si el móvil está en inglés, la app se adapta íntegramente a inglés; si está en español u otro idioma, 
-  se muestra en castellano, sin ninguna cadena forzada (hardcodeada) en Java ni en XML.
+2. AUTENTICACIÓN Y GESTIÓN DE SESIÓN (FIREBASE AUTHENTICATION)
+- Flujo unificado de acceso y registro: Implementado mediante el SDK nativo de Firebase Authentication con proveedor Email/Contraseña en una tarjeta integrada de alta gama. Ambos campos (correo y contraseña con toggle de visibilidad) conviven en la misma pantalla, permitiendo alternar instantáneamente entre inicio de sesión y registro de nuevo chef sin pantallas intermedias ni transiciones lentas.
+- Verificación de sesión activa: Si existe una sesión previa en FirebaseAuth.getInstance().getCurrentUser(), la aplicación accede directamente a MainActivity optimizando el tiempo de arranque en frío.
+- Cierre de sesión bajo confirmación: Diálogo modal basado en DialogFragment y MaterialAlertDialogBuilder con marca gráfica culinaria que invoca FirebaseAuth.getInstance().signOut(), notifica mediante Snackbar interactivo y redirige limpiamente a la pantalla de bienvenida.
+- Validación y feedback en tiempo real: Control de formato con Patterns.EMAIL_ADDRESS, longitud mínima de clave y gestión de errores asíncronos (credenciales erróneas o cuenta existente) asociados a cada TextInputLayout.
 
 
-2. AUTENTICACIÓN CON FIREBASEUI Y GESTIÓN DE SESIÓN
-Para la autenticación de usuarios he utilizado la librería oficial de FirebaseUI (v9.1.1):
-
-- Pantalla de bienvenida (LoginActivity):
-  Diseñé un layout (activity_login.xml) con una estética moderna y una tarjeta de 
-  bienvenida donde el usuario puede iniciar el proceso de identificación o registro 
-  pulsando en "Acceder / Crear cuenta". Si el usuario ya tenía una sesión activa previa, 
-  compruebo FirebaseAuth.getInstance().getCurrentUser() en el arranque para saltar 
-  directamente a MainActivity sin transiciones innecesarias.
-
-- Configuración y flujo de autenticación:
-  Lancé el intent de inicio de sesión de FirebaseUI configurando el proveedor de 
-  Email/Contraseña. Durante las pruebas en el emulador me encontré con dos detalles técnicos:
-  * El tema por defecto no contrastaba bien en componentes Material, así que creé el estilo 
-    Theme.ChefPocket.Login heredando de FirebaseUI.DefaultMaterialTheme, logrando que los 
-    campos de texto y botones se vean con el delineado perfecto.
-  * En versiones modernas de Android (Android 14 y 15), el Credential Manager bloqueaba 
-    el flujo en el emulador, por lo que añadí la instrucción .setCredentialManagerEnabled(false) 
-    al constructor de AuthUI.
-
-- Cierre de sesión y diálogo de confirmación:
-  En la pestaña de Perfil (PerfilFragment) añadí un botón para cerrar sesión. Siguiendo 
-  el patrón que vimos en clase (Tema 2), creé la clase CerrarSesionDialogFragment 
-  heredando de DialogFragment y usando MaterialAlertDialogBuilder. Mediante la interfaz 
-  de callback CerrarSesionListener aviso a la actividad para que llame a 
-  AuthUI.getInstance().signOut(), notifique al usuario con un Snackbar y lo devuelva a 
-  LoginActivity, asegurando que la sesión queda cerrada de forma limpia.
+3. NAVEGACIÓN Y EXPERIENCIA VISUAL
+- Navegación por pestañas: Implementada mediante BottomNavigationView en MainActivity con transacciones de FragmentManager empleando show() y hide() para evitar recreaciones de vistas y preservar el estado de navegación.
+- Paleta gastronómica e icono adaptativo: Paleta cromática cálida en colors.xml con tonos terracota (#E65100) y ámbar (#FFB300). Icono adaptativo nativo (ic_launcher) con diseño vectorial de gorro de chef y cubiertos.
+- Micro-animaciones nativas: Volteo horizontal 3D fluido en la propuesta del chef y efecto de latido interactivo en el botón flotante de favoritos.
 
 
-3. INTERNACIONALIZACIÓN COMPLETA (STRINGS.XML)
-Al probar en el emulador me percaté de que, al estar el sistema operativo del teléfono 
-en inglés (en-US), FirebaseUI mostraba textos en inglés en la pantalla de bienvenida y en 
-el formulario de usuarios ya registrados ("Welcome back!", "Trouble signing in?").
-
-Para resolverlo y asegurar que la entrega se evalúe 100% en castellano independientemente 
-del idioma del móvil del profesor:
-- Sobrescribí en res/values/strings.xml toda la batería de recursos de FirebaseUI (fui_*).
-- Traduje tanto las pantallas de creación de cuenta como las de usuario recurrente, 
-  recuperación de contraseña olvidada y mensajes de error de validación (por ejemplo, 
-  contraseña incorrecta o correo mal formado).
+4. CONSUMO DE SERVICIOS REST Y GESTIÓN DE RED (THEMEALDB)
+- Conectividad proactiva (NetworkUtils): Comprobación de estado de red mediante ConnectivityManager y NetworkCapabilities previa a cualquier petición HTTP. Si no hay conexión, muestra un estado visual offline (card_offline) y botón de reintento.
+- Retrofit y Gson: Cliente Singleton RetrofitClient conectado a TheMealDB (https://www.themealdb.com/api/json/v1/1/) con convertidor GsonConverterFactory y modelos serializables (MealDto, MealResponse).
+- Carga asíncrona de imágenes (Glide): Integración de Glide con transformaciones de recorte (centerCrop), transiciones suaves y placeholders vectoriales para garantizar scroll continuo a 60 FPS.
+- Pantalla Explorar y catálogo dinámico:
+  * Propuesta culinaria del chef ("¿No sabes qué cocinar?"): Llamada aleatoria (random.php) con botón de refresco.
+  * Catálogo de recetas con cabecera reactiva y selector de categorías mediante Chips ("Destacadas", "Pastas", "Pollo", "Pescados", etc.) y contador dinámico de platos disponibles.
+  * Buscador en tiempo real: Búsqueda textual mediante OnEditorActionListener y consulta a search.php?s=.
 
 
-4. NAVEGACIÓN INFERIOR Y DISEÑO VISUAL
-Para conseguir una interfaz moderna y atractiva, similar a las aplicaciones actuales 
-como Instagram:
-
-- Implementé un BottomNavigationView en la parte inferior de MainActivity, enlazado 
-  a un contenedor de fragmentos (fragment_container).
-- Creé 4 pestañas desacopladas con iconos vectoriales propios: Explorar (receta del 
-  día y buscador), Favoritos (recetas guardadas en la nube), Estadísticas (métricas 
-  culinarias) y Perfil (datos del usuario logueado e ID de Firebase).
-- Para el estilo visual, definí una paleta gastronómica en colors.xml con tonos 
-  terracota (#E65100), ámbar (#FFB300) y superficies cálidas, además de un selector de 
-  estados (selector_nav_bottom.xml) para resaltar la pestaña activa.
-- Icono adaptativo gourmet y micro-animaciones nativas:
-  Diseñé un icono adaptativo propio (ic_launcher) con un gorro de chef y cubiertos sobre fondo 
-  en degradado terracota (#E65100), sustituyendo el androide genérico de plantilla. Además, 
-  incorporé micro-animaciones nativas fluidas (efecto de volteo horizontal 3D de la tarjeta 
-  de sugerencia del chef al pedir una nueva propuesta y efecto de latido/pop al guardar recetas 
-  en favoritos) que elevan notablemente la calidad de interacción de la app sin sobrecargar el hilo principal.
-- Para garantizar una experiencia de usuario fluida e instantánea, gestioné la navegación en 
-  MainActivity mediante transacciones de FragmentManager empleando show() y hide() en lugar 
-  de destruir y recrear fragmentos (replace()). Esto, sumado al alcance de ExplorarViewModel 
-  ligado a la Activity anfitriona (requireActivity()), conserva íntegro el estado en memoria: 
-  la propuesta gastronómica destacada no cambia aleatoriamente al conmutar de pestaña, ni se 
-  pierde la posición de scroll ni los filtros aplicados en el catálogo. Únicamente se solicita 
-  una nueva propuesta si el usuario pulsa explícitamente el botón "Probar otra".
+5. ARQUITECTURA DE RENDIMIENTO Y LATENCIA CERO (0 MS)
+Para garantizar una experiencia instantánea y sin retardos perceptibles:
+- Precarga en buffer de la siguiente sugerencia: En cuanto se muestra una receta, el ViewModel solicita en segundo plano la siguiente propuesta y pre-traduce sus datos. Al pulsar "Probar otra", la entrega se realiza desde memoria en 3 ms sin esperar a la red.
+- Caché inicial en disco: ExplorarViewModel almacena la última sugerencia y el catálogo en SharedPreferences (JSON). Al arrancar la app, la pantalla principal se pinta de inmediato (0 ms) en frío.
+- Caché de categorías en memoria: Las recetas de categorías ya consultadas se conservan en un Map concurrente en memoria, permitiendo alternar entre pestañas de forma instantánea.
+- Caché HTTP OkHttp (20 MB): Configuración de OkHttpClient con directiva de caché de 20 MB en disco y reutilización de conexiones TLS.
+- Persistencia de traducciones (TraductorUtils): Traducciones gastronómicas cacheadas en disco; cualquier plato o instrucción traducido una vez responde siempre en O(1) en sesiones futuras.
 
 
-5. ACCESO A SERVICIOS WEB REST (RETROFIT + GSON + GLIDE) Y GESTIÓN OFFLINE
-Para cumplir con el requisito de consumo de APIs externas (Tema 4):
-
-- Comprobación previa de conectividad (Tema 4, Diapositiva 3):
-  Creé la clase NetworkUtils en el paquete utilidades. Antes de realizar cualquier 
-  petición a la red, compruebo si el dispositivo tiene acceso activo a Internet mediante 
-  ConnectivityManager (con soporte tanto para NetworkCapabilities en Android moderno 
-  como para NetworkInfo). Si no hay red, la aplicación no se queda bloqueada ni lanza 
-  errores silenciosos: conmuta la interfaz para mostrar una tarjeta visual de aviso 
-  (card_offline con icono ic_wifi_off) y un botón de "Reintentar", además de notificar 
-  mediante un Snackbar. Al recuperar la señal o pulsar en reintentar, se reanuda la 
-  carga automáticamente.
-
-- Modelos de datos DTO y servicio Retrofit:
-  Para interactuar con la API TheMealDB (https://www.themealdb.com/api/json/v1/1/):
-  * Diseñé los modelos MealDto y MealResponse en datos.api.modelos anotando los campos 
-    con @SerializedName para su deserialización automática mediante Gson. Creé un 
-    método auxiliar getIngredientesConMedidas() que agrupa los 20 campos dinámicos 
-    de ingredientes y cantidades que devuelve la API.
-  * Definí la interfaz TheMealDbApiService con las operaciones HTTP correspondientes 
-    (@GET("random.php") para la receta aleatoria del día y @GET("search.php") para 
-    el buscador).
-  * Implementé la clase RetrofitClient siguiendo el patrón Singleton, instanciando un 
-    único cliente Retrofit configurado con el convertidor GsonConverterFactory.
-
-- Carga asíncrona e imágenes con Glide en ExplorarFragment:
-  En la pestaña principal muestro la tarjeta destacada "¿No sabes qué cocinar?". 
-  La llamada asíncrona se ejecuta mediante enqueue() con callbacks onResponse() y 
-  onFailure(). Para la visualización de la fotografía del plato utilizo la librería 
-  Glide, configurando placeholders y redondeo adaptativo para que la interfaz se sienta 
-  fluida y elegante. Añadí además el botón "Probar otra" para que el usuario pueda forzar 
-  una nueva propuesta gourmet al vuelo.
-
-- Gestión de estado y persistencia en memoria con ViewModel y LiveData (Tema 4, Diapositiva 19):
-  Siguiendo el esquema de arquitectura de la diapositiva 19 (App UI / ViewModel -> 
-  Retrofit Service), implementé la clase ExplorarViewModel en el paquete ui.viewmodel. 
-  Al rotar el dispositivo o alternar entre las pestañas del menú inferior, la actividad y 
-  el fragmento se destruyen y recrean, lo que inicialmente provocaba peticiones repetidas 
-  a TheMealDB y parpadeos en pantalla. Al delegar la receta en un MutableLiveData dentro 
-  del ViewModel, la propuesta se conserva intacta en memoria. Solo cuando el usuario pulsa 
-  de forma explícita en "Probar otra" o cuando no existía una sugerencia previa, el 
-  ViewModel solicita una nueva propuesta aleatoria al servicio Retrofit.
-
-- Arquitectura multi-nivel de caché y pre-carga inteligente para latencia cero (0 ms):
-  Para erradicar cualquier retardo perceptible al arrancar la app, conmutar categorías o 
-  pedir una nueva sugerencia con "Probar otra", diseñé un sistema de optimización en 3 capas:
-  a) Pre-carga en buffer en segundo plano: Tan pronto como se visualiza una propuesta del chef, 
-     ExplorarViewModel solicita en background la siguiente receta aleatoria y pre-traduce su título 
-     e instrucciones. Al pulsar "Probar otra", la nueva receta se entrega en 3 milisegundos desde 
-     memoria RAM, iniciando el volteo 3D de inmediato sin esperar a los servidores de TheMealDB.
-  b) Caché persistente en disco (arranque instantáneo): Al abrir la aplicación, ExplorarViewModel 
-     recupera de inmediato la última sugerencia y el catálogo de 25 recetas desde SharedPreferences 
-     (JSON con Gson), pintando la interfaz en el fotograma 0 sin mostrar skeletons ni retardos.
-  c) Caché HTTP en disco con OkHttp (20 MB): Configuré en RetrofitClient un cliente OkHttpClient 
-     con directiva de caché de 20 MB y reutilización de conexiones TLS, reduciendo drásticamente 
-     el ancho de banda y acelerando cualquier consulta repetida.
-  d) Caché persistente de traducciones (O(1)): En TraductorUtils añadí persistencia en disco de 
-     todas las cadenas traducidas. Cada paso, título o ingrediente traducido se conserva entre 
-     sesiones, eliminando cualquier petición redundante a APIs de traducción externas.
-  e) Carga no bloqueante de instrucciones en RecipeDetailActivity: La pantalla de detalle muestra 
-     inmediatamente los pasos e ingredientes disponibles sin bloquear la vista con pantallas de 
-     espera ("Traduciendo..."), actualizando suavemente el texto en segundo plano si procede.
-
-- Trazas de depuración en Logcat:
-  Para poder auditar el correcto funcionamiento de cada componente y verificar el flujo 
-  durante el desarrollo, añadí trazas de log (Log.i, Log.d y Log.w) bajo una etiqueta 
-  unificada ("ChefPocket"). Esto permite filtrar en el Logcat de Android Studio de un 
-  vistazo el estado de la red, la inicialización del cliente Retrofit, la receta 
-  recibida y la carga de imágenes.
+6. DETALLE DE RECETA (RECIPEDETAILACTIVITY)
+- Cabecera colapsable (CollapsingToolbarLayout): Efecto parallax sobre la fotografía del plato con barra de herramientas integrada.
+- Desglose estructurado de ingredientes: Lista de ingredientes y medidas calculadas con viñetas temáticas.
+- Instrucciones paso a paso numeradas: Algoritmo de parseo en TraductorUtils que limpia encabezados redundantes y presenta cada instrucción en tarjetas numeradas secuenciales. Carga no bloqueante de lectura inmediata.
+- Consulta complementaria (lookup.php): Si una receta proviene de un listado simplificado, la actividad solicita automáticamente los detalles completos y los almacena en caché.
+- Vídeo tutorial en YouTube: Enlace directo mediante Intent implícito (ACTION_VIEW) verificado contra conectividad de red.
 
 
-6. CATÁLOGO DE RECETAS, FILTROS POR CATEGORÍA (CHIPS), BUSCADOR Y TRADUCTOR ADAPTATIVO
-Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
-
-- Buscador interactivo en tiempo real:
-  Añadí en fragment_explorar.xml una caja de búsqueda con TextInputEditText y estilo outlined, 
-  con icono de lupa y botón para limpiar texto al vuelo. En ExplorarFragment vinculé un 
-  OnEditorActionListener para capturar la pulsación de la tecla "Enter/Buscar" en el teclado 
-  virtual del móvil, cerrando el teclado y disparando la búsqueda en TheMealDB mediante el 
-  ViewModel.
-
-- Barra de filtros rápidos por categoría con Chips:
-  Incorporé un ChipGroup horizontal dentro de un HorizontalScrollView con selección única 
-  (app:singleSelection="true"). Definí chips temáticos para las categorías más populares: 
-  "Destacadas ⭐", "Pastas", "Pollo", "Pescados", "Postres", "Vegetariano", "Desayunos" y "Ternera". 
-  Al pulsar sobre cualquiera de ellos, el ViewModel consulta la API filtrando por dicha categoría 
-  o mostrando una selección rotativa de 25 platos gourmet al azar si se marca "Destacadas ⭐".
-
-- Cabecera dinámica y contador de recetas en tiempo real:
-  Para que la experiencia simule la apertura de una carta temática o menú de restaurante, 
-  la cabecera del catálogo no es un texto fijo, sino un componente reactivo (tv_titulo_seccion_catalogo) 
-  conectado a categoriaActiva del ViewModel. Al pulsar sobre cualquier chip o realizar una búsqueda, 
-  la cabecera se actualiza de inmediato con el nombre temático del menú (ej. "Recetas de Pollo 🍗", 
-  "Recetas de Pastas 🍝", o "Resultados para: 'cake'"), acompañada a su derecha de una insignia 
-  estilizada (tv_contador_catalogo) que indica en tiempo real el número de platos disponibles 
-  (ej. "81 recetas", "12 recetas").
-
-- Adaptador RecyclerView (MealAdapter):
-  Diseñé item_receta.xml con MaterialCardView, esquinas redondeadas y una imagen cuadrada 
-  (ShapeableImageView) cargada de forma asíncrona mediante Glide con placeholder y transición 
-  cruzada. El adaptador MealAdapter actualiza la lista eficientemente mediante notifyDataSetChanged(), 
-  y muestra un mensaje amigable ("tv_sin_resultados") si la búsqueda no encuentra ningún plato.
-
-- Soporte de idioma bilingüe, diccionarios O(1) y traductor asíncrono en segundo plano (TraductorUtils):
-  Dado que la API TheMealDB proporciona los datos en inglés, diseñé la clase TraductorUtils 
-  para gestionar de forma inteligente la internacionalización de la app según el idioma del móvil:
-  
-  * Diccionarios en memoria O(1) y traducción dinámica: Traducen al instante categorías, países 
-    de origen, más de 120 ingredientes comunes y unidades de medida culinarias ("cups" -> "tazas", 
-    "tbsp" -> "cucharadas", "to taste" -> "al gusto", etc.), garantizando que los filtros por Chips, 
-    las tarjetas del catálogo y la lista de ingredientes aparezcan en perfecto castellano en 0 ms. 
-    Para ingredientes específicos no incluidos en el diccionario estático o títulos complejos, 
-    incorporé traducción asíncrona por lotes en segundo plano.
-  * Pipeline de traducción asíncrona con caché en memoria (traducirInstruccionesAsync): Para las 
-    instrucciones completas de preparación, conecté en segundo plano mediante un hilo del sistema 
-    (ExecutorService) una arquitectura con tolerancia a fallos que consulta en primer término Google 
-    Translate (client=gtx) y dispone de fallback secundario a MyMemory (segmentado por oraciones para 
-    evitar límites de caracteres), sin claves ni bloqueos en la interfaz de usuario. Los resultados 
-    se almacenan en una caché en memoria (ConcurrentHashMap), permitiendo que accesos posteriores a la 
-    misma receta respondan de inmediato en 0 ms.
-  * Aviso contextual inteligente según estado de traducción (card_aviso_idioma): Para ofrecer una 
-    interfaz limpia y libre de ruidos visuales, configuré la tarjeta de aviso de idioma oculta por defecto 
-    (View.GONE). Cuando la traducción al español se completa satisfactoriamente (o la receta ya dispone de 
-    traducción nativa/destacada), la tarjeta permanece oculta y el usuario disfruta de la receta como si 
-    hubiese sido redactada originalmente en castellano. Únicamente si el dispositivo se encuentra offline 
-    o el servicio de traducción experimenta una incidencia de red, la tarjeta se muestra de forma dinámica 
-    informando con claridad: "Instrucciones mostradas en su idioma original (inglés). Conéctate a Internet 
-    para obtener la traducción automática al español." y presentando las instrucciones originales de TheMealDB.
-  * Cortocircuito para idioma inglés: Si el dispositivo del usuario está configurado en inglés 
-    (Locale.getDefault()), la comprobación esEspanol() cortocircuita de inmediato devolviendo los 
-    textos originales de la API sin sobrecarga de procesamiento ni llamadas de red innecesarias.
-
-
-7. PANTALLA DE DETALLE DE RECETA (RECIPEDETAILACTIVITY), INGREDIENTES Y VÍDEO TUTORIAL
-Para que el usuario pueda consultar paso a paso toda la información necesaria para cocinar:
-
-- Navegación explícita mediante Intent:
-  Al pulsar sobre la propuesta destacada o sobre cualquier receta del catálogo en ExplorarFragment, 
-  se inicia un Intent explícito hacia RecipeDetailActivity enviando el objeto MealDto 
-  (que implementa Serializable) bajo la clave EXTRA_RECETA. En AndroidManifest.xml declaré la 
-  actividad configurando android:parentActivityName=".ui.actividades.MainActivity" para garantizar 
-  la navegación hacia arriba de forma estándar.
-
-- Cabecera interactiva con CollapsingToolbarLayout y Glide:
-  Diseñé la cabecera en activity_recipe_detail.xml usando CoordinatorLayout y CollapsingToolbarLayout 
-  con efecto parallax. La fotografía del plato se carga con Glide y se funde suavemente al hacer 
-  scroll, manteniendo el título de la receta fijado en la barra superior junto al botón de retroceso.
-
-- Desglose de ingredientes con medidas:
-  En MealDto implementé la clase auxiliar IngredienteItem y el método getIngredientesDesglosados(). 
-  En RecipeDetailActivity inflo dinámicamente filas personalizadas (item_ingrediente.xml) con 
-  puntos decorativos en tono terracota, mostrando el nombre del ingrediente a la izquierda y la 
-  medida precisa requerida a la derecha.
-
-- Instrucciones de preparación paso a paso con numeración visual:
-  Para evitar presentar un bloque denso e incómodo de texto corrido, diseñé un algoritmo en 
-  TraductorUtils (desglosarPasosInstrucciones) que segmenta las instrucciones en pasos individuales 
-  limpios eliminando prefijos redundantes. En la interfaz inflo dinámicamente para cada paso una vista 
-  dedicada (item_paso_instruccion.xml) con un distintivo numérico circular en color terracota y su 
-  correspondiente texto explicativo, logrando una experiencia de lectura secuencial sumamente clara y moderna.
-
-- Consulta complementaria (lookup.php) si faltan datos:
-  Si el usuario accede a una receta filtrada por categoría (cuyo endpoint original en TheMealDB solo 
-  devuelve el identificador, el título y la foto), RecipeDetailActivity lo detecta automáticamente, 
-  muestra un indicador de carga y realiza una petición asíncrona a lookup.php?i={idMeal} con 
-  Retrofit para recuperar los ingredientes y las instrucciones completas antes de pintar la vista.
-
-- Enlace directo a vídeo tutorial en YouTube:
-  Si la receta dispone de URL de vídeo en el campo strYoutube, muestro un botón estilizado 
-  (btn_ver_video_detalle) con el icono de YouTube. Antes de lanzar el Intent implícito de tipo 
-  ACTION_VIEW hacia la aplicación de YouTube o el navegador, compruebo la conectividad con 
-  NetworkUtils.hayConexion(this). Si el dispositivo no tiene conexión, evito errores silenciosos 
-  y muestro un aviso no bloqueante mediante Snackbar.
-
-- Botón flotante de favoritos (FAB):
-  Añadí un FloatingActionButton superpuesto entre la fotografía y el contenido para permitir 
-  marcar o desmarcar la receta como favorita conmutando en tiempo real en Firebase. Al abrir la 
-  pantalla, consulta de forma reactiva si el plato ya está guardado para alternar el icono entre 
-  contorno (ic_favorite_border) o relleno (ic_favorite_filled), mostrando avisos contextuales no 
-  bloqueantes mediante Snackbar.
-
-
-8. PERSISTENCIA EN LA NUBE CON FIREBASE REALTIME DATABASE Y MODO OFFLINE EN DISCO
-Para satisfacer los requisitos de almacenamiento en la nube y sincronización reactiva (Tema 3):
-
-- Persistencia en disco local (Modo Offline de Firebase):
-  Creé la clase ChefPocketApp extendiendo de Application y la registré en AndroidManifest.xml. 
-  En su método onCreate() invoqué FirebaseDatabase.getInstance().setPersistenceEnabled(true). 
-  Esto garantiza que Firebase mantenga una base de datos SQLite interna en el dispositivo, 
-  permitiendo al usuario consultar sus recetas favoritas y sus estadísticas incluso en modo avión 
-  o sin conexión a Internet, sincronizando automáticamente las modificaciones pendientes en cuanto 
-  se recupera la red.
-
-- Estructura de datos particionada por usuario (Multiusuario y doble colección):
-  Para garantizar la privacidad, el aislamiento de datos entre cuentas de Firebase Auth y 
-  una distinción lógica entre deseos y logros culinarios, estructuré dos nodos JSON en la nube:
-  * usuarios / {userId} / favoritos / {idMeal} -> Colección de recetas guardadas para cocinar más tarde (wishlist).
-  * usuarios / {userId} / cocinadas / {idMeal} -> Historial permanente de recetas preparadas con éxito.
-  Esta separación aporta una gran ventaja de UX: si el usuario hace limpieza en su recetario 
-  de favoritos y elimina recetas, su nivel y experiencia como cocinero no se pierden ni disminuyen.
-
-- Serialización de modelos y exclusión de métodos auxiliares:
-  En el modelo MealDto anoté con @Exclude (del paquete com.google.firebase.database.Exclude) los 
-  métodos auxiliares getIngredientesDesglosados(), getIngredientesConMedidas() y tieneTraduccionEspanol(). 
-  De esta forma evité que Firebase intentara persistir propiedades calculadas que carecen de campos 
-  correspondientes, previniendo excepciones durante la deserialización automática.
-
-- Capa de acceso a datos (FirebaseDbHelper):
-  Siguiendo el patrón Singleton, implementé FirebaseDbHelper en el paquete datos.firebase. 
-  Centraliza todas las operaciones contra la base de datos en la nube:
-  * comprobarEsFavorito(): consulta puntual mediante addListenerForSingleValueEvent().
-  * guardarFavorito() y eliminarFavorito(): llamadas asíncronas con setValue() y removeValue().
-  * conmutarFavorito(): método de alto nivel que comprueba el estado actual y lo alterna de forma atómica.
-  * suscribirAFavoritos() y suscribirAPlatosCocinados(): establecen ValueEventListener persistentes 
-    que notifican cualquier cambio en tiempo real hacia los fragmentos.
-  * desuscribirDeFavoritos() y desuscribirDeCocinadas(): eliminan los escuchadores en el ciclo 
-    de vida (onStop) para prevenir fugas de memoria.
-  * marcarPlatoComoCocinado() y comprobarPlatoCocinado(): gestionan el registro de platos preparados con éxito.
-
-- Pantalla de detalle con acción de cocinado (RecipeDetailActivity):
-  En la pantalla de detalle incorporé, justo después del botón de vídeo tutorial para 
-  respetar el orden natural del flujo culinario (consultar pasos -> ver vídeo explicativo -> 
-  preparar el plato), el botón de logro gastronómico "¡HE COCINADO ESTE PLATO!" (btn_marcar_cocinado). 
-  Al pulsarlo, la receta se registra en el nodo /cocinadas de Firebase, el botón se transforma 
-  a un estado de confirmación ("✔ ¡PLATO COCINADO CON ÉXITO!") y se notifica al usuario con un 
-  Snackbar festivo ("¡Enhorabuena, Chef! Has sumado experiencia culinaria").
-
-- Pestaña de Favoritos (FavoritosFragment):
-  Muestra la colección de recetas guardadas por el usuario. Implementé un RecyclerView conectado a 
-  MealAdapter que se alimenta del escuchador en tiempo real de Firebase. Si el usuario no tiene 
-  favoritos, conmuta a una vista ilustrativa de estado vacío (layout_favoritos_vacio). Si añade o 
-  elimina recetas desde cualquier punto de la aplicación, la lista y el contador del subtítulo se 
-  actualizan de forma instantánea.
-
-- Panel de Estadísticas Culinarias (EstadisticasFragment) y Hero Card de Rango de Chef:
-  Diseñé un panel de control gastronómico reactivo situando como protagonista absoluto en lo más 
-  alto de la pantalla la Tarjeta Hero del Rango de Chef (MaterialCardView con borde resaltado y 
-  elevación), garantizando que el usuario aprecie su progreso culinario de forma inmediata:
-  * Rango de Chef permanente: calculado según el número de platos cocinados con éxito:
-    - "Pinche de Cocina 🧑‍🍳" (0 platos preparados).
-    - "Cocinero Novato 🍳" (1 a 2 platos preparados).
-    - "Chef Aficionado 👨‍🍳" (3 a 5 platos preparados).
-    - "Master Chef Pocket ⭐" (6 o más platos preparados).
-  * Mensaje dinámico de progreso: indica cuántos platos faltan exactamente para el siguiente ascenso.
-  * Tarjetas métricas de actividad: desglose simultáneo de "Platos Cocinados" y "Recetas en Favoritos".
-  * Preferencias gastronómicas: detección reactiva de la categoría culinaria predilecta (analizando 
-    las frecuencias de las recetas cocinadas y guardadas) y la cocina del mundo favorita (país de origen).
-  Todas las métricas se recalculan en tiempo real sin recargar la pantalla gracias a los 
-  ValueEventListener sincronizados con Firebase.
+7. BASE DE DATOS EN LA NUBE (FIREBASE REALTIME DATABASE)
+- Sincronización reactiva y partición multiusuario:
+  * /usuarios/{uid}/favoritos/{idMeal} -> Colección de recetas guardadas para cocinar.
+  * /usuarios/{uid}/cocinadas/{idMeal} -> Historial acumulativo de recetas preparadas con éxito.
+  Esta separación preserva los logros del usuario aunque decida limpiar su recetario de favoritos.
+- Capa de datos centralizada (FirebaseDbHelper): Métodos atómicos para comprobar, añadir, eliminar y conmutar favoritos, así como registrar platos cocinados.
+- Escuchadores en tiempo real (ValueEventListener): Sincronización bidireccional inmediata en Favoritos y Estadísticas, desuscribiendo los listeners en el ciclo de vida (onStop) para prevenir fugas de memoria.
+- Persistencia offline en disco: Activación de FirebaseDatabase.getInstance().setPersistenceEnabled(true) en ChefPocketApp para disponibilidad offline sin conexión.
+- Panel de estadísticas culinarias (EstadisticasFragment):
+  * Rango de Chef progresivo ("Pinche de Cocina", "Cocinero Novato", "Chef Aficionado", "Master Chef Pocket") calculado según platos cocinados.
+  * Tarjetas métricas de actividad (platos cocinados vs recetas en favoritos).
+  * Preferencias gastronómicas: Detección algorítmica de la categoría culinaria favorita y la cocina del mundo predilecta según la actividad del usuario.

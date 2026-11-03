@@ -2,11 +2,40 @@
     <!-- Nombre de la aplicación -->
     <string name="app_name">ChefPocket</string>
 
+        <!-- Formulario Unificado de Autenticación -->
+    <string name="hint_correo">Correo electrónico</string>
+    <string name="hint_contrasena">Contraseña</string>
+    <string name="hint_nombre_chef">Nombre y apellidos del Chef</string>
+    <string name="placeholder_nombre">Ej. Enrique Arancón</string>
+    <string name="placeholder_email">ejemplo@correo.com</string>
+    <string name="placeholder_password">Mínimo 6 caracteres</string>
+    <string name="btn_iniciar_sesion_accion">Iniciar sesión</string>
+    <string name="btn_crear_cuenta_accion">Crear mi cuenta</string>
+    <string name="tab_iniciar_sesion">Iniciar sesión</string>
+    <string name="tab_registrarse">Registrarse</string>
+    <string name="pregunta_no_cuenta">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="pregunta_si_cuenta">¿Ya tienes cuenta? Inicia sesión aquí</string>
+    <string name="error_campo_vacio">Este campo es obligatorio</string>
+    <string name="error_correo_invalido">Introduce un correo electrónico válido</string>
+    <string name="error_contrasena_corta">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_credenciales_invalidas">Correo o contraseña incorrectos</string>
+    <string name="error_correo_en_uso">Este correo ya está registrado</string>
+    <string name="autenticando">Accediendo a tu cocina...</string>
+    <string name="registrando">Creando tu cuenta de Chef...</string>
+
     <!-- Pantalla de Login / Bienvenida -->
     <string name="login_eslogan">ChefPocket</string>
     <string name="login_subtitulo">Tu recetario inteligente de bolsillo</string>
     <string name="login_descripcion">Explora cientos de recetas internacionales, encuentra inspiración diaria y guarda tus platos favoritos en la nube.</string>
     <string name="btn_iniciar_sesion">Acceder / Crear cuenta</string>
+    <string name="btn_empezar_cocinar">Comenzar a cocinar</string>
+    <string name="login_feature_1_titulo">Explora la cocina mundial</string>
+    <string name="login_feature_1_desc">Cientos de recetas con fotos de alta calidad y pasos detallados</string>
+    <string name="login_feature_2_titulo">Tu recetario en la nube</string>
+    <string name="login_feature_2_desc">Guarda tus platos favoritos sincronizados en tiempo real con Firebase</string>
+    <string name="login_feature_3_titulo">Evoluciona tu rango de chef</string>
+    <string name="login_feature_3_desc">Registra los platos que cocines y asciende hasta Master Chef</string>
+    <string name="login_seguridad">Autenticación segura con Firebase Auth</string>
     <string name="login_pie">Máster en Ingeniería Web · UPM</string>
 
     <!-- Menú Principal y Navegación Inferior -->
@@ -27,6 +56,9 @@
     <string name="sesion_cerrada">Sesión cerrada con éxito.</string>
     <string name="info_cuenta">Información de la Cuenta</string>
     <string name="info_proveedor">Proveedor: Correo electrónico / Firebase Auth</string>
+    <string name="perfil_badge_miembro">Miembro Gourmet ChefPocket</string>
+    <string name="perfil_seccion_detalles">Detalles de la cuenta</string>
+    <string name="perfil_sincronizacion_activa">Sincronización en la nube: Activa</string>
     <string name="id_usuario_formato">ID de usuario: %1$s</string>
     <string name="titulo_seccion_favoritos">Mis Recetas Favoritas</string>
     <string name="subtitulo_seccion_favoritos">Colección sincronizada en la nube con Firebase</string>
@@ -51,10 +83,10 @@
     <string name="rango_master">Master Chef Pocket ⭐</string>
 
     <!-- Diálogo de Confirmación de Cierre de Sesión -->
-    <string name="dialogo_cerrar_sesion_titulo">Cerrar sesión</string>
-    <string name="dialogo_cerrar_sesion_mensaje">¿Estás seguro de que deseas salir de ChefPocket?</string>
-    <string name="dialogo_accion_aceptar">Salir</string>
-    <string name="dialogo_accion_cancelar">Cancelar</string>
+    <string name="dialogo_cerrar_sesion_titulo">¿Listo para colgar el delantal?</string>
+    <string name="dialogo_cerrar_sesion_mensaje">Cerrarás la sesión en este dispositivo. Tus recetas favoritas y tus estadísticas culinarias seguirán seguras en la nube.</string>
+    <string name="dialogo_accion_aceptar">Cerrar sesión</string>
+    <string name="dialogo_accion_cancelar">Seguir cocinando</string>
 
     <!-- Estados y Red -->
     <string name="cargando_datos">Cargando recetas gourmet…</string>

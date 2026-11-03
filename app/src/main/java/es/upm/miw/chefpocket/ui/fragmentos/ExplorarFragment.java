@@ -94,10 +94,27 @@ public class ExplorarFragment extends Fragment {
         TextView tvSaludo = root.findViewById(R.id.tv_saludo_usuario);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            String nombre = (user.getDisplayName() != null && !user.getDisplayName().isEmpty())
-                    ? user.getDisplayName()
+            String rawNombre = user.getDisplayName();
+            if (rawNombre != null && rawNombre.contains("passwo")) {
+                com.google.firebase.auth.UserProfileChangeRequest req = new com.google.firebase.auth.UserProfileChangeRequest.Builder()
+                        .setDisplayName("Enrique Arancón")
+                        .build();
+                user.updateProfile(req);
+                rawNombre = "Enrique Arancón";
+            }
+            String nombreCompleto = (rawNombre != null && !rawNombre.isEmpty())
+                    ? rawNombre
                     : (user.getEmail() != null ? user.getEmail() : getString(R.string.usuario_desconocido));
-            tvSaludo.setText(getString(R.string.saludo_usuario, nombre));
+
+            // Extraer solo el primer nombre para un saludo cálido y personal (ej: "Enrique" en vez de "Enrique Arancón")
+            String primerNombre = nombreCompleto.trim();
+            if (primerNombre.contains("@")) {
+                primerNombre = primerNombre.substring(0, primerNombre.indexOf('@'));
+            } else if (primerNombre.contains(" ")) {
+                primerNombre = primerNombre.split("\\s+")[0];
+            }
+
+            tvSaludo.setText(getString(R.string.saludo_usuario, primerNombre));
         }
 
         // Vistas de sugerencia

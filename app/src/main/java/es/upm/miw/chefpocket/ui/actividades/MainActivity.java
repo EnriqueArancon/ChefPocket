@@ -120,12 +120,9 @@ public class MainActivity extends AppCompatActivity implements CerrarSesionDialo
 
     @Override
     public void onConfirmarCierreSesion() {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(task -> {
-                    Toast.makeText(this, R.string.sesion_cerrada, Toast.LENGTH_SHORT).show();
-                    redirigirALogin();
-                });
+        FirebaseAuth.getInstance().signOut();
+        Toast.makeText(this, R.string.sesion_cerrada, Toast.LENGTH_SHORT).show();
+        redirigirALogin();
     }
 }
 

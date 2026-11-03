@@ -19,5 +19,8 @@
         <item name="colorPrimaryVariant">@color/chef_primary_dark</item>
         <item name="colorAccent">@color/chef_accent</item>
         <item name="android:statusBarColor">@color/chef_primary_dark</item>
+        <item name="android:colorBackground">@color/chef_background</item>
+        <item name="colorSurface">@color/chef_surface</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
     </style>
 </resources>
