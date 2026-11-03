@@ -165,9 +165,9 @@ Para enriquecer la experiencia de usuario y facilitar la exploración de platos:
 - Barra de filtros rápidos por categoría con Chips:
   Incorporé un ChipGroup horizontal dentro de un HorizontalScrollView con selección única 
   (app:singleSelection="true"). Definí chips temáticos para las categorías más populares: 
-  "Todas", "Pastas", "Pollo", "Pescados", "Postres", "Vegetariano", "Desayunos" y "Ternera". 
+  "Destacadas ⭐", "Pastas", "Pollo", "Pescados", "Postres", "Vegetariano", "Desayunos" y "Ternera". 
   Al pulsar sobre cualquiera de ellos, el ViewModel consulta la API filtrando por dicha categoría 
-  o mostrando el catálogo global si se marca "Todas".
+  o mostrando una selección rotativa de 25 platos gourmet al azar si se marca "Destacadas ⭐".
 
 - Cabecera dinámica y contador de recetas en tiempo real:
   Para que la experiencia simule la apertura de una carta temática o menú de restaurante, 

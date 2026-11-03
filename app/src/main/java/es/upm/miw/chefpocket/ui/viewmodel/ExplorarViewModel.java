@@ -9,7 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import es.upm.miw.chefpocket.datos.api.RetrofitClient;
 import es.upm.miw.chefpocket.datos.api.modelos.MealDto;
@@ -27,6 +29,9 @@ import retrofit2.Response;
 public class ExplorarViewModel extends ViewModel {
 
     private static final String LOG_TAG = "ChefPocket";
+
+    // Letras del abecedario con mayor catálogo en TheMealDB para rotar las recetas destacadas
+    private static final char[] LETRAS_DESTACADAS = {'b', 'c', 'm', 'p', 's', 't', 'a'};
 
     // Estado de la receta sugerida
     private final MutableLiveData<MealDto> recetaSugerida = new MutableLiveData<>();
@@ -115,7 +120,7 @@ public class ExplorarViewModel extends ViewModel {
     }
 
     /**
-     * Carga el catálogo filtrando por categoría o mostrando todas las recetas por defecto.
+     * Carga el catálogo filtrando por categoría o mostrando una selección rotativa de platos destacados.
      *
      * @param context Contexto de la app para comprobar conectividad.
      * @param categoriaEnglish Categoría en inglés de TheMealDB (o "Todas").
@@ -133,7 +138,10 @@ public class ExplorarViewModel extends ViewModel {
 
         Call<MealResponse> call;
         if (cat.equalsIgnoreCase("Todas")) {
-            call = RetrofitClient.getInstance().getApiService().buscarRecetasPorNombre("");
+            // Selecciona una letra al azar de las más pobladas de TheMealDB para rotar las 25 destacadas
+            char letraAleatoria = LETRAS_DESTACADAS[new Random().nextInt(LETRAS_DESTACADAS.length)];
+            Log.i(LOG_TAG, "ExplorarViewModel: Cargando selección destacada rotativa (Letra: " + letraAleatoria + ")...");
+            call = RetrofitClient.getInstance().getApiService().buscarPorPrimeraLetra(String.valueOf(letraAleatoria));
         } else {
             call = RetrofitClient.getInstance().getApiService().filtrarPorCategoria(cat);
         }
@@ -143,15 +151,21 @@ public class ExplorarViewModel extends ViewModel {
             public void onResponse(@NonNull Call<MealResponse> call, @NonNull Response<MealResponse> response) {
                 cargandoCatalogo.postValue(false);
                 if (response.isSuccessful() && response.body() != null && response.body().getMeals() != null) {
-                    List<MealDto> lista = response.body().getMeals();
-                    if (!cat.equalsIgnoreCase("Todas")) {
+                    List<MealDto> lista = new ArrayList<>(response.body().getMeals());
+                    if (cat.equalsIgnoreCase("Todas")) {
+                        // Barajamos aleatoriamente y nos quedamos con una selección rotativa de 25 platos
+                        Collections.shuffle(lista);
+                        if (lista.size() > 25) {
+                            lista = new ArrayList<>(lista.subList(0, 25));
+                        }
+                    } else {
                         for (MealDto m : lista) {
                             if (m.getStrCategory() == null || m.getStrCategory().isEmpty()) {
                                 m.setStrCategory(cat);
                             }
                         }
                     }
-                    Log.i(LOG_TAG, "ExplorarViewModel: Catálogo cargado con " + lista.size() + " recetas para categoría: " + cat);
+                    Log.i(LOG_TAG, "ExplorarViewModel: Catálogo cargado con " + lista.size() + " recetas para: " + cat);
                     recetasCatalogo.postValue(lista);
                 } else {
                     recetasCatalogo.postValue(new ArrayList<>());

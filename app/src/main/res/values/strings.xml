@@ -72,7 +72,7 @@
 
     <!-- Filtros y Búsqueda -->
     <string name="hint_buscar_receta">Buscar por plato o ingrediente…</string>
-    <string name="categoria_todas">Todas</string>
+    <string name="categoria_todas">Destacadas ⭐</string>
     <string name="categoria_pollo">Pollo</string>
     <string name="categoria_pastas">Pastas</string>
     <string name="categoria_pescados">Pescados</string>
@@ -80,7 +80,7 @@
     <string name="categoria_vegetariano">Vegetariano</string>
     <string name="categoria_desayunos">Desayunos</string>
     <string name="categoria_ternera">Ternera</string>
-    <string name="titulo_catalogo_recetas">Catálogo de recetas</string>
+    <string name="titulo_catalogo_recetas">Platos Destacados ⭐</string>
     <string name="titulo_seccion_pollo">Recetas de Pollo 🍗</string>
     <string name="titulo_seccion_pastas">Recetas de Pastas 🍝</string>
     <string name="titulo_seccion_pescados">Pescados y Mariscos 🐟</string>

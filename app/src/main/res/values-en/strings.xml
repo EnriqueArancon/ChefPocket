@@ -72,7 +72,7 @@
 
     <!-- Filters & Search -->
     <string name="hint_buscar_receta">Search by dish or ingredient…</string>
-    <string name="categoria_todas">All</string>
+    <string name="categoria_todas">Featured ⭐</string>
     <string name="categoria_pollo">Chicken</string>
     <string name="categoria_pastas">Pasta</string>
     <string name="categoria_pescados">Seafood</string>
@@ -80,7 +80,7 @@
     <string name="categoria_vegetariano">Vegetarian</string>
     <string name="categoria_desayunos">Breakfast</string>
     <string name="categoria_ternera">Beef</string>
-    <string name="titulo_catalogo_recetas">Recipe Catalog</string>
+    <string name="titulo_catalogo_recetas">Featured Dishes ⭐</string>
     <string name="titulo_seccion_pollo">Chicken Recipes 🍗</string>
     <string name="titulo_seccion_pastas">Pasta Recipes 🍝</string>
     <string name="titulo_seccion_pescados">Seafood Dishes 🐟</string>

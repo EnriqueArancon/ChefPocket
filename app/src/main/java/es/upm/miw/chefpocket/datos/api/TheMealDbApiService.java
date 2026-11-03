@@ -26,6 +26,14 @@ public interface TheMealDbApiService {
     Call<MealResponse> buscarRecetasPorNombre(@Query("s") String nombre);
 
     /**
+     * Busca recetas cuya primera letra coincida con el carácter indicado.
+     *
+     * @param letra Primera letra de la receta (ej. "b", "c", "s")
+     */
+    @GET("search.php")
+    Call<MealResponse> buscarPorPrimeraLetra(@Query("f") String letra);
+
+    /**
      * Recupera el detalle completo de una receta a partir de su ID único.
      *
      * @param idMeal Identificador numérico de la receta en TheMealDB
