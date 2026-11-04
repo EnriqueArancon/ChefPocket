@@ -1,203 +1,222 @@
-<resources>
-    <!-- Nombre de la aplicación -->
-    <string name="app_name">ChefPocket</string>
-
-        <!-- Formulario Unificado de Autenticación -->
-    <string name="hint_correo">Correo electrónico</string>
-    <string name="hint_contrasena">Contraseña</string>
-    <string name="hint_nombre_chef">Nombre y apellidos del Chef</string>
-    <string name="placeholder_nombre">Ej. Enrique Arancón</string>
-    <string name="placeholder_email">ejemplo@correo.com</string>
-    <string name="placeholder_password">Mínimo 6 caracteres</string>
-    <string name="btn_iniciar_sesion_accion">Iniciar sesión</string>
-    <string name="btn_crear_cuenta_accion">Crear mi cuenta</string>
-    <string name="tab_iniciar_sesion">Iniciar sesión</string>
-    <string name="tab_registrarse">Registrarse</string>
-    <string name="pregunta_no_cuenta">¿No tienes cuenta? Regístrate aquí</string>
-    <string name="pregunta_si_cuenta">¿Ya tienes cuenta? Inicia sesión aquí</string>
-    <string name="error_campo_vacio">Este campo es obligatorio</string>
-    <string name="error_correo_invalido">Introduce un correo electrónico válido</string>
-    <string name="error_contrasena_corta">La contraseña debe tener al menos 6 caracteres</string>
-    <string name="error_credenciales_invalidas">Correo o contraseña incorrectos</string>
-    <string name="error_correo_en_uso">Este correo ya está registrado</string>
-    <string name="autenticando">Accediendo a tu cocina...</string>
-    <string name="registrando">Creando tu cuenta de Chef...</string>
-
-    <!-- Pantalla de Login / Bienvenida -->
-    <string name="login_eslogan">ChefPocket</string>
-    <string name="login_subtitulo">Tu recetario inteligente de bolsillo</string>
-    <string name="login_descripcion">Explora cientos de recetas internacionales, encuentra inspiración diaria y guarda tus platos favoritos en la nube.</string>
-    <string name="btn_iniciar_sesion">Acceder / Crear cuenta</string>
-    <string name="btn_empezar_cocinar">Comenzar a cocinar</string>
-    <string name="login_feature_1_titulo">Explora la cocina mundial</string>
-    <string name="login_feature_1_desc">Cientos de recetas con fotos de alta calidad y pasos detallados</string>
-    <string name="login_feature_2_titulo">Tu recetario en la nube</string>
-    <string name="login_feature_2_desc">Guarda tus platos favoritos sincronizados en tiempo real con Firebase</string>
-    <string name="login_feature_3_titulo">Evoluciona tu rango de chef</string>
-    <string name="login_feature_3_desc">Registra los platos que cocines y asciende hasta Master Chef</string>
-    <string name="login_seguridad">Autenticación segura con Firebase Auth</string>
-    <string name="login_pie">Máster en Ingeniería Web · UPM</string>
-
-    <!-- Menú Principal y Navegación Inferior -->
-    <string name="menu_explorar">Explorar</string>
-    <string name="menu_favoritos">Favoritos</string>
-    <string name="menu_estadisticas">Estadísticas</string>
-    <string name="menu_perfil">Perfil</string>
-    <string name="menu_cerrar_sesion">Cerrar sesión</string>
-
-    <!-- Autenticación y Saludos -->
-    <string name="saludo_usuario">¡Hola, %1$s! 👋</string>
-    <string name="subtitulo_home">¿Qué te apetece cocinar hoy?</string>
-    <string name="usuario_desconocido">Gourmet</string>
-    <string name="usuario_logueado_como">Conectado como:</string>
-    <string name="mensaje_bienvenida">¡Bienvenido/a a ChefPocket, %1$s!</string>
-    <string name="login_cancelado">Inicio de sesión cancelado.</string>
-    <string name="error_login">Error al iniciar sesión. Inténtalo de nuevo.</string>
-    <string name="sesion_cerrada">Sesión cerrada con éxito.</string>
-    <string name="info_cuenta">Información de la Cuenta</string>
-    <string name="info_proveedor">Proveedor: Correo electrónico / Firebase Auth</string>
-    <string name="perfil_badge_miembro">Miembro Gourmet ChefPocket</string>
-    <string name="perfil_seccion_detalles">Detalles de la cuenta</string>
-    <string name="perfil_sincronizacion_activa">Sincronización en la nube: Activa</string>
-    <string name="id_usuario_formato">ID de usuario: %1$s</string>
-    <string name="titulo_seccion_favoritos">Mis Recetas Favoritas</string>
-    <string name="subtitulo_seccion_favoritos">Colección sincronizada en la nube con Firebase</string>
-    <string name="favoritos_vacio_titulo">Tu recetario está vacío</string>
-    <string name="favoritos_vacio">Aún no tienes recetas favoritas guardadas. Marca el corazón en cualquier receta para guardarla aquí.</string>
-    <string name="estadisticas_vacio">Aún no tienes suficientes recetas en favoritos para calcular tus estadísticas culinarias. ¡Guarda tus platos preferidos para descubrirlas!</string>
-    <string name="titulo_seccion_estadisticas">Estadísticas Culinarias</string>
-    <string name="subtitulo_seccion_estadisticas">Métricas en tiempo real de tu recetario en Firebase</string>
-    <string name="stat_total_recetas">Recetas en Favoritos</string>
-    <string name="stat_total_recetas_sub">Platos sincronizados en tu cuenta de Firebase</string>
-    <string name="stat_platos_cocinados">Platos Cocinados</string>
-    <string name="stat_platos_cocinados_sub">Experiencia culinaria permanente</string>
-    <string name="btn_marcar_cocinado_inactivo">¡HE COCINADO ESTE PLATO!</string>
-    <string name="btn_marcar_cocinado_activo">✔ ¡PLATO COCINADO CON ÉXITO!</string>
-    <string name="snack_plato_cocinado_anadido">¡Enhorabuena, Chef! Has sumado experiencia culinaria.</string>
-    <string name="snack_plato_cocinado_eliminado">Plato retirado de tu historial de cocina.</string>
-    <string name="stat_categoria_predilecta">Categoría Predilecta</string>
-    <string name="stat_origen_predilecto">Cocina Preferida</string>
-    <string name="stat_rango_culinario">Rango de Chef</string>
-    <string name="rango_novato">Cocinero Novato 🍳</string>
-    <string name="rango_aficionado">Chef Aficionado 👨‍🍳</string>
-    <string name="rango_master">Master Chef Pocket ⭐</string>
-
-    <!-- Diálogo de Confirmación de Cierre de Sesión -->
-    <string name="dialogo_cerrar_sesion_titulo">¿Listo para colgar el delantal?</string>
-    <string name="dialogo_cerrar_sesion_mensaje">Cerrarás la sesión en este dispositivo. Tus recetas favoritas y tus estadísticas culinarias seguirán seguras en la nube.</string>
-    <string name="dialogo_accion_aceptar">Cerrar sesión</string>
-    <string name="dialogo_accion_cancelar">Seguir cocinando</string>
-
-    <!-- Estados y Red -->
-    <string name="cargando_datos">Cargando recetas gourmet…</string>
-    <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
-    <string name="titulo_receta_dia">¿No sabes qué cocinar?</string>
-    <string name="subtitulo_receta_dia">Inspiración del Chef</string>
-    <string name="btn_cambiar_receta">Probar otra</string>
-    <string name="btn_ver_detalle">Ver preparación</string>
-    <string name="cargando_receta">Consultando TheMealDB…</string>
-    <string name="modo_offline_titulo">Modo sin conexión</string>
-    <string name="modo_offline_mensaje">No hay acceso a Internet. Conéctate a una red Wi-Fi o móvil para descubrir nuevas recetas.</string>
-    <string name="btn_reintentar">Reintentar</string>
-    <string name="receta_origen_categoria">%1$s · %2$s</string>
-    <string name="error_cargar_receta">No se pudo obtener la receta del servidor.</string>
-
-    <!-- Filtros y Búsqueda -->
-    <string name="hint_buscar_receta">Buscar por plato o ingrediente…</string>
-    <string name="categoria_todas">Destacadas ⭐</string>
-    <string name="categoria_pollo">Pollo</string>
-    <string name="categoria_pastas">Pastas</string>
-    <string name="categoria_pescados">Pescados</string>
-    <string name="categoria_postres">Postres</string>
-    <string name="categoria_vegetariano">Vegetariano</string>
-    <string name="categoria_desayunos">Desayunos</string>
-    <string name="categoria_ternera">Ternera</string>
-    <string name="titulo_catalogo_recetas">Platos Destacados ⭐</string>
-    <string name="titulo_seccion_pollo">Recetas de Pollo 🍗</string>
-    <string name="titulo_seccion_pastas">Recetas de Pastas 🍝</string>
-    <string name="titulo_seccion_pescados">Pescados y Mariscos 🐟</string>
-    <string name="titulo_seccion_postres">Postres y Dulces 🍰</string>
-    <string name="titulo_seccion_vegetariano">Platos Vegetarianos 🥗</string>
-    <string name="titulo_seccion_desayunos">Desayunos y Meriendas 🍳</string>
-    <string name="titulo_seccion_ternera">Platos de Ternera 🥩</string>
-    <string name="titulo_seccion_busqueda">Resultados para: \"%1$s\"</string>
-    <string name="contador_recetas_formato">%1$d recetas</string>
-    <string name="sin_resultados_busqueda">No se encontraron recetas para tu búsqueda.</string>
-
-    <!-- Detalle de Receta e Idioma -->
-    <string name="titulo_actividad_detalle">Detalle de la receta</string>
-    <string name="titulo_ingredientes">Ingredientes necesarios</string>
-    <string name="ingredientes_en_instrucciones">Ingredientes detallados en los pasos de preparación</string>
-    <string name="titulo_preparacion">Preparación paso a paso</string>
-    <string name="btn_video_tutorial">Ver vídeo tutorial en YouTube</string>
-    <string name="aviso_idioma_titulo">Aviso de idioma</string>
-    <string name="aviso_idioma_original">Instrucciones mostradas en su idioma original (inglés). Conéctate a Internet para obtener la traducción automática al español.</string>
-    <string name="traduciendo_instrucciones">Traduciendo pasos de preparación al español…</string>
-    <string name="video_sin_conexion">Se necesita conexión a Internet para reproducir el vídeo tutorial.</string>
-    <string name="cargando_detalle_receta">Cargando detalles de la receta…</string>
-    <string name="compartir_receta_texto">¡Mira esta deliciosa receta de %1$s en ChefPocket!\n%2$s</string>
-    <string name="fab_anadir_favorito">Añadir a favoritos</string>
-    <string name="fab_eliminar_favorito">Eliminar de favoritos</string>
-    <string name="favorito_anadido">Receta añadida a favoritos</string>
-    <string name="favorito_eliminado">Receta eliminada de favoritos</string>
-
-    <!-- Sobrescritura completa de textos de FirebaseUI en español -->
-    <!-- Botones y Acciones Comunes -->
-    <string name="fui_sign_in_default">Iniciar sesión</string>
-    <string name="fui_sign_in_with_email">Iniciar sesión con correo</string>
-    <string name="fui_continue">Continuar</string>
-    <string name="fui_next_default">Siguiente</string>
-    <string name="fui_button_text_save">Guardar</string>
-    <string name="fui_button_text_send">Enviar</string>
-
-    <!-- Campos de Entrada (Hints) -->
-    <string name="fui_email_hint">Correo electrónico</string>
-    <string name="fui_name_hint">Nombre y apellidos</string>
-    <string name="fui_password_hint">Contraseña</string>
-    <string name="fui_confirm_password_hint">Confirmar contraseña</string>
-    <string name="fui_new_password_hint">Nueva contraseña</string>
-
-    <!-- Registro de Nuevo Usuario -->
-    <string name="fui_title_register_email">Crear cuenta</string>
-    <string name="fui_progress_dialog_signing_up">Creando tu cuenta…</string>
-    <string name="fui_email_account_creation_error">No se ha podido registrar la cuenta con este correo.</string>
-
-    <!-- Usuario Recurrente (Welcome Back / Inicio de Sesión Existente) -->
-    <string name="fui_welcome_back_email_header">¡Hola de nuevo!</string>
-    <string name="fui_welcome_back_idp_header">Ya tienes una cuenta</string>
-    <string name="fui_welcome_back_email_link_header">Ya tienes una cuenta registrada</string>
-    <string name="fui_welcome_back_password_prompt_body">Ya has utilizado %1$s para iniciar sesión. Introduce la contraseña de esa cuenta para continuar.</string>
-    <string name="fui_welcome_back_idp_prompt">Ya has utilizado %1$s. Inicia sesión con %2$s para continuar.</string>
-    <string name="fui_title_welcome_back_password_prompt">Iniciar sesión</string>
-    <string name="fui_title_welcome_back_idp_prompt">Iniciar sesión</string>
-    <string name="fui_trouble_signing_in">¿Problemas para iniciar sesión?</string>
-
-    <!-- Recuperación de Contraseña -->
-    <string name="fui_title_recover_password_activity">Recuperar contraseña</string>
-    <string name="fui_title_confirm_recover_password">Revisa tu correo</string>
-    <string name="fui_password_recovery_body">Te enviaremos un correo a esta dirección con las instrucciones para restablecer tu contraseña.</string>
-    <string name="fui_confirm_recovery_body">Sigue las instrucciones que hemos enviado a %1$s para restablecer tu contraseña.</string>
-    <string name="fui_progress_dialog_sending">Enviando instrucciones…</string>
-
-    <!-- Diálogos de Progreso -->
-    <string name="fui_progress_dialog_loading">Cargando…</string>
-    <string name="fui_progress_dialog_signing_in">Iniciando sesión…</string>
-    <string name="fui_progress_dialog_checking_accounts">Comprobando cuenta…</string>
-
-    <!-- Validaciones y Errores -->
-    <string name="fui_required_field">No puedes dejar este campo en blanco.</string>
-    <string name="fui_invalid_email_address">La dirección de correo electrónico no es válida.</string>
-    <string name="fui_missing_email_address">Introduce tu correo electrónico para continuar.</string>
-    <string name="fui_missing_first_and_last_name">Introduce tu nombre y apellidos.</string>
-    <string name="fui_passwords_do_not_match">Las contraseñas no coinciden.</string>
-    <string name="fui_error_invalid_password">Contraseña incorrecta. Inténtalo de nuevo.</string>
-    <string name="fui_error_email_does_not_exist">No existe ninguna cuenta asociada a este correo electrónico.</string>
-    <string name="fui_error_password_too_short">La contraseña debe tener al menos %1$d caracteres.</string>
-    <string name="fui_error_unknown">Se ha producido un error inesperado. Inténtalo más tarde.</string>
-    <string name="fui_no_internet">Error de red. Comprueba tu conexión a Internet.</string>
-
-    <plurals name="fui_error_weak_password">
-        <item quantity="one">La contraseña debe tener al menos %1$d carácter y combinar letras y números.</item>
-        <item quantity="other">La contraseña debe tener al menos %1$d caracteres y combinar letras y números.</item>
-    </plurals>
+<resources>
+    <!-- Nombre de la aplicación -->
+    <string name="app_name">ChefPocket</string>
+
+        <!-- Formulario Unificado de Autenticación -->
+    <string name="hint_correo">Correo electrónico</string>
+    <string name="hint_contrasena">Contraseña</string>
+    <string name="hint_nombre_chef">Nombre y apellidos del Chef</string>
+    <string name="placeholder_nombre">Ej. Enrique Arancón</string>
+    <string name="placeholder_email">ejemplo@correo.com</string>
+    <string name="placeholder_password">Mínimo 6 caracteres</string>
+    <string name="btn_iniciar_sesion_accion">Iniciar sesión</string>
+    <string name="btn_crear_cuenta_accion">Crear mi cuenta</string>
+    <string name="tab_iniciar_sesion">Iniciar sesión</string>
+    <string name="tab_registrarse">Registrarse</string>
+    <string name="pregunta_no_cuenta">¿No tienes cuenta? Regístrate aquí</string>
+    <string name="pregunta_si_cuenta">¿Ya tienes cuenta? Inicia sesión aquí</string>
+    <string name="error_campo_vacio">Este campo es obligatorio</string>
+    <string name="error_correo_invalido">Introduce un correo electrónico válido</string>
+    <string name="error_contrasena_corta">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_credenciales_invalidas">Correo o contraseña incorrectos</string>
+    <string name="error_correo_en_uso">Este correo ya está registrado</string>
+    <string name="autenticando">Accediendo a tu cocina...</string>
+    <string name="registrando">Creando tu cuenta de Chef...</string>
+
+    <!-- Pantalla de Login / Bienvenida -->
+    <string name="login_eslogan">ChefPocket</string>
+    <string name="login_subtitulo">Tu recetario inteligente de bolsillo</string>
+    <string name="login_descripcion">Explora cientos de recetas internacionales, encuentra inspiración diaria y guarda tus platos favoritos en la nube.</string>
+    <string name="btn_iniciar_sesion">Acceder / Crear cuenta</string>
+    <string name="btn_empezar_cocinar">Comenzar a cocinar</string>
+    <string name="login_feature_1_titulo">Explora la cocina mundial</string>
+    <string name="login_feature_1_desc">Cientos de recetas con fotos de alta calidad y pasos detallados</string>
+    <string name="login_feature_2_titulo">Tu recetario en la nube</string>
+    <string name="login_feature_2_desc">Guarda tus platos favoritos sincronizados en tiempo real con Firebase</string>
+    <string name="login_feature_3_titulo">Evoluciona tu rango de chef</string>
+    <string name="login_feature_3_desc">Registra los platos que cocines y asciende hasta Master Chef</string>
+    <string name="login_seguridad">Autenticación segura con Firebase Auth</string>
+    <string name="login_pie">Máster en Ingeniería Web · UPM</string>
+
+    <!-- Menú Principal y Navegación Inferior -->
+    <string name="menu_explorar">Explorar</string>
+    <string name="menu_favoritos">Favoritos</string>
+    <string name="menu_estadisticas">Estadísticas</string>
+    <string name="menu_perfil">Perfil</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+
+    <!-- Autenticación y Saludos -->
+    <string name="saludo_usuario">¡Hola, %1$s! 👋</string>
+    <string name="subtitulo_home">¿Qué te apetece cocinar hoy?</string>
+    <string name="usuario_desconocido">Gourmet</string>
+    <string name="usuario_logueado_como">Conectado como:</string>
+    <string name="mensaje_bienvenida">¡Bienvenido/a a ChefPocket, %1$s!</string>
+    <string name="login_cancelado">Inicio de sesión cancelado.</string>
+    <string name="error_login">Error al iniciar sesión. Inténtalo de nuevo.</string>
+    <string name="sesion_cerrada">Sesión cerrada con éxito.</string>
+    <string name="info_cuenta">Información de la Cuenta</string>
+    <string name="info_proveedor">Proveedor: Correo electrónico / Firebase Auth</string>
+    <string name="perfil_badge_miembro">Miembro Gourmet ChefPocket</string>
+    <string name="perfil_seccion_detalles">Detalles de la cuenta</string>
+    <string name="perfil_sincronizacion_activa">Sincronización en la nube: Activa</string>
+    <string name="id_usuario_formato">ID de usuario: %1$s</string>
+    <string name="titulo_seccion_favoritos">Mis Recetas Favoritas</string>
+    <string name="subtitulo_seccion_favoritos">Colección sincronizada en la nube con Firebase</string>
+    <string name="favoritos_vacio_titulo">Tu recetario está vacío</string>
+    <string name="favoritos_vacio">Aún no tienes recetas favoritas guardadas. Marca el corazón en cualquier receta para guardarla aquí.</string>
+    <string name="estadisticas_vacio">Aún no tienes suficientes recetas en favoritos para calcular tus estadísticas culinarias. ¡Guarda tus platos preferidos para descubrirlas!</string>
+    <string name="titulo_seccion_estadisticas">Estadísticas Culinarias</string>
+    <string name="subtitulo_seccion_estadisticas">Métricas en tiempo real de tu recetario en Firebase</string>
+    <string name="stat_total_recetas">Recetas en Favoritos</string>
+    <string name="stat_total_recetas_sub">Platos sincronizados en tu cuenta de Firebase</string>
+    <string name="stat_platos_cocinados">Platos Cocinados</string>
+    <string name="stat_platos_cocinados_sub">Experiencia culinaria permanente</string>
+    <string name="btn_marcar_cocinado_inactivo">¡HE COCINADO ESTE PLATO!</string>
+    <string name="btn_marcar_cocinado_activo">✔ ¡PLATO COCINADO CON ÉXITO!</string>
+    <string name="snack_plato_cocinado_anadido">¡Enhorabuena, Chef! Has sumado experiencia culinaria.</string>
+    <string name="snack_plato_cocinado_eliminado">Plato retirado de tu historial de cocina.</string>
+    <string name="stat_categoria_predilecta">Categoría Predilecta</string>
+    <string name="stat_origen_predilecto">Cocina Preferida</string>
+    <string name="stat_rango_culinario">Rango de Chef</string>
+    <string name="rango_pinche">Pinche de Cocina 🧑‍🍳</string>
+    <string name="rango_novato">Cocinero Novato 🍳</string>
+    <string name="rango_aficionado">Chef Aficionado 👨‍🍳</string>
+    <string name="rango_master">Master Chef Pocket ⭐</string>
+    <string name="stat_rango_sub_cero">"¡Prepara tu primer plato y pulsa '¡He cocinado este plato!' para ascender a Cocinero Novato!"</string>
+    <string name="stat_rango_sub_novato">Has preparado %1$d platos con éxito. ¡Cocina %2$d más para ascender a Chef Aficionado!</string>
+    <string name="stat_rango_sub_aficionado">¡Dominio de los fogones! Has cocinado %1$d platos. ¡Prepara %2$d más para coronarte Master Chef Pocket!</string>
+    <string name="stat_rango_sub_master">¡Nivel gastronómico supremo alcanzado! Has cocinado %1$d platos internacionales.</string>
+    <string name="stat_descubre_gustos">Guarda o cocina recetas para descubrir tus gustos</string>
+    <string name="stat_explora_gastronomias">Explora gastronomías del mundo en la app</string>
+    <string name="stat_recetas_contadas_singular">1 receta preparada / guardada</string>
+    <string name="stat_recetas_contadas_plural">%1$d recetas preparadas / guardadas</string>
+    <string name="stat_categoria_variada">Variado</string>
+    <string name="stat_categoria_variada_sub">Platos de diversas categorías</string>
+    <string name="stat_origen_contado_singular">1 plato de este país</string>
+    <string name="stat_origen_contado_plural">%1$d platos de este país</string>
+    <string name="stat_origen_internacional">Internacional</string>
+    <string name="stat_origen_internacional_sub">Sabores internacionales</string>
+    <string name="contador_favoritos_singular">1 receta guardada en tu recetario</string>
+    <string name="contador_favoritos_plural">%1$d recetas guardadas en tu recetario</string>
+    <string name="error_firebase">Error de comunicación con Firebase</string>
+    <string name="error_abrir_video">No se pudo abrir el enlace del vídeo</string>
+
+    <!-- Diálogo de Confirmación de Cierre de Sesión -->
+    <string name="dialogo_cerrar_sesion_titulo">¿Listo para colgar el delantal?</string>
+    <string name="dialogo_cerrar_sesion_mensaje">Cerrarás la sesión en este dispositivo. Tus recetas favoritas y tus estadísticas culinarias seguirán seguras en la nube.</string>
+    <string name="dialogo_accion_aceptar">Cerrar sesión</string>
+    <string name="dialogo_accion_cancelar">Seguir cocinando</string>
+
+    <!-- Estados y Red -->
+    <string name="cargando_datos">Cargando recetas gourmet…</string>
+    <string name="sin_conexion_internet">Sin conexión a Internet. Comprueba tus ajustes de red.</string>
+    <string name="titulo_receta_dia">¿No sabes qué cocinar?</string>
+    <string name="subtitulo_receta_dia">Inspiración del Chef</string>
+    <string name="btn_cambiar_receta">Probar otra</string>
+    <string name="btn_ver_detalle">Ver preparación</string>
+    <string name="cargando_receta">Consultando TheMealDB…</string>
+    <string name="modo_offline_titulo">Modo sin conexión</string>
+    <string name="modo_offline_mensaje">No hay acceso a Internet. Conéctate a una red Wi-Fi o móvil para descubrir nuevas recetas.</string>
+    <string name="btn_reintentar">Reintentar</string>
+    <string name="receta_origen_categoria">%1$s · %2$s</string>
+    <string name="error_cargar_receta">No se pudo obtener la receta del servidor.</string>
+
+    <!-- Filtros y Búsqueda -->
+    <string name="hint_buscar_receta">Buscar por plato o ingrediente…</string>
+    <string name="categoria_todas">Destacadas ⭐</string>
+    <string name="categoria_pollo">Pollo</string>
+    <string name="categoria_pastas">Pastas</string>
+    <string name="categoria_pescados">Pescados</string>
+    <string name="categoria_postres">Postres</string>
+    <string name="categoria_vegetariano">Vegetariano</string>
+    <string name="categoria_desayunos">Desayunos</string>
+    <string name="categoria_ternera">Ternera</string>
+    <string name="titulo_catalogo_recetas">Platos Destacados ⭐</string>
+    <string name="titulo_seccion_pollo">Recetas de Pollo 🍗</string>
+    <string name="titulo_seccion_pastas">Recetas de Pastas 🍝</string>
+    <string name="titulo_seccion_pescados">Pescados y Mariscos 🐟</string>
+    <string name="titulo_seccion_postres">Postres y Dulces 🍰</string>
+    <string name="titulo_seccion_vegetariano">Platos Vegetarianos 🥗</string>
+    <string name="titulo_seccion_desayunos">Desayunos y Meriendas 🍳</string>
+    <string name="titulo_seccion_ternera">Platos de Ternera 🥩</string>
+    <string name="titulo_seccion_busqueda">Resultados para: \"%1$s\"</string>
+    <string name="contador_recetas_formato">%1$d recetas</string>
+    <string name="sin_resultados_busqueda">No se encontraron recetas para tu búsqueda.</string>
+
+    <!-- Detalle de Receta e Idioma -->
+    <string name="titulo_actividad_detalle">Detalle de la receta</string>
+    <string name="titulo_ingredientes">Ingredientes necesarios</string>
+    <string name="ingredientes_en_instrucciones">Ingredientes detallados en los pasos de preparación</string>
+    <string name="titulo_preparacion">Preparación paso a paso</string>
+    <string name="btn_video_tutorial">Ver vídeo tutorial en YouTube</string>
+    <string name="aviso_idioma_titulo">Aviso de idioma</string>
+    <string name="aviso_idioma_original">Instrucciones mostradas en su idioma original (inglés). Conéctate a Internet para obtener la traducción automática al español.</string>
+    <string name="traduciendo_instrucciones">Traduciendo pasos de preparación al español…</string>
+    <string name="video_sin_conexion">Se necesita conexión a Internet para reproducir el vídeo tutorial.</string>
+    <string name="cargando_detalle_receta">Cargando detalles de la receta…</string>
+    <string name="compartir_receta_texto">¡Mira esta deliciosa receta de %1$s en ChefPocket!\n%2$s</string>
+    <string name="fab_anadir_favorito">Añadir a favoritos</string>
+    <string name="fab_eliminar_favorito">Eliminar de favoritos</string>
+    <string name="favorito_anadido">Receta añadida a favoritos</string>
+    <string name="favorito_eliminado">Receta eliminada de favoritos</string>
+
+    <!-- Sobrescritura completa de textos de FirebaseUI en español -->
+    <!-- Botones y Acciones Comunes -->
+    <string name="fui_sign_in_default">Iniciar sesión</string>
+    <string name="fui_sign_in_with_email">Iniciar sesión con correo</string>
+    <string name="fui_continue">Continuar</string>
+    <string name="fui_next_default">Siguiente</string>
+    <string name="fui_button_text_save">Guardar</string>
+    <string name="fui_button_text_send">Enviar</string>
+
+    <!-- Campos de Entrada (Hints) -->
+    <string name="fui_email_hint">Correo electrónico</string>
+    <string name="fui_name_hint">Nombre y apellidos</string>
+    <string name="fui_password_hint">Contraseña</string>
+    <string name="fui_confirm_password_hint">Confirmar contraseña</string>
+    <string name="fui_new_password_hint">Nueva contraseña</string>
+
+    <!-- Registro de Nuevo Usuario -->
+    <string name="fui_title_register_email">Crear cuenta</string>
+    <string name="fui_progress_dialog_signing_up">Creando tu cuenta…</string>
+    <string name="fui_email_account_creation_error">No se ha podido registrar la cuenta con este correo.</string>
+
+    <!-- Usuario Recurrente (Welcome Back / Inicio de Sesión Existente) -->
+    <string name="fui_welcome_back_email_header">¡Hola de nuevo!</string>
+    <string name="fui_welcome_back_idp_header">Ya tienes una cuenta</string>
+    <string name="fui_welcome_back_email_link_header">Ya tienes una cuenta registrada</string>
+    <string name="fui_welcome_back_password_prompt_body">Ya has utilizado %1$s para iniciar sesión. Introduce la contraseña de esa cuenta para continuar.</string>
+    <string name="fui_welcome_back_idp_prompt">Ya has utilizado %1$s. Inicia sesión con %2$s para continuar.</string>
+    <string name="fui_title_welcome_back_password_prompt">Iniciar sesión</string>
+    <string name="fui_title_welcome_back_idp_prompt">Iniciar sesión</string>
+    <string name="fui_trouble_signing_in">¿Problemas para iniciar sesión?</string>
+
+    <!-- Recuperación de Contraseña -->
+    <string name="fui_title_recover_password_activity">Recuperar contraseña</string>
+    <string name="fui_title_confirm_recover_password">Revisa tu correo</string>
+    <string name="fui_password_recovery_body">Te enviaremos un correo a esta dirección con las instrucciones para restablecer tu contraseña.</string>
+    <string name="fui_confirm_recovery_body">Sigue las instrucciones que hemos enviado a %1$s para restablecer tu contraseña.</string>
+    <string name="fui_progress_dialog_sending">Enviando instrucciones…</string>
+
+    <!-- Diálogos de Progreso -->
+    <string name="fui_progress_dialog_loading">Cargando…</string>
+    <string name="fui_progress_dialog_signing_in">Iniciando sesión…</string>
+    <string name="fui_progress_dialog_checking_accounts">Comprobando cuenta…</string>
+
+    <!-- Validaciones y Errores -->
+    <string name="fui_required_field">No puedes dejar este campo en blanco.</string>
+    <string name="fui_invalid_email_address">La dirección de correo electrónico no es válida.</string>
+    <string name="fui_missing_email_address">Introduce tu correo electrónico para continuar.</string>
+    <string name="fui_missing_first_and_last_name">Introduce tu nombre y apellidos.</string>
+    <string name="fui_passwords_do_not_match">Las contraseñas no coinciden.</string>
+    <string name="fui_error_invalid_password">Contraseña incorrecta. Inténtalo de nuevo.</string>
+    <string name="fui_error_email_does_not_exist">No existe ninguna cuenta asociada a este correo electrónico.</string>
+    <string name="fui_error_password_too_short">La contraseña debe tener al menos %1$d caracteres.</string>
+    <string name="fui_error_unknown">Se ha producido un error inesperado. Inténtalo más tarde.</string>
+    <string name="fui_no_internet">Error de red. Comprueba tu conexión a Internet.</string>
+
+    <plurals name="fui_error_weak_password">
+        <item quantity="one">La contraseña debe tener al menos %1$d carácter y combinar letras y números.</item>
+        <item quantity="other">La contraseña debe tener al menos %1$d caracteres y combinar letras y números.</item>
+    </plurals>
 </resources>

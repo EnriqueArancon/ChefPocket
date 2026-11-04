@@ -1,144 +1,163 @@
-<resources>
-    <!-- App Name -->
-    <string name="app_name">ChefPocket</string>
-
-        <!-- Unified Auth Form -->
-    <string name="hint_correo">Email address</string>
-    <string name="hint_contrasena">Password</string>
-    <string name="hint_nombre_chef">Chef Name</string>
-    <string name="placeholder_nombre">E.g. Enrique Arancón</string>
-    <string name="placeholder_email">example@domain.com</string>
-    <string name="placeholder_password">Minimum 6 characters</string>
-    <string name="btn_iniciar_sesion_accion">Sign in</string>
-    <string name="btn_crear_cuenta_accion">Create account</string>
-    <string name="tab_iniciar_sesion">Sign in</string>
-    <string name="tab_registrarse">Register</string>
-    <string name="pregunta_no_cuenta">"Don't have an account? Sign up here"</string>
-    <string name="pregunta_si_cuenta">Already have an account? Sign in here</string>
-    <string name="error_campo_vacio">This field is required</string>
-    <string name="error_correo_invalido">Enter a valid email address</string>
-    <string name="error_contrasena_corta">Password must be at least 6 characters</string>
-    <string name="error_credenciales_invalidas">Invalid email or password</string>
-    <string name="error_correo_en_uso">This email is already registered</string>
-    <string name="autenticando">Entering your kitchen…</string>
-    <string name="registrando">Creating your Chef account…</string>
-
-    <!-- Welcome / Login Screen -->
-    <string name="login_eslogan">ChefPocket</string>
-    <string name="login_subtitulo">Your smart pocket cookbook</string>
-    <string name="login_descripcion">Explore hundreds of international recipes, find daily inspiration, and save your favorites in the cloud.</string>
-    <string name="btn_iniciar_sesion">Sign In / Create Account</string>
-    <string name="btn_empezar_cocinar">Start Cooking</string>
-    <string name="login_feature_1_titulo">Explore World Cuisine</string>
-    <string name="login_feature_1_desc">Hundreds of recipes with high-res photos and detailed steps</string>
-    <string name="login_feature_2_titulo">Your Cloud Cookbook</string>
-    <string name="login_feature_2_desc">Save your favorite dishes synced in real time with Firebase</string>
-    <string name="login_feature_3_titulo">Level Up Your Chef Rank</string>
-    <string name="login_feature_3_desc">Log the dishes you cook and advance to Master Chef</string>
-    <string name="login_seguridad">Secure authentication with Firebase Auth</string>
-    <string name="login_pie">Master in Web Engineering · UPM</string>
-
-    <!-- Main Menu & Bottom Navigation -->
-    <string name="menu_explorar">Explore</string>
-    <string name="menu_favoritos">Favorites</string>
-    <string name="menu_estadisticas">Stats</string>
-    <string name="menu_perfil">Profile</string>
-    <string name="menu_cerrar_sesion">Sign out</string>
-
-    <!-- Greetings & Status -->
-    <string name="saludo_usuario">Hello, %1$s! 👋</string>
-    <string name="subtitulo_home">What would you like to cook today?</string>
-    <string name="usuario_desconocido">Foodie</string>
-    <string name="usuario_logueado_como">Logged in as:</string>
-    <string name="mensaje_bienvenida">Welcome to ChefPocket, %1$s!</string>
-    <string name="login_cancelado">Sign-in cancelled.</string>
-    <string name="error_login">Error signing in. Please try again.</string>
-    <string name="sesion_cerrada">Signed out successfully.</string>
-    <string name="info_cuenta">Account Information</string>
-    <string name="info_proveedor">Provider: Email / Firebase Auth</string>
-    <string name="perfil_badge_miembro">ChefPocket Gourmet Member</string>
-    <string name="perfil_seccion_detalles">Account Details</string>
-    <string name="perfil_sincronizacion_activa">Cloud sync: Active</string>
-    <string name="id_usuario_formato">User ID: %1$s</string>
-    <string name="titulo_seccion_favoritos">My Favorite Recipes</string>
-    <string name="subtitulo_seccion_favoritos">Collection synced to the cloud via Firebase</string>
-    <string name="favoritos_vacio_titulo">Your recipe collection is empty</string>
-    <string name="favoritos_vacio">You don\'t have any favorite recipes saved yet. Tap the heart on any dish to save it here.</string>
-    <string name="estadisticas_vacio">You don\'t have enough favorite recipes yet to calculate your culinary stats. Save your favorite dishes to discover them!</string>
-    <string name="titulo_seccion_estadisticas">Culinary Statistics</string>
-    <string name="subtitulo_seccion_estadisticas">Real-time metrics from your Firebase recipe collection</string>
-    <string name="stat_total_recetas">Recipes in Favorites</string>
-    <string name="stat_total_recetas_sub">Dishes synchronized in your Firebase account</string>
-    <string name="stat_platos_cocinados">Dishes Cooked</string>
-    <string name="stat_platos_cocinados_sub">Permanent culinary experience</string>
-    <string name="btn_marcar_cocinado_inactivo">I COOKED THIS DISH!</string>
-    <string name="btn_marcar_cocinado_activo">✔ DISH COOKED SUCCESSFULLY!</string>
-    <string name="snack_plato_cocinado_anadido">Congratulations, Chef! You gained culinary experience.</string>
-    <string name="snack_plato_cocinado_eliminado">Dish removed from your cooking log.</string>
-    <string name="stat_categoria_predilecta">Favorite Category</string>
-    <string name="stat_origen_predilecto">Preferred Cuisine</string>
-    <string name="stat_rango_culinario">Chef Rank</string>
-    <string name="rango_novato">Novice Cook 🍳</string>
-    <string name="rango_aficionado">Amateur Chef 👨‍🍳</string>
-    <string name="rango_master">Master Chef Pocket ⭐</string>
-
-    <!-- Sign-out Dialog -->
-    <string name="dialogo_cerrar_sesion_titulo">Ready to hang up your apron?</string>
-    <string name="dialogo_cerrar_sesion_mensaje">You will be signed out on this device. Your favorite recipes and cooking stats will remain safe in the cloud.</string>
-    <string name="dialogo_accion_aceptar">Sign out</string>
-    <string name="dialogo_accion_cancelar">Keep cooking</string>
-
-    <!-- Network & Suggestions -->
-    <string name="cargando_datos">Loading gourmet recipes…</string>
-    <string name="sin_conexion_internet">No Internet connection. Check your network settings.</string>
-    <string name="titulo_receta_dia">Don\'t know what to cook?</string>
-    <string name="subtitulo_receta_dia">Chef\'s Inspiration</string>
-    <string name="btn_cambiar_receta">Try another</string>
-    <string name="btn_ver_detalle">View preparation</string>
-    <string name="cargando_receta">Querying TheMealDB…</string>
-    <string name="modo_offline_titulo">Offline Mode</string>
-    <string name="modo_offline_mensaje">No Internet access. Connect to Wi-Fi or mobile data to discover new recipes.</string>
-    <string name="btn_reintentar">Retry</string>
-    <string name="receta_origen_categoria">%1$s · %2$s</string>
-    <string name="error_cargar_receta">Could not fetch recipe from server.</string>
-
-    <!-- Filters & Search -->
-    <string name="hint_buscar_receta">Search by dish or ingredient…</string>
-    <string name="categoria_todas">Featured ⭐</string>
-    <string name="categoria_pollo">Chicken</string>
-    <string name="categoria_pastas">Pasta</string>
-    <string name="categoria_pescados">Seafood</string>
-    <string name="categoria_postres">Desserts</string>
-    <string name="categoria_vegetariano">Vegetarian</string>
-    <string name="categoria_desayunos">Breakfast</string>
-    <string name="categoria_ternera">Beef</string>
-    <string name="titulo_catalogo_recetas">Featured Dishes ⭐</string>
-    <string name="titulo_seccion_pollo">Chicken Recipes 🍗</string>
-    <string name="titulo_seccion_pastas">Pasta Recipes 🍝</string>
-    <string name="titulo_seccion_pescados">Seafood Dishes 🐟</string>
-    <string name="titulo_seccion_postres">Desserts &amp; Sweets 🍰</string>
-    <string name="titulo_seccion_vegetariano">Vegetarian Dishes 🥗</string>
-    <string name="titulo_seccion_desayunos">Breakfast Dishes 🍳</string>
-    <string name="titulo_seccion_ternera">Beef Dishes 🥩</string>
-    <string name="titulo_seccion_busqueda">Results for: \"%1$s\"</string>
-    <string name="contador_recetas_formato">%1$d recipes</string>
-    <string name="sin_resultados_busqueda">No recipes found for your query.</string>
-
-    <!-- Recipe Detail -->
-    <string name="titulo_actividad_detalle">Recipe Details</string>
-    <string name="titulo_ingredientes">Ingredients</string>
-    <string name="ingredientes_en_instrucciones">Ingredients detailed in the preparation steps</string>
-    <string name="titulo_preparacion">Step-by-Step Instructions</string>
-    <string name="btn_video_tutorial">Watch video tutorial on YouTube</string>
-    <string name="aviso_idioma_titulo">Language notice</string>
-    <string name="aviso_idioma_original">Instructions displayed in original language (English). Connect to the Internet to enable automatic translation.</string>
-    <string name="traduciendo_instrucciones">Loading recipe instructions…</string>
-    <string name="video_sin_conexion">An Internet connection is required to play the video tutorial.</string>
-    <string name="cargando_detalle_receta">Loading recipe details…</string>
-    <string name="compartir_receta_texto">Check out this recipe for %1$s on ChefPocket!\n%2$s</string>
-    <string name="fab_anadir_favorito">Add to favorites</string>
-    <string name="fab_eliminar_favorito">Remove from favorites</string>
-    <string name="favorito_anadido">Recipe saved to favorites</string>
-    <string name="favorito_eliminado">Recipe removed from favorites</string>
-</resources>
-
+<resources>
+    <!-- App Name -->
+    <string name="app_name">ChefPocket</string>
+
+        <!-- Unified Auth Form -->
+    <string name="hint_correo">Email address</string>
+    <string name="hint_contrasena">Password</string>
+    <string name="hint_nombre_chef">Chef Name</string>
+    <string name="placeholder_nombre">E.g. Enrique Arancón</string>
+    <string name="placeholder_email">example@domain.com</string>
+    <string name="placeholder_password">Minimum 6 characters</string>
+    <string name="btn_iniciar_sesion_accion">Sign in</string>
+    <string name="btn_crear_cuenta_accion">Create account</string>
+    <string name="tab_iniciar_sesion">Sign in</string>
+    <string name="tab_registrarse">Register</string>
+    <string name="pregunta_no_cuenta">"Don't have an account? Sign up here"</string>
+    <string name="pregunta_si_cuenta">Already have an account? Sign in here</string>
+    <string name="error_campo_vacio">This field is required</string>
+    <string name="error_correo_invalido">Enter a valid email address</string>
+    <string name="error_contrasena_corta">Password must be at least 6 characters</string>
+    <string name="error_credenciales_invalidas">Invalid email or password</string>
+    <string name="error_correo_en_uso">This email is already registered</string>
+    <string name="autenticando">Entering your kitchen…</string>
+    <string name="registrando">Creating your Chef account…</string>
+
+    <!-- Welcome / Login Screen -->
+    <string name="login_eslogan">ChefPocket</string>
+    <string name="login_subtitulo">Your smart pocket cookbook</string>
+    <string name="login_descripcion">Explore hundreds of international recipes, find daily inspiration, and save your favorites in the cloud.</string>
+    <string name="btn_iniciar_sesion">Sign In / Create Account</string>
+    <string name="btn_empezar_cocinar">Start Cooking</string>
+    <string name="login_feature_1_titulo">Explore World Cuisine</string>
+    <string name="login_feature_1_desc">Hundreds of recipes with high-res photos and detailed steps</string>
+    <string name="login_feature_2_titulo">Your Cloud Cookbook</string>
+    <string name="login_feature_2_desc">Save your favorite dishes synced in real time with Firebase</string>
+    <string name="login_feature_3_titulo">Level Up Your Chef Rank</string>
+    <string name="login_feature_3_desc">Log the dishes you cook and advance to Master Chef</string>
+    <string name="login_seguridad">Secure authentication with Firebase Auth</string>
+    <string name="login_pie">Master in Web Engineering · UPM</string>
+
+    <!-- Main Menu & Bottom Navigation -->
+    <string name="menu_explorar">Explore</string>
+    <string name="menu_favoritos">Favorites</string>
+    <string name="menu_estadisticas">Stats</string>
+    <string name="menu_perfil">Profile</string>
+    <string name="menu_cerrar_sesion">Sign out</string>
+
+    <!-- Greetings & Status -->
+    <string name="saludo_usuario">Hello, %1$s! 👋</string>
+    <string name="subtitulo_home">What would you like to cook today?</string>
+    <string name="usuario_desconocido">Foodie</string>
+    <string name="usuario_logueado_como">Logged in as:</string>
+    <string name="mensaje_bienvenida">Welcome to ChefPocket, %1$s!</string>
+    <string name="login_cancelado">Sign-in cancelled.</string>
+    <string name="error_login">Error signing in. Please try again.</string>
+    <string name="sesion_cerrada">Signed out successfully.</string>
+    <string name="info_cuenta">Account Information</string>
+    <string name="info_proveedor">Provider: Email / Firebase Auth</string>
+    <string name="perfil_badge_miembro">ChefPocket Gourmet Member</string>
+    <string name="perfil_seccion_detalles">Account Details</string>
+    <string name="perfil_sincronizacion_activa">Cloud sync: Active</string>
+    <string name="id_usuario_formato">User ID: %1$s</string>
+    <string name="titulo_seccion_favoritos">My Favorite Recipes</string>
+    <string name="subtitulo_seccion_favoritos">Collection synced to the cloud via Firebase</string>
+    <string name="favoritos_vacio_titulo">Your recipe collection is empty</string>
+    <string name="favoritos_vacio">You don\'t have any favorite recipes saved yet. Tap the heart on any dish to save it here.</string>
+    <string name="estadisticas_vacio">You don\'t have enough favorite recipes yet to calculate your culinary stats. Save your favorite dishes to discover them!</string>
+    <string name="titulo_seccion_estadisticas">Culinary Statistics</string>
+    <string name="subtitulo_seccion_estadisticas">Real-time metrics from your Firebase recipe collection</string>
+    <string name="stat_total_recetas">Recipes in Favorites</string>
+    <string name="stat_total_recetas_sub">Dishes synchronized in your Firebase account</string>
+    <string name="stat_platos_cocinados">Dishes Cooked</string>
+    <string name="stat_platos_cocinados_sub">Permanent culinary experience</string>
+    <string name="btn_marcar_cocinado_inactivo">I COOKED THIS DISH!</string>
+    <string name="btn_marcar_cocinado_activo">✔ DISH COOKED SUCCESSFULLY!</string>
+    <string name="snack_plato_cocinado_anadido">Congratulations, Chef! You gained culinary experience.</string>
+    <string name="snack_plato_cocinado_eliminado">Dish removed from your cooking log.</string>
+    <string name="stat_categoria_predilecta">Favorite Category</string>
+    <string name="stat_origen_predilecto">Preferred Cuisine</string>
+    <string name="stat_rango_culinario">Chef Rank</string>
+    <string name="rango_pinche">Kitchen Apprentice 🧑‍🍳</string>
+    <string name="rango_novato">Novice Cook 🍳</string>
+    <string name="rango_aficionado">Amateur Chef 👨‍🍳</string>
+    <string name="rango_master">Master Chef Pocket ⭐</string>
+    <string name="stat_rango_sub_cero">"Prepare your first dish and tap 'I cooked this dish!' to become a Novice Cook!"</string>
+    <string name="stat_rango_sub_novato">You cooked %1$d dishes successfully. Cook %2$d more to become an Amateur Chef!</string>
+    <string name="stat_rango_sub_aficionado">Stove master! You cooked %1$d dishes. Prepare %2$d more to become a Master Chef Pocket!</string>
+    <string name="stat_rango_sub_master">Supreme culinary rank achieved! You cooked %1$d international dishes.</string>
+    <string name="stat_descubre_gustos">Save or cook recipes to discover your tastes</string>
+    <string name="stat_explora_gastronomias">Explore world cuisines in the app</string>
+    <string name="stat_recetas_contadas_singular">1 recipe prepared / saved</string>
+    <string name="stat_recetas_contadas_plural">%1$d recipes prepared / saved</string>
+    <string name="stat_categoria_variada">Diverse</string>
+    <string name="stat_categoria_variada_sub">Dishes from various categories</string>
+    <string name="stat_origen_contado_singular">1 dish from this country</string>
+    <string name="stat_origen_contado_plural">%1$d dishes from this country</string>
+    <string name="stat_origen_internacional">International</string>
+    <string name="stat_origen_internacional_sub">International flavors</string>
+    <string name="contador_favoritos_singular">1 recipe saved in your cookbook</string>
+    <string name="contador_favoritos_plural">%1$d recipes saved in your cookbook</string>
+    <string name="error_firebase">Firebase communication error</string>
+    <string name="error_abrir_video">Unable to open video link</string>
+
+    <!-- Sign-out Dialog -->
+    <string name="dialogo_cerrar_sesion_titulo">Ready to hang up your apron?</string>
+    <string name="dialogo_cerrar_sesion_mensaje">You will be signed out on this device. Your favorite recipes and cooking stats will remain safe in the cloud.</string>
+    <string name="dialogo_accion_aceptar">Sign out</string>
+    <string name="dialogo_accion_cancelar">Keep cooking</string>
+
+    <!-- Network & Suggestions -->
+    <string name="cargando_datos">Loading gourmet recipes…</string>
+    <string name="sin_conexion_internet">No Internet connection. Check your network settings.</string>
+    <string name="titulo_receta_dia">Don\'t know what to cook?</string>
+    <string name="subtitulo_receta_dia">Chef\'s Inspiration</string>
+    <string name="btn_cambiar_receta">Try another</string>
+    <string name="btn_ver_detalle">View preparation</string>
+    <string name="cargando_receta">Querying TheMealDB…</string>
+    <string name="modo_offline_titulo">Offline Mode</string>
+    <string name="modo_offline_mensaje">No Internet access. Connect to Wi-Fi or mobile data to discover new recipes.</string>
+    <string name="btn_reintentar">Retry</string>
+    <string name="receta_origen_categoria">%1$s · %2$s</string>
+    <string name="error_cargar_receta">Could not fetch recipe from server.</string>
+
+    <!-- Filters & Search -->
+    <string name="hint_buscar_receta">Search by dish or ingredient…</string>
+    <string name="categoria_todas">Featured ⭐</string>
+    <string name="categoria_pollo">Chicken</string>
+    <string name="categoria_pastas">Pasta</string>
+    <string name="categoria_pescados">Seafood</string>
+    <string name="categoria_postres">Desserts</string>
+    <string name="categoria_vegetariano">Vegetarian</string>
+    <string name="categoria_desayunos">Breakfast</string>
+    <string name="categoria_ternera">Beef</string>
+    <string name="titulo_catalogo_recetas">Featured Dishes ⭐</string>
+    <string name="titulo_seccion_pollo">Chicken Recipes 🍗</string>
+    <string name="titulo_seccion_pastas">Pasta Recipes 🍝</string>
+    <string name="titulo_seccion_pescados">Seafood Dishes 🐟</string>
+    <string name="titulo_seccion_postres">Desserts &amp; Sweets 🍰</string>
+    <string name="titulo_seccion_vegetariano">Vegetarian Dishes 🥗</string>
+    <string name="titulo_seccion_desayunos">Breakfast Dishes 🍳</string>
+    <string name="titulo_seccion_ternera">Beef Dishes 🥩</string>
+    <string name="titulo_seccion_busqueda">Results for: \"%1$s\"</string>
+    <string name="contador_recetas_formato">%1$d recipes</string>
+    <string name="sin_resultados_busqueda">No recipes found for your query.</string>
+
+    <!-- Recipe Detail -->
+    <string name="titulo_actividad_detalle">Recipe Details</string>
+    <string name="titulo_ingredientes">Ingredients</string>
+    <string name="ingredientes_en_instrucciones">Ingredients detailed in the preparation steps</string>
+    <string name="titulo_preparacion">Step-by-Step Instructions</string>
+    <string name="btn_video_tutorial">Watch video tutorial on YouTube</string>
+    <string name="aviso_idioma_titulo">Language notice</string>
+    <string name="aviso_idioma_original">Instructions displayed in original language (English). Connect to the Internet to enable automatic translation.</string>
+    <string name="traduciendo_instrucciones">Loading recipe instructions…</string>
+    <string name="video_sin_conexion">An Internet connection is required to play the video tutorial.</string>
+    <string name="cargando_detalle_receta">Loading recipe details…</string>
+    <string name="compartir_receta_texto">Check out this recipe for %1$s on ChefPocket!\n%2$s</string>
+    <string name="fab_anadir_favorito">Add to favorites</string>
+    <string name="fab_eliminar_favorito">Remove from favorites</string>
+    <string name="favorito_anadido">Recipe saved to favorites</string>
+    <string name="favorito_eliminado">Recipe removed from favorites</string>
+</resources>
+
